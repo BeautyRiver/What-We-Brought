@@ -3,34 +3,22 @@ using UnityEngine;
 
 public class Player_Interaction : MonoBehaviour
 {
-    // 'Interactable' 대신 새 부모 이름 'interaction'을 사용
-    private interaction currentInteractable = null;
-
-    private void OnTriggerEnter2D(Collider2D other)
+    public float radius;
+    public LayerMask interactableLayer;
+    private void Update()
     {
-        // 'interaction'을 상속받은 스크립트(NPC, Object)가 있는지 찾음
-        interaction interactableScript = other.GetComponent<interaction>();
-
-        if (interactableScript != null)
+        var interactableObj = Physics2D.OverlapCircleAll(transform.position, radius, interactableLayer);
+        if (interactableObj.Length > 0)
         {
-            Debug.Log(other.name + " 범위 진입");
-            interactableScript.isPlayerInRange = true;
-            currentInteractable = interactableScript;
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        // 'interaction'을 상속받았는지 확인
-        if (other.GetComponent<interaction>() == currentInteractable)
-        {
-            if (currentInteractable != null) // 안전 장치
+            foreach (var item in interactableObj)
             {
-                Debug.Log(currentInteractable.name + " 범위 이탈");
-                currentInteractable.isPlayerInRange = false;
-                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-                currentInteractable = null;
+                item.GetComponent<Interaction>().isPlayerInRange = true;
             }
         }
     }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, radius);
+    }   
 }
