@@ -352,7 +352,7 @@ Transform:
   m_GameObject: {fileID: 705578485}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.93, y: 0.61, z: 0}
+  m_LocalPosition: {x: -2.95, y: -0.33, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -640,9 +640,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13265c6aaede1ce4caeec49235b3d556, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cursorTexture: {fileID: 2800000, guid: e7048945c0ae8e04aa4d93e506deda05, type: 3}
-  hotSpot: {x: 0, y: 0}
-  isPlayerInRange: 0
 --- !u!61 &1605572033
 BoxCollider2D:
   m_ObjectHideFlags: 0
