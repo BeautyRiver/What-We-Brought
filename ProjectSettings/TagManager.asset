@@ -4,7 +4,8 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Goal
+  - NPC
+  - Object
   layers:
   - Default
   - TransparentFX
@@ -13,8 +14,8 @@ TagManager:
   - Water
   - UI
   - Wall
-  - Pushable
-  - 
+  - Box
+  - Interactable
   - 
   - 
   - 
