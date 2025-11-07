@@ -5,7 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - NPC
-  - BasicObject
+  - Object
   layers:
   - Default
   - TransparentFX
@@ -13,9 +13,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Wall
+  - Box
+  - Interactable
   - 
   - 
   - 
