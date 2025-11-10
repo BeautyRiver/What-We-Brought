@@ -20,7 +20,7 @@ public class Interaction : MonoBehaviour
 
         if (interactable == null)
         {
-            Debug.LogWarning(gameObject.name + "에 IInteractable 컴포넌트가 없습니다!");
+            Debug.LogWarning(gameObject.name + "에 IInteractable 컴포넌트가 없습니다");
         }
     }
 
@@ -50,7 +50,7 @@ public class Interaction : MonoBehaviour
 
         if (isPlayerInRange)
         {
-            Debug.Log("마우스가 " + gameObject.name + "에 들어옴!");
+            Debug.Log("마우스가 " + gameObject.name + "에 들어옴");
             SetCursor();
         }
     }
@@ -64,7 +64,7 @@ public class Interaction : MonoBehaviour
     {
         if (isPlayerInRange)
         {
-            Debug.Log("마우스가 " + gameObject.name + "를 클릭함!");
+            Debug.Log("마우스가 " + gameObject.name + "를 클릭함");
 
             if (interactable != null)
             {
