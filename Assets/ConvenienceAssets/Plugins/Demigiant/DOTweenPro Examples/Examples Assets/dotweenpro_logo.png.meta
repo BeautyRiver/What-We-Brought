@@ -95,5 +95,6 @@ AssetOrigin:
   productId: 32416
   packageName: DOTween Pro
   packageVersion: 1.0.380
-  assetPath: Assets/Plugins/Demigiant/DOTweenPro Examples/Examples Assets/dotweenpro_logo.png
+  assetPath: Assets/ConvenienceAssets/Plugins/Demigiant/DOTweenPro Examples/Examples
+    Assets/dotweenpro_logo.png
   uploadId: 642067
