@@ -25,5 +25,5 @@ AssetOrigin:
   productId: 32416
   packageName: DOTween Pro
   packageVersion: 1.0.380
-  assetPath: Assets/Plugins/Demigiant/DOTweenPro/Editor/DOTweenProEditor.dll
+  assetPath: Assets/ConvenienceAssets/Plugins/Demigiant/DOTweenPro/Editor/DOTweenProEditor.dll
   uploadId: 642067
