@@ -4,7 +4,10 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Goal
+  - NPC
+  - Object
+  - BasicObject
+  - Clue
   layers:
   - Default
   - TransparentFX
@@ -14,7 +17,7 @@ TagManager:
   - UI
   - Wall
   - Pushable
-  - 
+  - Interactable
   - 
   - 
   - 
