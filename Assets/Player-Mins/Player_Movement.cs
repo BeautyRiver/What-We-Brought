@@ -3,33 +3,39 @@ using UnityEngine.UIElements;
 
 public class Player_Movement : MonoBehaviour
 {
-    Vector2 inputVec;
-    Rigidbody2D rb;         
-    Animator anim;          
+    Rigidbody rb;         
+    Animator anim;
+    Transform cameraTransform;
+    private Vector3 moveDirection;
 
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        // 같은 오브젝트(또는 자식)에 있는 Animator 컴포넌트를 가져옵니다.
-        // 만약 애니메이터가 자식 오브젝트에 있다면 GetComponentInChildren<Animator>()를 써야 합니다.
+        rb = GetComponent<Rigidbody>();        
         anim = GetComponent<Animator>();
+        cameraTransform = GetComponent<Transform>();
     }
 
     void Update()
     {
-        // 1. 이동 입력 받기
-        inputVec = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        Vector3 inputVec = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
-        // 2. 애니메이션 파라미터 업데이트
-        // 입력 벡터의 길이(magnitude)가 0보다 크면 이동 중으로 판단합니다.
+        Vector3 camForward = cameraTransform.forward;
+        Vector3 camRight = cameraTransform.right;
+
+        camForward.y = 0;
+        camRight.y = 0;
+
+        camForward.Normalize();
+        camRight.Normalize();
+
+        moveDirection = (camForward * inputVec.z) + (camRight * inputVec.x);
         bool isMoving = inputVec.magnitude > 0;
         anim.SetBool("Moving", isMoving);
     }
 
     void FixedUpdate()
     {
-        // 3. 물리 기반 이동 처리
-        Vector2 newVec = inputVec.normalized * Time.fixedDeltaTime * 5f;
+        Vector3 newVec = moveDirection * Time.fixedDeltaTime * 5f;
         rb.MovePosition(rb.position + newVec);
     }
 
