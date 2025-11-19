@@ -2,29 +2,26 @@ using UnityEngine;
 
 public class Interaction : MonoBehaviour
 {
-    
-    public Texture2D cursorTexture; // 인스팩터 창에서 커서 이미지 받기위해 
-    public Vector2 hotSpot = Vector2.zero; // 클릭 좌표 설정
+    [Header("커서 설정")]
+    public Texture2D cursorTexture; // 인스펙터 창에서 커서 이미지 할당
+    public Vector2 hotSpot = Vector2.zero; // 커서 클릭 지점 설정
 
- 
-    private bool isPlayerInRange = false; // 플레이어가 범위 안에 있니? 처음은 false로 설정
+    private bool isPlayerInRange = false; // 플레이어가 범위 안에 있는지 여부
+    private IInteractable interactable; // 상호작용 인터페이스
 
-   
-    private IInteractable interactable; // 클릭 감지하고 IInteractable의 interact 함수를 호출하면
-                                        // npc나 오브젝트 스크립트가 호출받아서 기능을 실현 하기 위한 코드
-
-    private void Awake() // Npc나 BasicObject 스크립트가 잘 붙어있나 확인하기 위한 코드 
+    private void Awake()
     {
-
-        interactable = GetComponent<IInteractable>(); 
+        // 같은 오브젝트에 있는 IInteractable 구현체(BasicObject 등)를 가져옴
+        interactable = GetComponent<IInteractable>();
 
         if (interactable == null)
         {
-            Debug.LogWarning(gameObject.name + "에 IInteractable 컴포넌트가 없습니다");
+            Debug.LogWarning(gameObject.name + "에 IInteractable 컴포넌트가 없습니다!");
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other) // 다른 콜라이더 들어왔을때 호출
+    // [3D 변경 포인트] 2D가 빠지고 Collider 타입을 사용합니다.
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
@@ -33,49 +30,54 @@ public class Interaction : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other) // 나갔을때 
+    // [3D 변경 포인트] 2D가 빠지고 Collider 타입을 사용합니다.
+    private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             isPlayerInRange = false;
             Debug.Log(gameObject.name + ": 플레이어가 범위에서 나감");
 
-            ResetCursor();
+            ResetCursor(); // 범위 밖으로 나가면 커서 초기화
         }
     }
 
-
-    void OnMouseEnter() // 마우스 커서 올라갔을때 
+    // 3D 오브젝트에 Collider가 붙어있으면 이 함수들은 그대로 작동합니다.
+    void OnMouseEnter()
     {
-
+        // 플레이어가 근처에 있을 때만 커서 변경
         if (isPlayerInRange)
         {
-            Debug.Log("마우스가 " + gameObject.name + "에 들어옴");
             SetCursor();
         }
     }
 
-    void OnMouseExit() // 마우스 커서 나갔을때
+    void OnMouseExit()
     {
         ResetCursor();
     }
 
-    void OnMouseDown() // 마우스로 클릭했을때 
+    void OnMouseDown()
     {
+        // 플레이어가 근처에 있고 + 마우스로 클릭했을 때 실행
         if (isPlayerInRange)
         {
             Debug.Log("마우스가 " + gameObject.name + "를 클릭함");
 
             if (interactable != null)
             {
-                interactable.Interact();
+                interactable.Interact(); // 인터페이스 함수 호출
             }
         }
     }
 
-    private void SetCursor() 
+    private void SetCursor()
     {
-        Cursor.SetCursor(cursorTexture, hotSpot, CursorMode.Auto);
+        if (cursorTexture != null)
+        {
+            // 3D에서도 동일하게 작동합니다.
+            Cursor.SetCursor(cursorTexture, hotSpot, CursorMode.Auto);
+        }
     }
 
     private void ResetCursor()
