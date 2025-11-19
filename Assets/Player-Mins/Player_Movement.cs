@@ -3,9 +3,6 @@ using UnityEngine.UIElements;
 
 public class Player_Movement : MonoBehaviour
 {
-    public GameObject imageRight;
-    public GameObject imageLeft;
-
     Vector2 inputVec;
     Rigidbody2D rb;         
     Animator anim;
@@ -23,18 +20,20 @@ public class Player_Movement : MonoBehaviour
         // 1. 이동 입력 받기
         inputVec = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         Vector3 localVelocity = transform.InverseTransformDirection(rb.linearVelocity);
+        float moveX = rb.linearVelocity.x;
+        Vector3 currentScale = transform.localScale;
 
         // 2. 애니메이션 파라미터 업데이트
         // 입력 벡터의 길이(magnitude)가 0보다 크면 이동 중으로 판단합니다.
-        if (localVelocity.x > 0)
+        if (moveX < -0.1f)
         {
-            imageRight.SetActive(true);
-            imageLeft.SetActive(false);
+            currentScale.x = Mathf.Abs(currentScale.x);
+            transform.localScale = currentScale;
         }
-        else if (localVelocity.x < 0)
+        else if (moveX > 0.1f)
         {
-            imageRight.SetActive(false);
-            imageLeft.SetActive(true);
+            currentScale.x = -Mathf.Abs(currentScale.x);
+            transform.localScale = currentScale;
         }
         bool isMoving = inputVec.magnitude > 0;
         anim.SetBool("Moving_bool", isMoving);

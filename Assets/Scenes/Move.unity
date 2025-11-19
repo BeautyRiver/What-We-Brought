@@ -353,6 +353,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5be4b4df00ff6145846b5e31970166e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!70 &990293884
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990293879}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.5, y: 1}
+  m_Direction: 0
 --- !u!1 &1220306712
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,7 +554,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4406406690215301980, guid: 6c2489f605c996c4692d36d70195913d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 4406406690215301980, guid: 6c2489f605c996c4692d36d70195913d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -626,7 +663,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5705476349511219554, guid: 4ac3a3e4e5692af4c865e8371a203cd6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 990293884}
   m_SourcePrefab: {fileID: 100100000, guid: 4ac3a3e4e5692af4c865e8371a203cd6, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
