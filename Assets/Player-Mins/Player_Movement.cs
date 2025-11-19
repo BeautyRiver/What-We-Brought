@@ -5,30 +5,34 @@ public class Player_Movement : MonoBehaviour
 {
     Vector2 inputVec;
     Rigidbody2D rb;         
-    Animator anim;          
+    Animator anim;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        // °°Àº ¿ÀºêÁ§Æ®(¶Ç´Â ÀÚ½Ä)¿¡ ÀÖ´Â Animator ÄÄÆ÷³ÍÆ®¸¦ °¡Á®¿É´Ï´Ù.
-        // ¸¸¾à ¾Ö´Ï¸ŞÀÌÅÍ°¡ ÀÚ½Ä ¿ÀºêÁ§Æ®¿¡ ÀÖ´Ù¸é GetComponentInChildren<Animator>()¸¦ ½á¾ß ÇÕ´Ï´Ù.
+        // ê°™ì€ ì˜¤ë¸Œì íŠ¸(ë˜ëŠ” ìì‹)ì— ìˆëŠ” Animator ì»´í¬ë„ŒíŠ¸ë¥¼ ê°€ì ¸ì˜µë‹ˆë‹¤.
+        // ë§Œì•½ ì• ë‹ˆë©”ì´í„°ê°€ ìì‹ ì˜¤ë¸Œì íŠ¸ì— ìˆë‹¤ë©´ GetComponentInChildren<Animator>()ë¥¼ ì¨ì•¼ í•©ë‹ˆë‹¤.
         anim = GetComponent<Animator>();
     }
 
     void Update()
     {
-        // 1. ÀÌµ¿ ÀÔ·Â ¹Ş±â
+        // 1. ì´ë™ ì…ë ¥ ë°›ê¸°
         inputVec = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        Vector3 localVelocity = transform.InverseTransformDirection(rb.velocity);
 
-        // 2. ¾Ö´Ï¸ŞÀÌ¼Ç ÆÄ¶ó¹ÌÅÍ ¾÷µ¥ÀÌÆ®
-        // ÀÔ·Â º¤ÅÍÀÇ ±æÀÌ(magnitude)°¡ 0º¸´Ù Å©¸é ÀÌµ¿ ÁßÀ¸·Î ÆÇ´ÜÇÕ´Ï´Ù.
+        // 2. ì• ë‹ˆë©”ì´ì…˜ íŒŒë¼ë¯¸í„° ì—…ë°ì´íŠ¸
+        // ì…ë ¥ ë²¡í„°ì˜ ê¸¸ì´(magnitude)ê°€ 0ë³´ë‹¤ í¬ë©´ ì´ë™ ì¤‘ìœ¼ë¡œ íŒë‹¨í•©ë‹ˆë‹¤.
         bool isMoving = inputVec.magnitude > 0;
-        anim.SetBool("Moving", isMoving);
+        anim.SetBool("Moving_bool", isMoving);
+        if (localVelocity > 0) anim.SetBool("LR(0 = L)", 1);
+        else if (localVelocity < 0) anim.SetBool("LR(0 = L)", 0);
+        else anim.SetBool("LR(0 = L)", anim.GetBool("LR(0 = L)"));
     }
 
     void FixedUpdate()
     {
-        // 3. ¹°¸® ±â¹İ ÀÌµ¿ Ã³¸®
+        // 3. ë¬¼ë¦¬ ê¸°ë°˜ ì´ë™ ì²˜ë¦¬
         Vector2 newVec = inputVec.normalized * Time.fixedDeltaTime * 5f;
         rb.MovePosition(rb.position + newVec);
     }
