@@ -6,6 +6,9 @@ TagManager:
   tags:
   - NPC
   - Object
+  - BasicObject
+  - Clue
+  - Goal
   layers:
   - Default
   - TransparentFX
@@ -14,7 +17,7 @@ TagManager:
   - Water
   - UI
   - Wall
-  - Box
+  - Pushable
   - Interactable
   - 
   - 
@@ -42,6 +45,12 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Ground
+    uniqueID: 3449778755
+    locked: 0
+  - name: Objects
+    uniqueID: 746967157
     locked: 0
   m_RenderingLayers:
   - Default
