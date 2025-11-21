@@ -1,32 +1,30 @@
 using UnityEngine;
 
-
-[RequireComponent(typeof(SpriteRenderer))]
+// 3D에서는 SpriteRenderer 대신 Renderer(MeshRenderer 등)를 사용합니다.
+[RequireComponent(typeof(Renderer))]
 public class Highlightable : MonoBehaviour
 {
-    private SpriteRenderer spriteRenderer;
-    private Color originalColor; // 원래 색상을 저장할 변수
+    private Renderer myRenderer;
+    private Color originalColor;
 
     void Awake()
-    {   
-        
+    {
+        // 3D 렌더러 컴포넌트 가져오기
+        myRenderer = GetComponent<Renderer>();
 
-        spriteRenderer = GetComponent<SpriteRenderer>();
-
-        // 원래 색상 저장
-        originalColor = spriteRenderer.color;
+        // 원래 색상 저장 (Material의 색상)
+        originalColor = myRenderer.material.color;
     }
 
-    // Crow 스크립트가 호출 강조 함소
     public void Highlight(Color highlightColor)
     {
-        spriteRenderer.color = highlightColor;
+        // 3D 재질 색상 변경
+        myRenderer.material.color = highlightColor;
     }
 
-    // Crow 스크립트가 호출할 강조 종료 함수
     public void Unhighlight()
     {
-        // 원래색 복구
-        spriteRenderer.color = originalColor;
+        // 원래 색 복구
+        myRenderer.material.color = originalColor;
     }
 }

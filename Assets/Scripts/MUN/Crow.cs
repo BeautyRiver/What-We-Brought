@@ -1,31 +1,32 @@
 using UnityEngine;
-using System.Collections; // 코루틴
+using System.Collections;
+using System.Collections.Generic; // 리스트 사용을 위해 추가
 
 public class Crow : MonoBehaviour
 {
     [Header("능력 설정")]
     [Tooltip("까마귀 능력이 지속되는 시간 (초)")]
-    public float duration = 30.0f; // 지속시간
+    public float duration = 30.0f;
 
     [Tooltip("능력 사용 후 대기 시간 (초)")]
-    public float cooldown = 180.0f; // 쿨타임
+    public float cooldown = 180.0f;
+
+    [Tooltip("단서를 탐지할 반경")]
+    public float detectionRadius = 10.0f; // 탐지 범위 추가
 
     [Header("강조 설정")]
     [Tooltip("강조할 오브젝트의 태그")]
-    public string highlightTag = "Clue"; // 강조할 아이템 태그
+    public string highlightTag = "Clue";
 
     [Tooltip("강조할 때 사용할 색상")]
     public Color highlightColor = Color.yellow;
 
-    private bool isAbilityReady = true; // 현재 능력 사용이 가능한가?
+    private bool isAbilityReady = true;
 
     void Update()
     {
-     
-        
         if (Input.GetKeyDown(KeyCode.F) && isAbilityReady)
         {
-            // 타이머, 쿨타임 시작
             StartCoroutine(CrowAbilityCoroutine());
         }
         else if (Input.GetKeyDown(KeyCode.F) && !isAbilityReady)
@@ -34,51 +35,57 @@ public class Crow : MonoBehaviour
         }
     }
 
-    
-    IEnumerator CrowAbilityCoroutine()  // 코루틴사용을 위해 필요
+    IEnumerator CrowAbilityCoroutine()
     {
-  
-        isAbilityReady = false; 
-        Debug.Log("까마귀 능력 활성화 " + duration + "초 동안 단서를 찾습니다.");
+        isAbilityReady = false;
+        Debug.Log("까마귀 능력 활성화: 반경 " + detectionRadius + "m 내의 단서를 찾습니다.");
 
-        // Clue 태그를 가진 오브젝트 찾기
-        GameObject[] clues = GameObject.FindGameObjectsWithTag(highlightTag);
+        // 1. [3D 변경] OverlapSphere를 사용하여 내 주변 반경 내의 콜라이더들을 모두 찾음
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
 
-        // 강조해야할 아이템 강조
-        foreach (GameObject clueObject in clues)
+        // 하이라이트 적용된 객체들을 기억할 리스트 (나중에 끄기 위해)
+        List<Highlightable> activeHighlights = new List<Highlightable>();
+
+        // 2. 탐지된 물체 중 태그가 맞고, Highlightable 스크립트가 있는 것만 골라냄
+        foreach (Collider col in hitColliders)
         {
-            Highlightable h = clueObject.GetComponent<Highlightable>();
-            if (h != null)
+            if (col.CompareTag(highlightTag))
             {
-                h.Highlight(highlightColor); // 하이라이트 스크립트 실행
-            }
-        }
-
-       
-        // 코드가 지속시간동안 정지
-        yield return new WaitForSeconds(duration);
-
-        Debug.Log("까마귀 능력 지속 시간 종료. 강조를 해제합니다.");
-
-        // 강조 정지
-        foreach (GameObject clueObject in clues)
-        {
-            if (clueObject != null) 
-            {
-                Highlightable h = clueObject.GetComponent<Highlightable>();
+                Highlightable h = col.GetComponent<Highlightable>();
                 if (h != null)
                 {
-                    h.Unhighlight(); // 원래대로 복구
+                    h.Highlight(highlightColor);
+                    activeHighlights.Add(h); // 리스트에 추가
                 }
             }
         }
 
-        
-        Debug.Log("쿨타임 시작. " + cooldown + "초 후에 사용 가능합니다.");
-        yield return new WaitForSeconds(cooldown); // 쿨타임동안 코드 정지
+        // 지속 시간 대기
+        yield return new WaitForSeconds(duration);
 
-  
+        Debug.Log("까마귀 능력 지속 시간 종료. 강조를 해제합니다.");
+
+        // 3. 아까 켰던 애들만 다시 끄기
+        foreach (Highlightable h in activeHighlights)
+        {
+            if (h != null)
+            {
+                h.Unhighlight();
+            }
+        }
+
+        // 쿨타임 대기
+        Debug.Log("쿨타임 시작. " + cooldown + "초 후에 사용 가능합니다.");
+        yield return new WaitForSeconds(cooldown);
+
         isAbilityReady = true;
         Debug.Log("까마귀 능력이 준비되었습니다.");
+    }
+
+    // [편의 기능] 에디터 상에서 탐지 범위를 눈으로 보여주는 함수
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
 }
