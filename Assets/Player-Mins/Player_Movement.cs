@@ -11,7 +11,7 @@ public class Player_Movement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();        
-        anim = GetComponent<Animator>();
+        anim = GetComponentInChildren<Animator>();
         cameraTransform = GetComponent<Transform>();
     }
 
