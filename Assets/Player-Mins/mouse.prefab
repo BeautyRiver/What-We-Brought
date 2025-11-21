@@ -13,6 +13,10 @@ PrefabInstance:
       value: mouse
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: 79ac519ed5458bc4d9437c7f8654e81b, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: 79ac519ed5458bc4d9437c7f8654e81b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
