@@ -5,6 +5,8 @@ using UnityEngine.UIElements;
 
 public class MouseController_Puzzle : MonoBehaviour
 {
+    private Animator animator;
+
     private Vector2 direction;
     public bool isMoving;
     [SerializeField] private float moveDistance = 1f;
@@ -16,6 +18,11 @@ public class MouseController_Puzzle : MonoBehaviour
     private Vector2 recentlyDirection = Vector2.right;
     private float prevH;
     private float prevV;
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     private void Update()
     {
@@ -55,6 +62,11 @@ public class MouseController_Puzzle : MonoBehaviour
             recentlyDirection = direction;
             MoveAndPush();
         }
+
+        float angle = Mathf.Atan2(recentlyDirection.y, recentlyDirection.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, angle);
+
+        animator.SetBool("isMoving", isMoving);
     }
 
     private void MoveAndPush()
