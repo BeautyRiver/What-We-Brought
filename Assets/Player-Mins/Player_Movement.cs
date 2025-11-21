@@ -19,9 +19,9 @@ public class Player_Movement : MonoBehaviour
     {
         // 1. 이동 입력 받기
         inputVec = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        Vector3 localVelocity = transform.InverseTransformDirection(rb.linearVelocity);
+        Vector2 localVelocity = transform.InverseTransformDirection(rb.linearVelocity);
         float moveX = rb.linearVelocity.x;
-        Vector3 currentScale = transform.localScale;
+        Vector2 currentScale = transform.localScale;
 
         // 2. 애니메이션 파라미터 업데이트
         // 입력 벡터의 길이(magnitude)가 0보다 크면 이동 중으로 판단합니다.

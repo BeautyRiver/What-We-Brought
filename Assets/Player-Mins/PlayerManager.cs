@@ -18,6 +18,10 @@ public class PlayerManager : MonoBehaviour
     public Player_Movement playerMovementScript;
     public Rat_Movement ratMovementScript;
 
+    // 각 캐릭터의 '회전' 스크립트 연결
+    public PlayerRotate playerRotatescript;
+    public RatRotate ratRotatescript;
+
     // 현재 누구를 조작 중인지 상태를 저장하는 변수입니다. (true면 플레이어, false면 쥐)
     private bool isPlayerActive = true;
 
@@ -57,7 +61,9 @@ public class PlayerManager : MonoBehaviour
 
             // 2. 플레이어의 이동 스크립트는 켜고, 쥐의 이동 스크립트는 끕니다.
             playerMovementScript.enabled = true;
+            playerRotatescript.enabled = true;
             ratMovementScript.enabled = false;
+            ratRotatescript.enabled = false;
         }
         else
         {
@@ -69,7 +75,9 @@ public class PlayerManager : MonoBehaviour
 
             // 2. 플레이어의 이동 스크립트는 끄고, 쥐의 이동 스크립트는 켭니다.
             playerMovementScript.enabled = false;
+            playerRotatescript.enabled = false;
             ratMovementScript.enabled = true;
+            ratRotatescript.enabled = true;
         }
 
         // 디버깅을 위한 로그 출력 (콘솔창에서 확인 가능)
