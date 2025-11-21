@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
   m_Name: Rule Rock Tile
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: 21300000, guid: e3033cc3057840b4da000572fdb69a82, type: 3}
+  m_DefaultSprite: {fileID: 21300000, guid: f7357fb20f7b48b4bbf8768956dcf511, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
   m_TilingRules:
   - m_Id: 0
     m_Sprites:
-    - {fileID: 21300000, guid: e3033cc3057840b4da000572fdb69a82, type: 3}
-    - {fileID: 21300000, guid: ddf8fe400bd332c4e938bfacf9d88328, type: 3}
+    - {fileID: 21300000, guid: f7357fb20f7b48b4bbf8768956dcf511, type: 3}
+    - {fileID: 21300000, guid: daaf2c4329ff5e046a3db4d4eea4dabb, type: 3}
     m_GameObject: {fileID: 0}
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1

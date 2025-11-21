@@ -4,16 +4,16 @@ using Unity.Cinemachine;
 
 public class PlayerManager : MonoBehaviour
 {
-    public GameObject Player;
-    public GameObject Rat;
-    
-    public CinemachineCamera virtualCamera;
+    [SerializeField] private GameObject Player;
+    [SerializeField] private GameObject Rat;
 
-    private Transform playerTransform;
-    private Transform ratTransform;
+    [SerializeField] private CinemachineCamera virtualCamera;
 
-    private Player_Movement playerMovementScript;
-    private Rat_Movement ratMovementScript;
+    [SerializeField] private Transform playerTransform;
+    [SerializeField] private Transform ratTransform;
+
+    [SerializeField] private Player_Movement playerMovementScript;
+    [SerializeField] private Rat_Movement ratMovementScript;
 
     //public PlayerRotate playerRotatescript;
     //public RatRotate ratRotatescript;

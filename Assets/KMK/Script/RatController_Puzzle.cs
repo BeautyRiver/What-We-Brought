@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class MouseController_Puzzle : MonoBehaviour
+public class RatController_Puzzle : MonoBehaviour
 {
     private Animator animator;
 
@@ -21,7 +21,7 @@ public class MouseController_Puzzle : MonoBehaviour
 
     private void Awake()
     {
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void Update()
