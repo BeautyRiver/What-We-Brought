@@ -4,6 +4,10 @@
 TagManager:
   serializedVersion: 3
   tags:
+  - NPC
+  - Object
+  - BasicObject
+  - Clue
   - Goal
   layers:
   - Default
@@ -14,7 +18,7 @@ TagManager:
   - UI
   - Wall
   - Pushable
-  - 
+  - Interactable
   - 
   - 
   - 
@@ -41,6 +45,12 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Ground
+    uniqueID: 3449778755
+    locked: 0
+  - name: Objects
+    uniqueID: 746967157
     locked: 0
   m_RenderingLayers:
   - Default
