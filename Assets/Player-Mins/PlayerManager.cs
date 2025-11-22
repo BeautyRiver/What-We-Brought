@@ -4,33 +4,33 @@ using Unity.Cinemachine;
 
 public class PlayerManager : MonoBehaviour
 {
-    public GameObject Player;
-    public GameObject Rat;
+    [SerializeField] private GameObject Player;
+    [SerializeField] private GameObject Rat;
 
-    
-    public CinemachineCamera virtualCamera;
+    [SerializeField] private CinemachineCamera virtualCamera;
 
-    // 카메라가 따라갈 실제 게임 오브젝트(Transform)를 연결합니다.
-    public Transform playerTransform;
-    public Transform ratTransform;
+    [SerializeField] private Transform playerTransform;
+    [SerializeField] private Transform ratTransform;
 
-    // 각 캐릭터의 '이동'을 담당하는 스크립트 컴포넌트를 연결합니다.
-    public Player_Movement playerMovementScript;
-    public Rat_Movement ratMovementScript;
+    [SerializeField] private Player_Movement playerMovementScript;
+    [SerializeField] private Rat_Movement ratMovementScript;
 
-    // 현재 누구를 조작 중인지 상태를 저장하는 변수입니다. (true면 플레이어, false면 쥐)
+    //public PlayerRotate playerRotatescript;
+    //public RatRotate ratRotatescript;
+
     private bool isPlayerActive = true;
 
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // 시작 시 플레이어 활성화, 쥐는 비활성화
-        
+        playerTransform = Player.transform;
+        ratTransform = Rat.transform;
+        playerMovementScript = Player.GetComponent<Player_Movement>();
+        ratMovementScript = Rat.GetComponent<Rat_Movement>();
+
         UpdateCharacterState();
     }
 
-    // Update is called once per frame
     void Update()
     {
         // E키가 눌렸는지 매 프레임 검사합니다.
@@ -57,7 +57,9 @@ public class PlayerManager : MonoBehaviour
 
             // 2. 플레이어의 이동 스크립트는 켜고, 쥐의 이동 스크립트는 끕니다.
             playerMovementScript.enabled = true;
+            //playerRotatescript.enabled = true;
             ratMovementScript.enabled = false;
+            //ratRotatescript.enabled = false;
         }
         else
         {
@@ -69,7 +71,9 @@ public class PlayerManager : MonoBehaviour
 
             // 2. 플레이어의 이동 스크립트는 끄고, 쥐의 이동 스크립트는 켭니다.
             playerMovementScript.enabled = false;
+            //playerRotatescript.enabled = false;
             ratMovementScript.enabled = true;
+            //ratRotatescript.enabled = true;
         }
 
         // 디버깅을 위한 로그 출력 (콘솔창에서 확인 가능)

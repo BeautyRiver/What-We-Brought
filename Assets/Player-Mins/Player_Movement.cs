@@ -11,7 +11,7 @@ public class Player_Movement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();        
-        anim = GetComponent<Animator>();
+        anim = GetComponentInChildren<Animator>();
         cameraTransform = GetComponent<Transform>();
     }
 
@@ -30,6 +30,7 @@ public class Player_Movement : MonoBehaviour
 
         moveDirection = (camForward * inputVec.z) + (camRight * inputVec.x);
         bool isMoving = inputVec.magnitude > 0;
+        transform.localScale = new Vector3(isMoving ? Mathf.Sign(-moveDirection.x) : transform.localScale.x, transform.localScale.y, transform.localScale.z);
         anim.SetBool("Moving", isMoving);
     }
 
