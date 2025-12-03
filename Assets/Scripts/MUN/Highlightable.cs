@@ -1,30 +1,41 @@
 using UnityEngine;
+using System.Collections.Generic;
 
-// 3D에서는 SpriteRenderer 대신 Renderer(MeshRenderer 등)를 사용합니다.
-[RequireComponent(typeof(Renderer))]
 public class Highlightable : MonoBehaviour
 {
     private Renderer myRenderer;
-    private Color originalColor;
+    private Material[] originalMaterials; 
 
     void Awake()
     {
-        // 3D 렌더러 컴포넌트 가져오기
-        myRenderer = GetComponent<Renderer>();
 
-        // 원래 색상 저장 (Material의 색상)
-        originalColor = myRenderer.material.color;
+        myRenderer = GetComponentInChildren<Renderer>();
+        if (myRenderer != null)
+        {
+
+            originalMaterials = myRenderer.materials;
+        }
     }
 
-    public void Highlight(Color highlightColor)
+    // F키 눌렀을 때 아웃라인 추가
+    public void Highlight(Material outlineMat)
     {
-        // 3D 재질 색상 변경
-        myRenderer.material.color = highlightColor;
+        if (myRenderer == null) return;
+
+        List<Material> matList = new List<Material>(myRenderer.materials);
+
+
+        if (!matList.Contains(outlineMat))
+        {
+            matList.Add(outlineMat); 
+            myRenderer.materials = matList.ToArray(); 
+        }
     }
 
     public void Unhighlight()
     {
-        // 원래 색 복구
-        myRenderer.material.color = originalColor;
+        if (myRenderer == null) return;
+
+        myRenderer.materials = originalMaterials;
     }
 }
