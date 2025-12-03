@@ -40,13 +40,12 @@ public class Crow : MonoBehaviour
         isAbilityReady = false;
         Debug.Log("까마귀 능력 활성화: 반경 " + detectionRadius + "m 내의 단서를 찾습니다.");
 
-        // 1. [3D 변경] OverlapSphere를 사용하여 내 주변 반경 내의 콜라이더들을 모두 찾음
+        // OverlapSphere 3D 
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
 
-        // 하이라이트 적용된 객체들을 기억할 리스트 (나중에 끄기 위해)
         List<Highlightable> activeHighlights = new List<Highlightable>();
 
-        // 2. 탐지된 물체 중 태그가 맞고, Highlightable 스크립트가 있는 것만 골라냄
+      
         foreach (Collider col in hitColliders)
         {
             if (col.CompareTag(highlightTag))
@@ -55,7 +54,7 @@ public class Crow : MonoBehaviour
                 if (h != null)
                 {
                     h.Highlight(highlightColor);
-                    activeHighlights.Add(h); // 리스트에 추가
+                    activeHighlights.Add(h); 
                 }
             }
         }

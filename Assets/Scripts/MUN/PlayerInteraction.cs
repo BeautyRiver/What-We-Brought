@@ -30,10 +30,10 @@ public class PlayerInteraction : MonoBehaviour
             // 3. 플레이어와 그 물체 사이의 거리를 잽니다.
             float distance = Vector3.Distance(transform.position, hit.transform.position);
 
-            // 4. 거리가 사정거리(interactionRange) 안쪽인지 확인
+            // 거리가 사정거리(interactionRange) 안쪽인지 확인
             if (distance <= interactionRange)
             {
-                // 5. 그 물체에 IInteractable 스크립트가 있는지 확인
+                // 물체에 IInteractable 스크립트가 있는지 확인
                 IInteractable interactable = hit.transform.GetComponent<IInteractable>();
 
                 if (interactable != null)
