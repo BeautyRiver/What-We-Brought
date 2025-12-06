@@ -1,30 +1,41 @@
 using UnityEngine;
 
-// 3D에서는 SpriteRenderer 대신 Renderer(MeshRenderer 등)를 사용합니다.
-[RequireComponent(typeof(Renderer))]
 public class Highlightable : MonoBehaviour
 {
-    private Renderer myRenderer;
-    private Color originalColor;
+    private SpriteRenderer myRenderer; // 2D 그림을 담당하는 렌더러
+    private Material defaultMaterial;  // 원래 입고 있던 옷 (기본)
 
     void Awake()
     {
-        // 3D 렌더러 컴포넌트 가져오기
-        myRenderer = GetComponent<Renderer>();
+        // 내 몸통이나 자식들 중에서 SpriteRenderer를 찾습니다.
+        myRenderer = GetComponentInChildren<SpriteRenderer>();
 
-        // 원래 색상 저장 (Material의 색상)
-        originalColor = myRenderer.material.color;
+        if (myRenderer != null)
+        {
+            // 게임 시작할 때 입고 있던 원래 재질을 저장해둡니다.
+            defaultMaterial = myRenderer.material;
+        }
+        else
+        {
+            Debug.LogError(gameObject.name + ": SpriteRenderer가 없습니다! 이미지가 제대로 들어갔는지 확인하세요.");
+        }
     }
 
-    public void Highlight(Color highlightColor)
+    // [F키 눌렀을 때] 아웃라인 재질로 '교체'
+    public void Highlight(Material outlineMat)
     {
-        // 3D 재질 색상 변경
-        myRenderer.material.color = highlightColor;
+        if (myRenderer == null) return;
+
+        // 2D 이미지는 덧입히기보다 교체하는 방식이 훨씬 깔끔합니다.
+        myRenderer.material = outlineMat;
     }
 
+    // [시간 종료] 원래 재질로 '복구'
     public void Unhighlight()
     {
-        // 원래 색 복구
-        myRenderer.material.color = originalColor;
+        if (myRenderer == null) return;
+
+        // 저장해뒀던 원래 재질로 돌아갑니다.
+        myRenderer.material = defaultMaterial;
     }
 }
