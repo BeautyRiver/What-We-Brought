@@ -6,7 +6,7 @@ public class Player_Movement : MonoBehaviour
     Rigidbody rb;         
     Animator anim;
     Transform cameraTransform;
-    private Vector3 moveDirection;
+    private Vector3 moveDir;
 
     void Start()
     {
@@ -28,15 +28,18 @@ public class Player_Movement : MonoBehaviour
         camForward.Normalize();
         camRight.Normalize();
 
-        moveDirection = (camForward * inputVec.z) + (camRight * inputVec.x);
+        moveDir = (camForward * inputVec.z) + (camRight * inputVec.x);
         bool isMoving = inputVec.magnitude > 0;
-        transform.localScale = new Vector3(isMoving ? Mathf.Sign(-moveDirection.x) : transform.localScale.x, transform.localScale.y, transform.localScale.z);
+
+        float scaleX = moveDir.x == 0 ? transform.localScale.x : -Mathf.Sign(moveDir.x);
+        transform.localScale = new Vector3(scaleX, transform.localScale.y, transform.localScale.z);
+
         anim.SetBool("Moving", isMoving);
     }
 
     void FixedUpdate()
     {
-        Vector3 newVec = moveDirection * Time.fixedDeltaTime * 5f;
+        Vector3 newVec = moveDir.normalized * Time.fixedDeltaTime * 5f;
         rb.MovePosition(rb.position + newVec);
     }
 
