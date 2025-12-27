@@ -17,6 +17,7 @@ MonoBehaviour:
     - a5a793d341380e748b612b7ec29f2ba4
     - d0e90cda6ae2156499dd45e32ad2d500
     - 3ebb8de04dca4bd4aa13be4b20043859
+    - d59c47a05706c8148aa272c5c704bd41
     values:
     - goDatas_byGlobalId:
         keys: []
@@ -33,3 +34,9 @@ MonoBehaviour:
         values:
         - colorIndex: 5
           iconNameOrGuid: 
+    - goDatas_byGlobalId:
+        keys:
+        - globalObjectIdString: GlobalObjectId_V1-2-d59c47a05706c8148aa272c5c704bd41-24613760-0
+        values:
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon

@@ -13,12 +13,7 @@ public class PlayerInteraction : MonoBehaviour
     public Texture2D interactionCursor; // 손 모양 커서 등
     private Texture2D defaultCursor;    // 기본 커서 저장용
 
-    private void Update()
-    {
-        HandleInteraction();
-    }
-
-    void HandleInteraction()
+    public void HandleInteraction()
     {
         // 1. 카메라에서 마우스 커서 위치로 보이지 않는 광선(Ray)을 쏩니다.
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

@@ -45,9 +45,9 @@ public class Npc : MonoBehaviour, IInteractable
         }
 
         if (agent.velocity.x < -0.1f)
-            transform.localScale = new Vector3(1, 1, 1); // ¿ÞÂÊ º½
+            animator.transform.localScale = new Vector3(1, 1, 1); // ¿ÞÂÊ º½
         else if (agent.velocity.x > 0.1f)
-            transform.localScale = new Vector3(-1, 1, 1); // ¿À¸¥ÂÊ º½
+            animator.transform.localScale = new Vector3(-1, 1, 1); // ¿À¸¥ÂÊ º½
 
         isMoving = agent.velocity.magnitude > 0.1f;
         animator.SetBool("Moving", isMoving);
