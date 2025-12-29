@@ -7,12 +7,12 @@ public class Crow : MonoBehaviour
     [Header("능력 설정")]
     public float duration = 30.0f;
     public float cooldown = 180.0f;
-    public float detectionRadius = 10.0f; // 감지 범위
+    public float detectionRadius = 10.0f;
 
     [Header("강조 설정")]
     public string highlightTag = "Clue";
 
-    // [중요 변경] 색깔(Color) 대신 재질(Material)을 받습니다!
+    // [변경] 색상 대신 아웃라인 머티리얼을 직접 받습니다.
     public Material outlineEffectMaterial;
 
     private bool isAbilityReady = true;
@@ -37,13 +37,10 @@ public class Crow : MonoBehaviour
         {
             if (col.CompareTag(highlightTag))
             {
-                // 부모나 자식에 있는 Highlightable 스크립트를 찾음
-                Highlightable h = col.GetComponentInChildren<Highlightable>();
-                if (h == null) h = col.GetComponentInParent<Highlightable>();
-
+                Highlightable h = col.GetComponent<Highlightable>(); // GetComponentInParent가 필요할 수도 있음
                 if (h != null)
                 {
-                    // [중요] 색깔 대신 아웃라인 재질을 전달함
+                    // [변경] 재질을 전달합니다.
                     h.Highlight(outlineEffectMaterial);
                     activeHighlights.Add(h);
                 }
@@ -52,7 +49,7 @@ public class Crow : MonoBehaviour
 
         yield return new WaitForSeconds(duration);
 
-        // 시간 종료 후 끄기
+        // 끄기
         foreach (Highlightable h in activeHighlights)
         {
             if (h != null) h.Unhighlight();
@@ -61,9 +58,9 @@ public class Crow : MonoBehaviour
         Debug.Log("쿨타임 시작");
         yield return new WaitForSeconds(cooldown);
         isAbilityReady = true;
+        Debug.Log("준비 완료");
     }
 
-    // 에디터에서 범위를 눈으로 보기 위한 기즈모
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;

@@ -23,7 +23,7 @@ public class TutorialTrigger : MonoBehaviour
 
     void Start()
     {
-        tutorialManager = FindObjectOfType<TutorialUIManager>();
+        tutorialManager = FindFirstObjectByType<TutorialUIManager>();
 
         if (tutorialManager == null)
         {

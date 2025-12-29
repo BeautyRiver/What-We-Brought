@@ -19,6 +19,7 @@ MonoBehaviour:
     - 55a6a8ad359276a498aa32898bd0e55c
     - 0d6acd6155129c449b6002254c6fc6d4
     - f27f624cfe8fcd742b09fee7c78ecdd3
+    - c13a316b5b63e1d449a3427f57779da6
     values:
     - iconNameOrGuid: Material Icon
       colorIndex: 7
@@ -37,6 +38,10 @@ MonoBehaviour:
       isIconRecursive: 0
       isColorRecursive: 0
     - iconNameOrGuid: RawImage Icon
+      colorIndex: 0
+      isIconRecursive: 0
+      isColorRecursive: 0
+    - iconNameOrGuid: AnimationClip Icon
       colorIndex: 0
       isIconRecursive: 0
       isColorRecursive: 0
