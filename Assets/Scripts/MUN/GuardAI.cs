@@ -3,99 +3,159 @@ using UnityEngine.AI;
 
 public class GuardAI : MonoBehaviour
 {
-    public enum State { Patrol, Alert, Suspicion, Return }
+    // =========================================================
+    // [1. 상태 정의]
+    // =========================================================
+    public enum State
+    {
+        Patrol,    // 순찰
+        Alert,     // 추격
+        Suspicion, // 의심(배회)
+        Return     // 복귀
+    }
 
+    // =========================================================
+    // [2. 인스펙터 설정 변수들]
+    // =========================================================
     [Header("기본 설정")]
-    public Transform player;
-    public LayerMask obstacleMask;
-
-    [Header("스프라이트 설정")]
-    public SpriteRenderer spriteRenderer;
+    public Transform player;          // 쫓아야 할 플레이어 (Drag & Drop)
+    public LayerMask obstacleMask;    // 벽 인식 레이어
 
     [Header("순찰 설정")]
-    public Transform[] waypoints;
+    public Transform[] waypoints;     // 순찰 경로
     private int waypointIndex = 0;
 
     [Header("감지 설정")]
     public float viewAngle = 90f;
-    public float viewDistance = 10f; // 이 거리 안이면 발견
+    public float viewDistance = 10f;
 
-    [Header("AI 행동 설정 (변경됨)")]
-    // ★ [변경] 경비병과 플레이어 사이의 거리가 이 값보다 커지면 추격 포기
-    public float giveUpDistance = 15f; 
-    
-    public float wanderRadius = 4f;      
-    public float wanderDuration = 3f;    
+    [Header("AI 행동 설정")]
+    public float giveUpDistance = 15f;
+    public float wanderRadius = 4f;
+    public float wanderDuration = 3f;
 
+    [Header("속도 설정")]
+    public float moveSpeed = 3.5f;
+
+    // =========================================================
+    // [3. 내부 변수]
+    // =========================================================
     private NavMeshAgent agent;
-    public State currentState = State.Patrol; 
-    private float waitTimer = 0f;
-    private float wanderTimer = 0f;       
-    private Vector3 guardPostPosition;    
+    private Animator anim;            // 애니메이션 제어용 변수 추가
+    public State currentState = State.Patrol;
 
+    private float waitTimer = 0f;
+    private float wanderTimer = 0f;
+    private Vector3 guardPostPosition;
+
+    // 캐릭터의 원래 크기(스케일)를 저장할 변수 (0.8 크기 유지용)
+    private Vector3 originalScale;
+
+    // =========================================================
+    // [4. 초기화] 
+    // =========================================================
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        anim = GetComponent<Animator>(); // 애니메이터 가져오기
+
         agent.updateRotation = false;
         agent.updateUpAxis = false;
 
-        guardPostPosition = transform.position; // 복귀 위치는 여전히 저장 필요
+        guardPostPosition = transform.position;
 
-        if (waypoints.Length > 0)
+        // 현재 설정된 크기(0.8, 0.8, 1)를 기억해둠
+        originalScale = transform.localScale;
+
+        if (waypoints != null && waypoints.Length > 0 && waypoints[0] != null)
+        {
             agent.SetDestination(waypoints[0].position);
-
-        if (spriteRenderer == null)
-            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
     }
 
+    // =========================================================
+    // [5. 메인 루프] 
+    // =========================================================
     void Update()
     {
-        LookAtTarget();
+        agent.speed = moveSpeed;
 
-        // 1. 플레이어 감지 시도 (추격 중이 아닐 때만)
+        // 1. 방향 전환 및 애니메이션 처리 (문워킹 수정됨)
+        HandleAnimationAndRotation();
+
+        // 2. 플레이어 감지 (추격 중이 아닐 때만)
         if (currentState != State.Alert && CheckForPlayer())
         {
             currentState = State.Alert;
         }
 
-        // 2. 상태별 행동
+        // 3. 상태별 행동 실행
         switch (currentState)
         {
             case State.Patrol:
                 Patrol();
                 break;
-            case State.Alert: 
+            case State.Alert:
                 Chase();
                 break;
-            case State.Suspicion: 
+            case State.Suspicion:
                 Suspicion();
                 break;
-            case State.Return: 
+            case State.Return:
                 ReturnToPatrol();
                 break;
         }
     }
 
-    void LookAtTarget()
+    // =========================================================
+    // [6. 보조 기능] 시각 처리 및 감지 로직
+    // =========================================================
+
+    // [수정 완료] 원본 그림이 왼쪽을 보는 경우를 위해 로직 반전
+    void HandleAnimationAndRotation()
     {
-        if (currentState == State.Alert)
+        // 1. 걷기 애니메이션 (속도가 있으면 true, 멈추면 false)
+        bool isMoving = agent.velocity.sqrMagnitude > 0.1f;
+        if (anim != null)
         {
-            if (player.position.x > transform.position.x)
-                spriteRenderer.flipX = true; 
-            else
-                spriteRenderer.flipX = false;
+            anim.SetBool("isWalking", isMoving);
         }
+
+        // 2. 방향 전환 (좌우 반전)
+        // Alert 상태일 때는 플레이어를 바라봄
+        if (currentState == State.Alert && player != null)
+        {
+            if (player.position.x > transform.position.x) // 플레이어가 오른쪽에 있음
+            {
+                // 원본이 왼쪽을 보므로, 오른쪽을 보게 하려면 뒤집어야(-) 함
+                transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
+            }
+            else // 플레이어가 왼쪽에 있음
+            {
+                // 원본이 왼쪽을 보므로, 그냥 그대로(+) 둠
+                transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
+            }
+        }
+        // 평소에는 이동 방향을 바라봄
         else
         {
-            if (agent.velocity.x > 0.1f)
-                spriteRenderer.flipX = true;
-            else if (agent.velocity.x < -0.1f)
-                spriteRenderer.flipX = false;
+            if (agent.velocity.x > 0.1f) // 오른쪽으로 이동 중
+            {
+                // 오른쪽을 보게 하려면 뒤집어야(-) 함
+                transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
+            }
+            else if (agent.velocity.x < -0.1f) // 왼쪽으로 이동 중
+            {
+                // 왼쪽을 보게 하려면 그대로(+) 둠
+                transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
+            }
         }
     }
 
     bool CheckForPlayer()
     {
+        if (player == null) return false;
+
         Vector3 dirToPlayer = (player.position - transform.position).normalized;
         float dstToPlayer = Vector3.Distance(transform.position, player.position);
 
@@ -112,11 +172,13 @@ public class GuardAI : MonoBehaviour
         return false;
     }
 
-    // --- 상태별 로직 ---
+    // =========================================================
+    // [7. 상태별 행동 함수들] 
+    // =========================================================
 
     void Patrol()
     {
-        agent.speed = 2.5f;
+        if (waypoints == null || waypoints.Length == 0) return;
 
         if (!agent.pathPending && agent.remainingDistance < 0.5f)
         {
@@ -124,22 +186,19 @@ public class GuardAI : MonoBehaviour
             if (waitTimer > 2.0f)
             {
                 waypointIndex = (waypointIndex + 1) % waypoints.Length;
-                agent.SetDestination(waypoints[waypointIndex].position);
+                if (waypoints[waypointIndex] != null)
+                    agent.SetDestination(waypoints[waypointIndex].position);
                 waitTimer = 0f;
             }
         }
     }
 
-    void Chase() 
+    void Chase()
     {
-        agent.speed = 5.0f; 
+        if (player == null) return;
         agent.SetDestination(player.position);
 
-        // ★ [핵심 변경] 플레이어와 나의 거리 체크
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-        
-        // 플레이어가 도망쳐서 거리가 벌어지면 -> 추격 포기 (Suspicion 전환)
-        if (distanceToPlayer > giveUpDistance)
+        if (Vector3.Distance(transform.position, player.position) > giveUpDistance)
         {
             EnterSuspicionState();
         }
@@ -149,8 +208,7 @@ public class GuardAI : MonoBehaviour
     {
         currentState = State.Suspicion;
         wanderTimer = 0f;
-        agent.speed = 3.5f; 
-        MoveToRandomLocation(); 
+        MoveToRandomLocation();
     }
 
     void Suspicion()
@@ -159,46 +217,45 @@ public class GuardAI : MonoBehaviour
 
         if (!agent.pathPending && agent.remainingDistance < 0.5f)
         {
-             MoveToRandomLocation();
+            MoveToRandomLocation();
         }
 
         if (wanderTimer > wanderDuration)
         {
             currentState = State.Return;
             int closestIndex = GetClosestWaypointIndex();
-            waypointIndex = closestIndex; 
-            agent.SetDestination(waypoints[closestIndex].position);
+            if (closestIndex != -1)
+            {
+                waypointIndex = closestIndex;
+                agent.SetDestination(waypoints[closestIndex].position);
+            }
+            else
+            {
+                agent.SetDestination(guardPostPosition);
+            }
         }
 
-        if (CheckForPlayer())
-        {
-            currentState = State.Alert;
-        }
+        if (CheckForPlayer()) currentState = State.Alert;
     }
 
     void ReturnToPatrol()
     {
-        agent.speed = 3.5f;
-
         if (!agent.pathPending && agent.remainingDistance < 0.5f)
         {
             currentState = State.Patrol;
-            waitTimer = 0f; 
+            waitTimer = 0f;
         }
-
-        if (CheckForPlayer())
-        {
-            currentState = State.Alert;
-        }
+        if (CheckForPlayer()) currentState = State.Alert;
     }
 
-    // --- 유틸리티 ---
+    // =========================================================
+    // [8. 유틸리티] 
+    // =========================================================
 
     void MoveToRandomLocation()
     {
         Vector3 randomDirection = Random.insideUnitSphere * wanderRadius;
         randomDirection += transform.position;
-        
         NavMeshHit hit;
         if (NavMesh.SamplePosition(randomDirection, out hit, wanderRadius, 1))
         {
@@ -208,11 +265,12 @@ public class GuardAI : MonoBehaviour
 
     int GetClosestWaypointIndex()
     {
+        if (waypoints == null || waypoints.Length == 0) return -1;
         int closestIndex = 0;
         float minDistance = Mathf.Infinity;
-
         for (int i = 0; i < waypoints.Length; i++)
         {
+            if (waypoints[i] == null) continue;
             float dist = Vector3.Distance(transform.position, waypoints[i].position);
             if (dist < minDistance)
             {
@@ -225,19 +283,15 @@ public class GuardAI : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        // 1. 감지 범위 (노란색)
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, viewDistance);
 
-        // 2. 시야각 (빨간색)
         Gizmos.color = Color.red;
         Vector3 leftRay = Quaternion.Euler(0, -viewAngle / 2, 0) * transform.forward;
         Vector3 rightRay = Quaternion.Euler(0, viewAngle / 2, 0) * transform.forward;
         Gizmos.DrawRay(transform.position, leftRay * viewDistance);
         Gizmos.DrawRay(transform.position, rightRay * viewDistance);
 
-        // ★ 3. 추격 포기 거리 (파란색)
-        // 이번에는 기준점이 '플레이어'가 아니라 '나(경비병)'를 기준으로 이 원 밖으로 플레이어가 나가면 포기한다는 의미로 그립니다.
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, giveUpDistance);
     }

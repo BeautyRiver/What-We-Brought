@@ -1,10 +1,10 @@
-Shader "Custom/SpriteOutline"
+Shader "Custom/SpriteOutline_Improved"
 {
     Properties
     {
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
         _Color ("Tint", Color) = (1,1,1,1)
-        _OutlineColor ("Outline Color", Color) = (1,1,0,1) // 노란색 기본
+        [HDR] _OutlineColor ("Outline Color", Color) = (1,1,0,1) // HDR 추가로 발광 효과 대비
         _OutlineWidth ("Outline Width", Range(0, 10)) = 1
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
     }
@@ -51,7 +51,7 @@ Shader "Custom/SpriteOutline"
             fixed4 _OutlineColor;
             float _OutlineWidth;
             sampler2D _MainTex;
-            float4 _MainTex_TexelSize;
+            float4 _MainTex_TexelSize; // 텍스처의 픽셀 사이즈 (1/width, 1/height)
 
             v2f vert(appdata_t IN)
             {
@@ -69,25 +69,36 @@ Shader "Custom/SpriteOutline"
             {
                 fixed4 c = tex2D(_MainTex, IN.texcoord);
                 
-                // 만약 현재 픽셀이 투명하지 않다면 그냥 원래 색 출력
+                // 이미 색이 있다면(캐릭터 내부) 그냥 출력
                 if (c.a > 0.1) return c * IN.color;
 
-                // 주변(상하좌우) 픽셀 검사
-                float2 pixelUp = float2(0, _MainTex_TexelSize.y) * _OutlineWidth;
-                float2 pixelDown = float2(0, -_MainTex_TexelSize.y) * _OutlineWidth;
-                float2 pixelRight = float2(_MainTex_TexelSize.x, 0) * _OutlineWidth;
-                float2 pixelLeft = float2(-_MainTex_TexelSize.x, 0) * _OutlineWidth;
+                // --- 외곽선 검사 로직 시작 ---
+                
+                // 픽셀 단위로 오프셋 계산 (X, Y축)
+                float2 offset = _MainTex_TexelSize.xy * _OutlineWidth;
 
-                fixed4 pixelUpColor = tex2D(_MainTex, IN.texcoord + pixelUp);
-                fixed4 pixelDownColor = tex2D(_MainTex, IN.texcoord - pixelUp); // Down은 그냥 빼기
-                fixed4 pixelRightColor = tex2D(_MainTex, IN.texcoord + pixelRight);
-                fixed4 pixelLeftColor = tex2D(_MainTex, IN.texcoord - pixelRight); // Left는 빼기
+                // 8방향 검사 (상하좌우 + 대각선)
+                // 하나라도 알파값이 있으면 외곽선으로 판정
+                float alphaSum = 0;
 
-                // 주변에 색칠된 픽셀이 하나라도 있다면? -> 나는 아웃라인이다!
-                if (pixelUpColor.a > 0.1 || pixelDownColor.a > 0.1 || pixelRightColor.a > 0.1 || pixelLeftColor.a > 0.1)
+                // 상하좌우
+                alphaSum += tex2D(_MainTex, IN.texcoord + float2(0, offset.y)).a;  // Up
+                alphaSum += tex2D(_MainTex, IN.texcoord - float2(0, offset.y)).a;  // Down
+                alphaSum += tex2D(_MainTex, IN.texcoord + float2(offset.x, 0)).a;  // Right
+                alphaSum += tex2D(_MainTex, IN.texcoord - float2(offset.x, 0)).a;  // Left
+
+                // 대각선 (품질을 위해 추가, 성능이 중요하다면 제거 가능)
+                alphaSum += tex2D(_MainTex, IN.texcoord + float2(offset.x, offset.y)).a;   // Top-Right
+                alphaSum += tex2D(_MainTex, IN.texcoord + float2(-offset.x, offset.y)).a;  // Top-Left
+                alphaSum += tex2D(_MainTex, IN.texcoord + float2(offset.x, -offset.y)).a;  // Bottom-Right
+                alphaSum += tex2D(_MainTex, IN.texcoord + float2(-offset.x, -offset.y)).a; // Bottom-Left
+
+                // 주변에 불투명한 픽셀이 하나라도 발견되었다면
+                if (alphaSum > 0.1)
                 {
                     return _OutlineColor;
                 }
+                // -------------------------
 
                 return c * IN.color;
             }
