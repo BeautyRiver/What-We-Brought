@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 397dfa5f313b5524c9bb65f40734c8d3, type: 3}
   m_Name: testItem2
   m_EditorClassIdentifier: 
-  itemName: 
-  itemImage: {fileID: 0}
+  itemName: barrel
+  itemImage: {fileID: 21300000, guid: d5a1451836e5f634e8ce79c24ce61b65, type: 3}
+  placePrefab: {fileID: -8653719598885068355, guid: 928e14ca6e01698478d1f6b276d666fa, type: 3}
+  placeOffset: {x: 0, y: 0}
