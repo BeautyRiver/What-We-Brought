@@ -35,6 +35,11 @@ public class Interaction : MonoBehaviour
             isPlayerInRange = false;
             Debug.Log("플레이어 나감 (3D)");
             ResetCursor();
+
+            if (UIManager.instance != null)
+            {
+                UIManager.instance.HideTalkPanel();
+            }
         }
     }
 
