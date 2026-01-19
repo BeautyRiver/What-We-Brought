@@ -49,16 +49,16 @@ public class Slot : MonoBehaviour, IPointerClickHandler
                 return;
             }
 
-            // 이미 이 슬롯 아이템이 장착 중이면 해제
-            if (eq.equippedItem == _item)
+            // 슬롯 기준으로 장착/해제
+            if (eq.equippedSlot == this)
             {
                 eq.Unequip();
-                eq.SetEquippedSlot(null);      // 여기까지 OK
+                eq.SetEquippedSlot(null);
             }
             else
             {
-                eq.Equip(_item);               // 장착 아이템 교체
-                eq.SetEquippedSlot(this);      // ★ 새 슬롯을 넘겨줘야 함
+                eq.Equip(_item);
+                eq.SetEquippedSlot(this);
             }
         }
     }
