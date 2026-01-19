@@ -44,4 +44,9 @@ public class PlayerController : MonoBehaviour
 
         movement.Move(dir);
     }
+
+    public void StopMove()
+    {
+        movement.StopMove();
+    }
 }
