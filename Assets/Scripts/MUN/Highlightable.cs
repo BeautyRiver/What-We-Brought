@@ -2,13 +2,16 @@ using UnityEngine;
 
 public class Highlightable : MonoBehaviour
 {
-    private SpriteRenderer myRenderer; // Renderer -> SpriteRenderer로 변경
+    [Header("설정")]
+    [Tooltip("체크하면 게임 시작 시 투명하게 숨겨집니다.")]
+    public bool isHiddenByDefault = true; // 기본값을 true로 설정
+
+    private SpriteRenderer myRenderer;
     private Material originalMaterial;
     private bool isHighlighted = false;
 
     void Awake()
     {
-        // 2D 게임이므로 SpriteRenderer를 찾습니다.
         myRenderer = GetComponent<SpriteRenderer>();
         if (myRenderer == null) myRenderer = GetComponentInChildren<SpriteRenderer>();
 
@@ -22,33 +25,56 @@ public class Highlightable : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        // [수정 포인트] 시작할 때 설정에 따라 모습을 숨김
+        if (isHiddenByDefault && myRenderer != null)
+        {
+            myRenderer.enabled = false; // 렌더러를 꺼서 안 보이게 만듦 (충돌체는 살아있음)
+        }
+    }
+
+    // Crow.cs가 이 함수를 부릅니다
     public void Highlight(Material outlineMat)
     {
         if (myRenderer == null || isHighlighted) return;
 
         isHighlighted = true;
 
-        // 1. 현재 스프라이트 텍스처 저장 (스프라이트 아틀라스 대응)
+        // [수정 포인트] 능력이 발동되면 일단 보이게 켬!
+        myRenderer.enabled = true;
+
+        // 1. 텍스처 보존
         Texture currentTexture = myRenderer.sprite.texture;
 
-        // 2. 재질 교체
+        // 2. 아웃라인 재질로 교체
         myRenderer.material = outlineMat;
 
-        // 3. [중요] 쉐이더에 텍스처 다시 주입
-        // URP 스프라이트 쉐이더의 경우 _MainTex를 주로 사용하지만, 
-        // 사용하는 쉐이더 속성 이름이 다르면 맞춰줘야 합니다.
+        // 3. 텍스처 재연결
         if (myRenderer.material.HasProperty("_MainTex"))
         {
             myRenderer.material.SetTexture("_MainTex", currentTexture);
         }
     }
 
+    // Crow.cs가 능력이 끝나면 이 함수를 부릅니다
     public void Unhighlight()
     {
         if (myRenderer == null || !isHighlighted) return;
 
         isHighlighted = false;
-        // 원래 재질로 복구
-        myRenderer.material = originalMaterial;
+
+        // [수정 포인트] 원래 숨겨진 녀석이었다면 다시 숨김
+        if (isHiddenByDefault)
+        {
+            myRenderer.enabled = false; // 다시 안 보이게 끄기
+            // 숨겨졌으니 재질 복구는 굳이 안 해도 되지만, 깔끔하게 원래대로
+            myRenderer.material = originalMaterial;
+        }
+        else
+        {
+            // 원래 보이던 녀석이면 재질만 원래대로 복구
+            myRenderer.material = originalMaterial;
+        }
     }
 }

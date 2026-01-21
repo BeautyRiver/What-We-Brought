@@ -1,8 +1,8 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class Interaction : MonoBehaviour
 {
-    [Header("Ä¿¼­ ¼³Á¤")]
+    [Header("ì»¤ì„œ ì„¤ì •")]
     public Texture2D cursorTexture;
     public Vector2 hotSpot = Vector2.zero;
 
@@ -14,26 +14,25 @@ public class Interaction : MonoBehaviour
         interactable = GetComponent<IInteractable>();
     }
 
-    // [Áß¿ä] ¿©±â¸¦ 3D¿ë(Collider)À¸·Î ´Ù½Ã º¯°æÇß½À´Ï´Ù!
+    // [3D ì¶©ëŒ ê°ì§€]
     private void OnTriggerEnter(Collider other)
     {
-        // µğ¹ö±×: ¹«¾ù°ú ºÎµúÇû´ÂÁö È®ÀÎ
-        Debug.Log("[3D Ãæµ¹ °¨Áö] ºÎµúÈù ´ë»ó: " + other.name);
-
         if (other.CompareTag("Player"))
         {
             isPlayerInRange = true;
-            Debug.Log("ÇÃ·¹ÀÌ¾î °¨ÁöµÊ (3D)");
+            Debug.Log("í”Œë ˆì´ì–´ ê°ì§€ë¨ (3D)");
+            // ë“¤ì–´ì˜¤ìë§ˆì ë§ˆìš°ìŠ¤ê°€ ìœ„ì— ìˆì„ ìˆ˜ ìˆìœ¼ë‹ˆ ìƒíƒœ ê°±ì‹ 
+            OnMouseEnter();
         }
     }
 
-    // [Áß¿ä] ¿©±âµµ 3D¿ëÀ¸·Î º¯°æ!
+    // [3D ì¶©ëŒ ê°ì§€]
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             isPlayerInRange = false;
-            Debug.Log("ÇÃ·¹ÀÌ¾î ³ª°¨ (3D)");
+            Debug.Log("í”Œë ˆì´ì–´ ë‚˜ê° (3D)");
             ResetCursor();
 
             if (UIManager.instance != null)
@@ -43,9 +42,19 @@ public class Interaction : MonoBehaviour
         }
     }
 
-    // ¸¶¿ì½º ÀÌº¥Æ®´Â 2D/3D °ø¿ëÀÌ¹Ç·Î ±×´ë·Î µÒ
+    // [ìˆ˜ì • í•µì‹¬ â­] ë§ˆìš°ìŠ¤ ì˜¬ë ¸ì„ ë•Œ
     void OnMouseEnter()
     {
+        // 1. ìì‹ ì˜¤ë¸Œì íŠ¸ê¹Œì§€ ë’¤ì ¸ì„œ ê·¸ë¦¼(Sprite)ì„ ì°¾ì•„ë¼!
+        SpriteRenderer sr = GetComponentInChildren<SpriteRenderer>();
+
+        // 2. ê·¸ë¦¼ì„ ëª» ì°¾ì•˜ë‹¤ë©´? (ë¹ˆ ê»ë°ê¸°) -> íˆ¬ëª…í•œ ë†ˆìœ¼ë¡œ ì·¨ê¸‰í•´ì„œ ë¬´ì‹œ!
+        if (sr == null) return;
+
+        // 3. ê·¸ë¦¼ì€ ìˆëŠ”ë° ëˆˆì„ ê°ê³  ìˆë‹¤? (íˆ¬ëª…) -> ë¬´ì‹œ!
+        if (sr.enabled == false) return;
+
+        // 4. ë‹¤ í†µê³¼í–ˆìœ¼ë©´ ì»¤ì„œ ë„ìš°ê¸°
         if (isPlayerInRange) SetCursor();
     }
 
@@ -54,17 +63,25 @@ public class Interaction : MonoBehaviour
         ResetCursor();
     }
 
+    // [ìˆ˜ì • í•µì‹¬ â­] ë§ˆìš°ìŠ¤ í´ë¦­í–ˆì„ ë•Œ
     void OnMouseDown()
     {
-        Debug.Log("Å¬¸¯ÇÔ"); // Å¬¸¯ ·Î±× È®ÀÎ
+        // 1. ìì‹ê¹Œì§€ ë’¤ì ¸ì„œ í™•ì¸
+        SpriteRenderer sr = GetComponentInChildren<SpriteRenderer>();
 
+        // 2. ê·¸ë¦¼ì´ ì—†ê±°ë‚˜(null), êº¼ì ¸ìˆìœ¼ë©´(false) -> í´ë¦­ ê¸ˆì§€!
+        if (sr == null || sr.enabled == false) return;
+
+        Debug.Log("í´ë¦­í•¨");
+
+        // 3. ìƒí˜¸ì‘ìš© ì‹¤í–‰
         if (isPlayerInRange)
         {
             if (interactable != null) interactable.Interact();
         }
         else
         {
-            Debug.Log("°Å¸®°¡ ³Ê¹« ¸Ø");
+            Debug.Log("ê±°ë¦¬ê°€ ë„ˆë¬´ ë©ˆ");
         }
     }
 
