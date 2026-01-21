@@ -2,37 +2,44 @@ using UnityEngine;
 
 public class TestItemGet : MonoBehaviour
 {
+    [Header("카메라")]
+    public Camera cam;          // CinemachineBrain 달린 실제 메인 카메라
+    public float yOffset = 0f;  // 2.5D 보정용 Y 오프셋
+
     [Header("인벤토리")]
     public Inventory inventory;
 
-    void Start()
-    {
-        
-    }
+    // 아이템이 놓인 Z 평면 (전부 0이면 0)
+    public float itemZ = 0f;
 
-    // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
-            if(hit.collider != null)
+            Vector3 screenPos = Input.mousePosition;
+
+            // 카메라에서 아이템 평면까지의 거리
+            float zDist = itemZ - cam.transform.position.z;
+            screenPos.z = zDist;
+
+            // 3D에서 마우스가 가리키는 월드 좌표
+            Vector3 worldPos3 = cam.ScreenToWorldPoint(screenPos);
+
+            // 2.5D 카메라 기울기 때문에 어긋나는 Y를 보정
+            worldPos3.y += yOffset;
+
+            Vector2 clickPos = new Vector2(worldPos3.x, worldPos3.y);
+
+            Collider2D col = Physics2D.OverlapPoint(clickPos);
+            if (col != null)
             {
-                HitCheckObject(hit);
+                IObjectItem clickInterface = col.GetComponent<IObjectItem>();
+                if (clickInterface != null)
+                {
+                    Item item = clickInterface.ClickItem();
+                    inventory.AddItem(item);
+                }
             }
         }
     }
-    void HitCheckObject(RaycastHit2D hit)
-    {
-        IObjectItem clickInterface = hit.transform.gameObject.GetComponent<IObjectItem>();
-        if(clickInterface != null)
-        {
-            Item item = clickInterface.ClickItem();
-            inventory.AddItem(item);
-        }
-    } 
-
-
 }
