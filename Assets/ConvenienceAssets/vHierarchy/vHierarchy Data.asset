@@ -18,6 +18,7 @@ MonoBehaviour:
     - d0e90cda6ae2156499dd45e32ad2d500
     - 3ebb8de04dca4bd4aa13be4b20043859
     - d59c47a05706c8148aa272c5c704bd41
+    - 5085336dd0540cf459d5e6f84141f37d
     values:
     - goDatas_byGlobalId:
         keys: []
@@ -38,5 +39,29 @@ MonoBehaviour:
         keys:
         - globalObjectIdString: GlobalObjectId_V1-2-d59c47a05706c8148aa272c5c704bd41-24613760-0
         values:
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+    - goDatas_byGlobalId:
+        keys:
+        - globalObjectIdString: GlobalObjectId_V1-2-5085336dd0540cf459d5e6f84141f37d-516717847-0
+        - globalObjectIdString: GlobalObjectId_V1-2-5085336dd0540cf459d5e6f84141f37d-1877277935-0
+        - globalObjectIdString: GlobalObjectId_V1-2-5085336dd0540cf459d5e6f84141f37d-604082120-0
+        - globalObjectIdString: GlobalObjectId_V1-2-5085336dd0540cf459d5e6f84141f37d-265127780-0
+        - globalObjectIdString: GlobalObjectId_V1-2-5085336dd0540cf459d5e6f84141f37d-1662635176-0
+        - globalObjectIdString: GlobalObjectId_V1-2-5085336dd0540cf459d5e6f84141f37d-27185930-0
+        - globalObjectIdString: GlobalObjectId_V1-2-5085336dd0540cf459d5e6f84141f37d-1871589808-0
+        values:
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: EventSystem Icon
+        - colorIndex: 0
+          iconNameOrGuid: EventSystem Icon
+        - colorIndex: 0
+          iconNameOrGuid: EventSystem Icon
+        - colorIndex: 0
+          iconNameOrGuid: EventSystem Icon
         - colorIndex: 0
           iconNameOrGuid: Settings Icon

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8424597749114807324}
   - component: {fileID: 7646312015394671046}
   - component: {fileID: 4202165360244322227}
+  - component: {fileID: 4510793413354951133}
   - component: {fileID: 1372519150417590779}
   m_Layer: 0
   m_Name: Rat
@@ -29,14 +30,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7606894165200506342}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.29306385, y: 0, z: 0, w: 0.9560929}
+  m_LocalRotation: {x: 0.2930643, y: 0, z: 0, w: 0.9560928}
   m_LocalPosition: {x: 0, y: 0.293, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7378545014216166237}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 34.083, y: 0, z: 0}
 --- !u!54 &928495395642653283
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -101,6 +102,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
+  isLeftLookingDefault: 0
+--- !u!114 &4510793413354951133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7606894165200506342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a3b10913b078c84a9a461b97f07cd3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionRange: 3
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  interactionCursor: {fileID: 0}
 --- !u!65 &1372519150417590779
 BoxCollider:
   m_ObjectHideFlags: 0
