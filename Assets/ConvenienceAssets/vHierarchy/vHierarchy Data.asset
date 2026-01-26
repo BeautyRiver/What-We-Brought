@@ -50,6 +50,10 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-5085336dd0540cf459d5e6f84141f37d-1662635176-0
         - globalObjectIdString: GlobalObjectId_V1-2-5085336dd0540cf459d5e6f84141f37d-27185930-0
         - globalObjectIdString: GlobalObjectId_V1-2-5085336dd0540cf459d5e6f84141f37d-1871589808-0
+        - globalObjectIdString: GlobalObjectId_V1-2-5085336dd0540cf459d5e6f84141f37d-690151105-0
+        - globalObjectIdString: GlobalObjectId_V1-2-5085336dd0540cf459d5e6f84141f37d-1852208866-0
+        - globalObjectIdString: GlobalObjectId_V1-2-5085336dd0540cf459d5e6f84141f37d-333836481-0
+        - globalObjectIdString: GlobalObjectId_V1-2-5085336dd0540cf459d5e6f84141f37d-864859125-0
         values:
         - colorIndex: 0
           iconNameOrGuid: Settings Icon
@@ -65,3 +69,11 @@ MonoBehaviour:
           iconNameOrGuid: EventSystem Icon
         - colorIndex: 0
           iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 1
+          iconNameOrGuid: 

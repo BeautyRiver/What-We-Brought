@@ -14,6 +14,6 @@ public class LookAtCamera : MonoBehaviour
     {
         if (cameraTransform == null) return;
 
-        transform.rotation = Quaternion.Euler(cameraTransform.rotation.eulerAngles.x, 0, 0);
+        transform.rotation = Quaternion.Euler(cameraTransform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
     }
 }

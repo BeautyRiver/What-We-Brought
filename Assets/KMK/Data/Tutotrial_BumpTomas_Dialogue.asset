@@ -14,8 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textLines:
   - speakerName: Tomas
-    text: hihihihihi
-  - speakerName: Tomas
-    text: byebye
-  - speakerName: Tomas
-    text: zz
+    text: '!!!'

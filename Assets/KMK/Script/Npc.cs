@@ -4,6 +4,12 @@ using UnityEngine.Playables;
 
 public class Npc : MonoBehaviour, IInteractable
 {
+    // 정문수 코드 추가
+    [Header("대화 설정")]
+    [TextArea(3, 5)]
+    public string message = "";
+    //
+
     [Header("집 설정")]
     [SerializeField] private Transform houseTransform;
     [SerializeField] private float walkableRadius = 10f;
@@ -73,6 +79,16 @@ public class Npc : MonoBehaviour, IInteractable
     public void Interact()
     {
         Debug.Log("NPC와 상호작용 발생!");
+
+        //정문수 코드 추가
+        if (UIManager.instance != null)
+        {
+            UIManager.instance.ShowTalkPanel(message);
+        }
+        else
+        {
+            Debug.LogError("UIManager가 씬에 없습니다!");
+        }
     }
 
     private void OnDrawGizmosSelected()
