@@ -1,4 +1,3 @@
-// PlacementPreview.cs
 using UnityEngine;
 
 public class PlacementPreview : MonoBehaviour
@@ -26,7 +25,7 @@ public class PlacementPreview : MonoBehaviour
         var item = equipmentManager.equippedItem;
 
         // 장착된 아이템이 없거나 설치형이 아니면 고스트 제거
-        if (item == null || item.placePrefab == null)
+        if (item == null || item.itemType != ItemType.Placeable || item.placePrefab == null)
         {
             if (ghostInstance != null)
                 Destroy(ghostInstance);
@@ -44,7 +43,7 @@ public class PlacementPreview : MonoBehaviour
         Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mouseWorld.z = 0f;
 
-        // 필요하면 offset 추가
+        // 필요하면 offset 사용
         mouseWorld += (Vector3)item.placeOffset;
 
         ghostInstance.transform.position = mouseWorld;
@@ -56,31 +55,26 @@ public class PlacementPreview : MonoBehaviour
             return;
 
         var item = equipmentManager.equippedItem;
-        if (item == null || item.placePrefab == null)
+        if (item == null || item.itemType != ItemType.Placeable || item.placePrefab == null)
             return;
 
-        // 좌클릭으로 확정 설치 (원하는 키로 바꿔도 됨)
+        // 좌클릭으로 설치 확정 (원하면 다른 키로 변경)
         if (Input.GetMouseButtonDown(0))
         {
-            Vector3 placePos = ghostInstance != null
-                ? ghostInstance.transform.position
-                : Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            if (ghostInstance == null)
+                return;
 
+            Vector3 placePos = ghostInstance.transform.position;
             placePos.z = 0f;
 
-            Instantiate(item.placePrefab, placePos, Quaternion.identity);
-            Debug.Log($"{item.itemName} 설치 완료");
-
-            // 한 번 설치 후 해제하고 싶으면:
-            // equipmentManager.Unequip();
-            // equipmentManager.SetEquippedSlot(null);
-            // Destroy(ghostInstance);
+            // 실제 설치는 Item.Use가 담당
+            equipmentManager.UseEquippedAt(placePos);
         }
     }
 
     void MakeGhost(GameObject obj)
     {
-        // 간단 버전: 모든 SpriteRenderer의 알파를 낮춘다.
+        // 스프라이트 투명하게
         var sprites = obj.GetComponentsInChildren<SpriteRenderer>();
         foreach (var s in sprites)
         {
@@ -89,7 +83,7 @@ public class PlacementPreview : MonoBehaviour
             s.color = c;
         }
 
-        // 물리 충돌 막으려면 Collider 비활성화
+        // 고스트는 충돌 안 하게
         var colliders = obj.GetComponentsInChildren<Collider2D>();
         foreach (var col in colliders)
         {

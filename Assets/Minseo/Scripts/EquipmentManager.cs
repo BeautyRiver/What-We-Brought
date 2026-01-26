@@ -1,20 +1,23 @@
-// EquipmentManager.cs
+ï»¿// EquipmentManager.cs
 using UnityEngine;
 
 public class EquipmentManager : MonoBehaviour
 {
+    // ì‹±ê¸€í†¤ ì¸ìŠ¤í„´ìŠ¤
     public static EquipmentManager Instance { get; private set; }
 
-    [Header("ÇöÀç ÀåÂøµÈ ¾ÆÀÌÅÛ")]
-    public Item equippedItem;
+    [Header("í˜„ì¬ ì¥ì°©ëœ ì•„ì´í…œ")]
+    public Item equippedItem;          // ì§€ê¸ˆ ì„ íƒ/ì¥ì°©ëœ ì•„ì´í…œ
 
-    [Header("¼³Ä¡ ½Ã ±âÁØÀÌ µÉ Transform (ÇÃ·¹ÀÌ¾î µî)")]
-    public Transform installOrigin;
+    [Header("ì„¤ì¹˜ ì‹œ ê¸°ì¤€ì´ ë  Transform (í”Œë ˆì´ì–´ ë“±)")]
+    public Transform installOrigin;    // í•„ìš”í•˜ë©´ ë‚˜ì¤‘ì— ì‚¬ìš©í•  ê¸°ì¤€ì 
 
-    private Slot equippedSlot;    // ÇÏÀÌ¶óÀÌÆ®¸¦ ÁÙ ½½·Ô
+    // í˜„ì¬ í•˜ì´ë¼ì´íŠ¸(ì„ íƒ) ì¤‘ì¸ ìŠ¬ë¡¯
+    public Slot equippedSlot { get; private set; }
 
     private void Awake()
     {
+        // ì‹±ê¸€í†¤ ì´ˆê¸°í™”
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -23,49 +26,47 @@ public class EquipmentManager : MonoBehaviour
         Instance = this;
     }
 
+    // ì•„ì´í…œ ì¥ì°©
     public void Equip(Item item)
     {
         equippedItem = item;
-        Debug.Log($"{item.itemName} ÀåÂø");
+        Debug.Log($"{item.itemName} ì¥ì°©");
     }
 
+    // ì•„ì´í…œ í•´ì œ
     public void Unequip()
     {
         if (equippedItem != null)
         {
-            Debug.Log($"{equippedItem.itemName} ÇØÁ¦");
+            Debug.Log($"{equippedItem.itemName} í•´ì œ");
         }
         equippedItem = null;
     }
 
+    // ì–´ë–¤ ìŠ¬ë¡¯ì´ ì„ íƒ/ì¥ì°© ìƒíƒœì¸ì§€ ê°±ì‹  + í•˜ì´ë¼ì´íŠ¸ On/Off
     public void SetEquippedSlot(Slot slot)
     {
-        // ±âÁ¸ ½½·Ô ÇÏÀÌ¶óÀÌÆ® ²ô±â
+        // ì´ì „ ìŠ¬ë¡¯ í…Œë‘ë¦¬ ë„ê¸°
         if (equippedSlot != null)
             equippedSlot.SetHighlight(false);
 
-        // »õ ½½·Ô ±â¾ï
+        // ìƒˆ ìŠ¬ë¡¯ ê¸°ì–µ
         equippedSlot = slot;
 
-        // »õ ½½·Ô ÇÏÀÌ¶óÀÌÆ® ÄÑ±â
+        // ìƒˆ ìŠ¬ë¡¯ í…Œë‘ë¦¬ ì¼œê¸°
         if (equippedSlot != null)
             equippedSlot.SetHighlight(true);
     }
 
-    public void UseEquippedItem()
+    // ê³ ìŠ¤íŠ¸ê°€ ì•Œë ¤ ì¤€ ìœ„ì¹˜ë¡œ ì•„ì´í…œ ì‚¬ìš©
+    public void UseEquippedAt(Vector3 position)
     {
         if (equippedItem == null)
         {
-            Debug.Log("ÀåÂøµÈ ¾ÆÀÌÅÛÀÌ ¾ø½À´Ï´Ù.");
+            Debug.Log("ì¥ì°©ëœ ì•„ì´í…œì´ ì—†ìŠµë‹ˆë‹¤.");
             return;
         }
 
-        if (equippedItem.placePrefab == null)
-        {
-            Debug.Log("ÀÌ ¾ÆÀÌÅÛÀº ¼³Ä¡ÇüÀÌ ¾Æ´Õ´Ï´Ù.");
-            return;
-        }
-
-        // ½ÇÁ¦ ¼³Ä¡´Â ¾Æ·¡ 2¹ø¿¡¼­ °í½ºÆ® ¿ÀºêÁ§Æ® È®Á¤ À§Ä¡¸¦ ±âÁØÀ¸·Î ÇÏ°Ô ¹Ù²Ü ¿¹Á¤
+        equippedItem.Use(position);
     }
 }
