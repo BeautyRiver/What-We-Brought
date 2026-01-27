@@ -9,6 +9,7 @@ TagManager:
   - BasicObject
   - Clue
   - Goal
+  - Rat
   layers:
   - Default
   - TransparentFX

@@ -48,7 +48,7 @@ public class TalkPanel : MonoBehaviour
         talkText.DOText(content, totalInterval).SetEase(Ease.Linear).OnComplete(() => IsTyping = false);
     }
 
-    public void CompeleteText()
+    public void CompleteText()
     {
         talkText.DOKill();
         talkText.text = currentFullText;

@@ -18,7 +18,7 @@ public class Crow : MonoBehaviour
 
     private bool isAbilityReady = true;
 
-    void Update()
+    public void HadleCrowAbility()
     {
         // 쿨타임 UI 처리 등은 나중에 추가
         if (Input.GetKeyDown(KeyCode.F))
@@ -33,7 +33,6 @@ public class Crow : MonoBehaviour
             }
         }
     }
-
     IEnumerator CrowAbilityCoroutine()
     {
         isAbilityReady = false;

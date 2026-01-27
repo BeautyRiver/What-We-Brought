@@ -942,8 +942,9 @@ GameObject:
   - component: {fileID: 6242922078554439160}
   - component: {fileID: 2103131128168934068}
   - component: {fileID: 624616052694789959}
+  - component: {fileID: 5880223522062337228}
   - component: {fileID: 954247156528832726}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -992,7 +993,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 84
+  m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!65 &1392943722232743483
 BoxCollider:
@@ -1065,11 +1066,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a3b10913b078c84a9a461b97f07cd3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactionRange: 3
+  interactionRange: 6
   interactableLayer:
     serializedVersion: 2
     m_Bits: 256
-  interactionCursor: {fileID: 2800000, guid: e7048945c0ae8e04aa4d93e506deda05, type: 3}
+--- !u!114 &5880223522062337228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5316088918833687629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6c75ac692c28764c99420ab33fb29fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &954247156528832726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1084,12 +1096,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 3
   cooldown: 5
-  detectionRadius: 10
+  detectionRadius: 6
   highlightTag: Clue
   clueLayer:
     serializedVersion: 2
-    m_Bits: 0
-  outlineEffectMaterial: {fileID: 2100000, guid: 7b386c2f8f965f847b7b3a3ae9758bde, type: 2}
+    m_Bits: 256
+  outlineEffectMaterial: {fileID: 2100000, guid: b1a25d007f7457846937dc54c9da4496, type: 2}
 --- !u!1 &6958841030213987555
 GameObject:
   m_ObjectHideFlags: 0
@@ -1185,6 +1197,37 @@ Transform:
   - {fileID: 1563000483897510546}
   m_Father: {fileID: 3309837118219952249}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8749693144368032051
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2915868460398315653}
+  m_Layer: 0
+  m_Name: Medicine Bottle Pos
+  m_TagString: Untagged
+  m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2915868460398315653
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8749693144368032051}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.339, y: -4.892, z: -0.053}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8760701125940676910}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8801124463382194952
 GameObject:
   m_ObjectHideFlags: 0
@@ -1215,7 +1258,8 @@ Transform:
   m_LocalPosition: {x: 0.31499958, y: 5.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2915868460398315653}
   m_Father: {fileID: 131875661141589938}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7875875007174315191
