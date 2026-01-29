@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7101136540942009411}
   - component: {fileID: 2971042163892099629}
   m_Layer: 0
-  m_Name: Medicine Bottle
+  m_Name: Medicine Bottle_For Cut Scene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
