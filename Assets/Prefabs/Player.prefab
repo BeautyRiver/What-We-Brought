@@ -944,7 +944,7 @@ GameObject:
   - component: {fileID: 624616052694789959}
   - component: {fileID: 5880223522062337228}
   - component: {fileID: 954247156528832726}
-  m_Layer: 8
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1069,7 +1069,7 @@ MonoBehaviour:
   interactionRange: 6
   interactableLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 264
 --- !u!114 &5880223522062337228
 MonoBehaviour:
   m_ObjectHideFlags: 0

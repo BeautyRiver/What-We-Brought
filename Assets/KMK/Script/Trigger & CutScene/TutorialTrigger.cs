@@ -3,15 +3,15 @@ using UnityEngine;
 public class TutorialTrigger : EventTrigger
 {
     [Header("ÀÌ ±¸¿ª ¸àÆ®")]
-    [TextArea] public string myMessage;
+    [TextArea] public string content;
 
     protected override void StartEvent()
     {
-        TutorialManager.Instance.ShowTutorial(myMessage);
+        UIManager.instance.ShowInfoPanel(content);
     }
 
     protected override void EndEvent()
     {
-        TutorialManager.Instance.HideTutorial();
+        UIManager.instance.HideInfoPanel();
     }
 }

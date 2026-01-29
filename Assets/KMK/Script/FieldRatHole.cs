@@ -1,16 +1,15 @@
+using DG.Tweening;
+using System.Collections;
+using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class FieldRatHole : MonoBehaviour
-{
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+public class FieldRatHole : MonoBehaviour, IInteractable
+{    
+    public void Interact()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+        GameManager.instance.StartSwitchCamera(true);
+    }    
+    
+    
 }

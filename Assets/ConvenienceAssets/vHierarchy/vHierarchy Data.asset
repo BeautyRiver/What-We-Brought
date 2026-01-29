@@ -95,6 +95,11 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-227733717187919491-1974680838
         - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-4992418236501342822-5015535974006981964
         - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-35409266-0
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-16728545-0
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-1698970686-0
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-1215666709-0
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-1219308253-0
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-263938396-0
         values:
         - colorIndex: 0
           iconNameOrGuid: Camera Icon
@@ -122,6 +127,16 @@ MonoBehaviour:
           iconNameOrGuid: Settings Icon
         - colorIndex: 0
           iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Camera Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Camera Icon
+        - colorIndex: 0
+          iconNameOrGuid: StandaloneInputModule Icon
         - colorIndex: 0
           iconNameOrGuid: Settings Icon
     - goDatas_byGlobalId:

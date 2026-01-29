@@ -12,9 +12,13 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: cdd1dde3b13d7e54a8b57b4d8d38fa03, type: 3}
+    - target: {fileID: 4167767922908467194, guid: dfab9f929115e9047870a2ae3eeec3b6, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 32c569062ba58b84492a50ebd6f92dd9, type: 2}
     - target: {fileID: 4760452649970022560, guid: dfab9f929115e9047870a2ae3eeec3b6, type: 3}
       propertyPath: m_Name
-      value: Box2_ByPuzzle Variant
+      value: Box2_ByPuzzle
       objectReference: {fileID: 0}
     - target: {fileID: 6155887560614996078, guid: dfab9f929115e9047870a2ae3eeec3b6, type: 3}
       propertyPath: m_LocalPosition.x

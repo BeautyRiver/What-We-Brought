@@ -9,14 +9,14 @@ public class RatTutorialTrigger : TutorialTrigger
     protected override void StartEvent()
     {
         base.StartEvent();
-        TutorialManager.Instance.ShowTutorial(myMessage);
+        UIManager.instance.ShowInfoPanel(content);
         questMouseHole.Highlight(outlineEffectMaterial);
     }
 
     protected override void EndEvent()
     {
         base.EndEvent();
-        TutorialManager.Instance.HideTutorial();
+        UIManager.instance.HideInfoPanel();
         questMouseHole.Unhighlight();
     }
 }

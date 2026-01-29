@@ -7,19 +7,15 @@ public class NotePanel : MonoBehaviour
     [Header("UI 요소 연결")]
     public TextMeshProUGUI noteText;
 
-    private void Awake()
-    {
-        gameObject.SetActive(false);
-    }
     public void OpenPanel(string content)
     {
-        GameManager.instance.SetPlayerMoveState(false);
+        GameManager.instance.SetGameState(GameState.Dialogue);
         noteText.text = content;
     }
 
     public void ClosePanel()
     {
-        GameManager.instance.SetPlayerMoveState(true);
+        GameManager.instance.SetGameState(GameState.Playing);
         gameObject.SetActive(false);
     }
 }

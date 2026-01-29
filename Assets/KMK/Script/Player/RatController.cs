@@ -1,11 +1,11 @@
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class RatController : MonoBehaviour
 {
     private PlayerMovement movement;
     private PlayerInteraction interaction;
     private Transform cameraTransform;
-    private bool isControllable = false;
 
     private void Awake()
     {
@@ -15,15 +15,16 @@ public class RatController : MonoBehaviour
     }
 
     private void Update()
-    {
-        if (!GameManager.instance.IsGameState)
+    {      
+        // 인간 상태면 리턴
+        if (GameManager.instance.CurrentCharacter == PlayerCharacter.Human)
             return;
 
-        if (!isControllable)
-            return;
-
-        SetMoveDir();
-        interaction.HandleInteraction();
+        if (GameManager.instance.CurrentState == GameState.Playing)
+        {
+            SetMoveDir();
+            interaction.HandleInteraction();
+        }
     }
 
     private void SetMoveDir()
@@ -53,12 +54,5 @@ public class RatController : MonoBehaviour
     public void StopMove()
     {
         movement.StopMove();
-    }
-
-    public void SetControllerState(bool isControllable)
-    {
-        this.isControllable = isControllable;
-        if (!isControllable)
-            StopMove();
     }
 }

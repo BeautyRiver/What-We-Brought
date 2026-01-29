@@ -1,12 +1,6 @@
 ﻿using UnityEngine;
 using Unity.Cinemachine;
 
-// 플레이어 타입 열거형 (GameManager 등에서 공용으로 쓴다면 별도 파일로 빼는 것을 추천)
-public enum PlayerCharacter
-{
-    Human,
-    Rat
-}
 
 public class CharacterSwapManager : MonoBehaviour
 {
@@ -79,18 +73,18 @@ public class CharacterSwapManager : MonoBehaviour
 
             ratObject.SetActive(false);
 
-            // 컨트롤러 설정
-            _ratController.SetControllerState(false);
-            _humanController.SetControllerState(true);
-
             Debug.Log("Mode: Human");
             if (GameManager.instance != null)
+            {
                 GameManager.instance.ChangeCharacter(PlayerCharacter.Human);
+                _ratController.StopMove();
+            }
         }
         else
         {
             // 쥐가 사람의 위치로 이동
-            ratObject.transform.position = humanObject.transform.position;
+            var newPos = new Vector3(humanObject.transform.position.x, ratObject.transform.position.y, humanObject.transform.position.z);
+            ratObject.transform.position = newPos;
 
             if (ratObject.activeSelf == false)
                 ratObject.SetActive(true);
@@ -98,13 +92,12 @@ public class CharacterSwapManager : MonoBehaviour
             // 카메라 타겟 변경
             virtualCamera.Follow = ratObject.transform;
 
-            // 컨트롤러 설정
-            _ratController.SetControllerState(true);
-            _humanController.SetControllerState(false);
-
             Debug.Log("Mode: Rat");
             if (GameManager.instance != null)
+            {
                 GameManager.instance.ChangeCharacter(PlayerCharacter.Rat);
+                _humanController.StopMove();
+            }
         }
     }
 }

@@ -45,5 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   virtualCamera: {fileID: 0}
-  playerController: {fileID: 0}
-  ratController: {fileID: 0}
+  humanObject: {fileID: 0}
+  ratObject: {fileID: 0}

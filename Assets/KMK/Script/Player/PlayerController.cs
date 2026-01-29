@@ -6,7 +6,6 @@ public class PlayerController : MonoBehaviour
     private PlayerInteraction interaction;
     private Crow crow;
     private Transform cameraTransform;
-    private bool isControllable = true;
 
     private void Awake()
     {        
@@ -18,16 +17,16 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (!GameManager.instance.IsGameState)
+        // 쥐 상태면 리턴
+        if (GameManager.instance.CurrentCharacter == PlayerCharacter.Rat)
             return;
 
-        if (!isControllable)
-            return;
-
-        SetMoveDir();
-        interaction.HandleInteraction();
-        crow.HadleCrowAbility();
-        
+        if (GameManager.instance.CurrentState == GameState.Playing)
+        {
+            SetMoveDir();
+            interaction.HandleInteraction();
+            crow.HadleCrowAbility();
+        }
     }
 
     private void SetMoveDir()
@@ -57,12 +56,5 @@ public class PlayerController : MonoBehaviour
     public void StopMove()
     {
         movement.StopMove();
-    }
-
-    public void SetControllerState(bool isControllable)
-    {
-        this.isControllable = isControllable;
-        if (!isControllable)
-            StopMove();
     }
 }

@@ -31,8 +31,8 @@ public class BumpTomasCutScene : CutsceneDirector
     IEnumerator CutsceneSequence()
     {
         // 플레이어 조작 잠금
-        GameManager.instance.SetPlayerMoveState(false);
-
+        GameManager.instance.SetGameState(GameState.Dialogue);
+        playerModel.gameObject.GetComponent<PlayerController>().StopMove();
         // 토마스 등장 및 이동
         if (tomasAnimator != null)
         {
@@ -98,7 +98,7 @@ public class BumpTomasCutScene : CutsceneDirector
     IEnumerator OnPlaerController()
     {
         yield return new WaitForSeconds(2f);
-        GameManager.instance.SetPlayerMoveState(true);
+        GameManager.instance.SetGameState(GameState.Playing);
     }
     IEnumerator TomasRun()
     {

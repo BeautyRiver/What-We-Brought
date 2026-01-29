@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4202165360244322227}
   - component: {fileID: 4510793413354951133}
   - component: {fileID: 1372519150417590779}
-  m_Layer: 3
+  m_Layer: 10
   m_Name: Rat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,10 +115,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a3b10913b078c84a9a461b97f07cd3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactionRange: 2
+  interactionRange: 2.5
   interactableLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 512
 --- !u!65 &1372519150417590779
 BoxCollider:
   m_ObjectHideFlags: 0
