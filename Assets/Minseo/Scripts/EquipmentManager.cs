@@ -1,72 +1,74 @@
-﻿// EquipmentManager.cs
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class EquipmentManager : MonoBehaviour
 {
-    // 싱글톤 인스턴스
     public static EquipmentManager Instance { get; private set; }
+    [Header("UI 연결")]
+    public GhostItemUI ghostUI;
 
     [Header("현재 장착된 아이템")]
-    public Item equippedItem;          // 지금 선택/장착된 아이템
-
-    [Header("설치 시 기준이 될 Transform (플레이어 등)")]
-    public Transform installOrigin;    // 필요하면 나중에 사용할 기준점
-
-    // 현재 하이라이트(선택) 중인 슬롯
+    public Item equippedItem;
     public Slot equippedSlot { get; private set; }
 
     private void Awake()
     {
-        // 싱글톤 초기화
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+        if (Instance != null && Instance != this) Destroy(gameObject);
+        else Instance = this;
     }
 
-    // 아이템 장착
+    // 장착
     public void Equip(Item item)
     {
         equippedItem = item;
-        Debug.Log($"{item.itemName} 장착");
+        if (ghostUI != null)
+        {
+            ghostUI.SetItemSprite(item); // 이미지 교체
+            ghostUI.Hide();              // 일단 숨김
+        }
+
+        Debug.Log($"손에 듦: {item.itemName}");
     }
 
-    // 아이템 해제
+    // 해제
     public void Unequip()
     {
-        if (equippedItem != null)
-        {
-            Debug.Log($"{equippedItem.itemName} 해제");
-        }
         equippedItem = null;
+        if (equippedSlot != null)
+        {
+            equippedSlot.SetHighlight(false);
+            equippedSlot = null;
+        }
+
+        if (ghostUI != null) ghostUI.Hide();
+
+        Debug.Log("손 비움");
     }
 
-    // 어떤 슬롯이 선택/장착 상태인지 갱신 + 하이라이트 On/Off
+    // 슬롯 UI 갱신용
     public void SetEquippedSlot(Slot slot)
     {
-        // 이전 슬롯 테두리 끄기
-        if (equippedSlot != null)
-            equippedSlot.SetHighlight(false);
-
-        // 새 슬롯 기억
+        if (equippedSlot != null) equippedSlot.SetHighlight(false);
         equippedSlot = slot;
-
-        // 새 슬롯 테두리 켜기
-        if (equippedSlot != null)
-            equippedSlot.SetHighlight(true);
+        if (equippedSlot != null) equippedSlot.SetHighlight(true);
     }
 
-    // 고스트가 알려 준 위치로 아이템 사용
-    public void UseEquippedAt(Vector3 position)
+    private void Update()
     {
-        if (equippedItem == null)
+        // 마우스 왼쪽 클릭
+        if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("장착된 아이템이 없습니다.");
-            return;
-        }
+            // 1. 아이템을 들고 있지 않으면 패스
+            if (equippedItem == null) return;
 
-        equippedItem.Use(position);
+            // 2. UI(인벤토리 등)를 클릭했다면 해제하지 않음 (슬롯 클릭 로직과 충돌 방지)
+            if (EventSystem.current.IsPointerOverGameObject()) return;
+
+            // 3. 월드의 상호작용 오브젝트를 클릭했는지 확인은 PlayerInteraction에서 처리함.
+            // 여기서는 "아무것도 아닌 허공"을 클릭했을 때 취소하는 로직이 필요함.
+            // 하지만 PlayerInteraction이 먼저 실행되어 Interact를 시도하고, 
+            // 실패했을 때 Unequip을 부르는 것이 구조상 깔끔함.
+            // 일단 여기서는 비워두고 PlayerInteraction에서 처리하는 것을 추천.
+        }
     }
 }

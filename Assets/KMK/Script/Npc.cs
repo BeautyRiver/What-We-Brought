@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Playables;
 
-public class Npc : MonoBehaviour, IInteractable
+public class Npc : MonoBehaviour
 {
     // 정문수 코드 추가
     [Header("대화 설정")]
@@ -74,21 +74,6 @@ public class Npc : MonoBehaviour, IInteractable
         }
 
         agent.SetDestination(hit.position);
-    }
-
-    public void Interact()
-    {
-        Debug.Log("NPC와 상호작용 발생!");
-
-        //정문수 코드 추가
-        if (UIManager.instance != null)
-        {
-            UIManager.instance.ShowTalkPanel(message);
-        }
-        else
-        {
-            Debug.LogError("UIManager가 씬에 없습니다!");
-        }
     }
 
     private void OnDrawGizmosSelected()

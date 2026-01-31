@@ -1,56 +1,100 @@
-using UnityEngine;
+ï»¿using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    [Header("¼³Á¤")]
-    [Tooltip("»óÈ£ÀÛ¿ëÀÌ °¡´ÉÇÑ ÃÖ´ë °Å¸®")]
+    [Header("ì„¤ì •")]
+    [Tooltip("ìƒí˜¸ì‘ìš©ì´ ê°€ëŠ¥í•œ ìµœëŒ€ ê±°ë¦¬")]
     public float interactionRange = 3.0f;
 
-    [Tooltip("»óÈ£ÀÛ¿ëÇÒ ¹°Ã¼°¡ ÀÖ´Â ·¹ÀÌ¾î (ÃÖÀûÈ­¿ë)")]
+    [Tooltip("ìƒí˜¸ì‘ìš©í•  ë¬¼ì²´ê°€ ìˆëŠ” ë ˆì´ì–´ (ìµœì í™”ìš©)")]
     public LayerMask interactableLayer;
-
-    [Header("Ä¿¼­ UI (¼±ÅÃ)")]
-    public Texture2D interactionCursor; // ¼Õ ¸ğ¾ç Ä¿¼­ µî
-    private Texture2D defaultCursor;    // ±âº» Ä¿¼­ ÀúÀå¿ë
 
     public void HandleInteraction()
     {
-        // 1. Ä«¸Ş¶ó¿¡¼­ ¸¶¿ì½º Ä¿¼­ À§Ä¡·Î º¸ÀÌÁö ¾Ê´Â ±¤¼±(Ray)À» ½õ´Ï´Ù.
+        // 1. UI ìœ„ì—ì„œëŠ” ë„ê¸°
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            // UI ìœ„ë‹ˆê¹Œ ê³ ìŠ¤íŠ¸ë„ êº¼ì•¼ í•¨
+            if (EquipmentManager.Instance.ghostUI != null)
+                EquipmentManager.Instance.ghostUI.Hide();
+            return;
+        }
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
+        bool isHitInteractable = false; // ìƒí˜¸ì‘ìš© ë¬¼ì²´ë¥¼ ì°¾ì•˜ëŠ”ì§€ ì—¬ë¶€
 
-        // 2. ±¤¼±ÀÌ 'interactableLayer'¿¡ ¼ÓÇÑ ¹°Ã¼¿¡ ´ê¾Ò´ÂÁö È®ÀÎ
+        // 2. ë ˆì´ìºìŠ¤íŠ¸ í™•ì¸
         if (Physics.Raycast(ray, out hit, 100f, interactableLayer))
         {
-            // 3. ÇÃ·¹ÀÌ¾î¿Í ±× ¹°Ã¼ »çÀÌÀÇ °Å¸®¸¦ Àì´Ï´Ù.
             float distance = Vector3.Distance(transform.position, hit.transform.position);
 
-            // °Å¸®°¡ »çÁ¤°Å¸®(interactionRange) ¾ÈÂÊÀÎÁö È®ÀÎ
             if (distance <= interactionRange)
             {
-                // ¹°Ã¼¿¡ IInteractable ½ºÅ©¸³Æ®°¡ ÀÖ´ÂÁö È®ÀÎ
+                Highlightable hiddenClue = hit.transform.GetComponent<Highlightable>();
+
+                // ë§Œì•½ ë‹¨ì„œì¸ë°(nullì´ ì•„ë‹˜) && í˜„ì¬ ì•ˆ ë³´ì´ëŠ” ìƒíƒœ(!IsVisible)ë¼ë©´?
+                if (hiddenClue != null && !hiddenClue.IsVisible)
+                {
+                    // ì•„ë¬´ê²ƒë„ ì•ˆ ë³¸ ì²™í•˜ê³  ì»¤ì„œ ì´ˆê¸°í™” í›„ ë¦¬í„´
+                    Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+                    return;
+                }
+
                 IInteractable interactable = hit.transform.GetComponent<IInteractable>();
 
+                // ìƒí˜¸ì‘ìš© ê°€ëŠ¥í•œ ë¬¼ì²´ë¥¼ ë°œê²¬í–ˆë‹¤ë©´?
                 if (interactable != null)
                 {
-                    // [Ä¿¼­ º¯°æ] »óÈ£ÀÛ¿ë °¡´ÉÇÏ¹Ç·Î Ä¿¼­ ¹Ù²Ş
-                    Cursor.SetCursor(interactionCursor, Vector2.zero, CursorMode.Auto);
+                    isHitInteractable = true;
 
-                    // [Å¬¸¯ Ã³¸®] ¸¶¿ì½º ¿ŞÂÊ ¹öÆ° Å¬¸¯ ½Ã
+                    // A. ì•„ì´í…œì„ ë“¤ê³  ìˆë‹¤ë©´? -> ê³ ìŠ¤íŠ¸ UI ë„ìš°ê¸°
+                    if (EquipmentManager.Instance.equippedItem != null)
+                    {
+                        EquipmentManager.Instance.ghostUI.Show();
+                        // ì»¤ì„œëŠ” ê¸°ë³¸ ì»¤ì„œ(null)ë‚˜ íˆ¬ëª… ì»¤ì„œë¡œ í•´ì„œ ê³ ìŠ¤íŠ¸ë§Œ ë³´ì´ê²Œ í•´ë„ ì¢‹ìŒ
+                        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+                    }
+                    // B. ë¹ˆì†ì´ë¼ë©´? -> ê¸°ì¡´ì²˜ëŸ¼ ì†ë°”ë‹¥ ì»¤ì„œ
+                    else
+                    {
+                        var interactionCursor = UIManager.instance.defaultInteractCursor;
+                        Cursor.SetCursor(interactionCursor, Vector2.zero, CursorMode.Auto);
+                    }
+
+                    // í´ë¦­ ì²˜ë¦¬
                     if (Input.GetMouseButtonDown(0))
                     {
                         interactable.Interact();
                     }
-                    return; // »óÈ£ÀÛ¿ë ÁßÀÌ¸é ¿©±â¼­ ÇÔ¼ö Á¾·á
                 }
             }
         }
 
-        // ¾Æ¹«°Íµµ ¾È ´ê¾Ò°Å³ª °Å¸®°¡ ¸Ö¸é Ä¿¼­ ¿ø»óº¹±¸
-        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        // 3. ì•„ë¬´ê²ƒë„ ì•ˆ ë‹¿ì•˜ê±°ë‚˜ ìƒí˜¸ì‘ìš© ëŒ€ìƒì´ ì•„ë‹ˆë¼ë©´?
+        if (!isHitInteractable)
+        {
+            // ì»¤ì„œ ì›ìƒë³µêµ¬
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+
+            // â­ ê³ ìŠ¤íŠ¸ ìˆ¨ê¸°ê¸° (í•µì‹¬!)
+            // ì•„ì´í…œì„ ë“¤ê³  ìˆì–´ë„, í—ˆê³µì—ì„œëŠ” ì•ˆ ë³´ì—¬ì¤Œ
+            if (EquipmentManager.Instance.ghostUI != null)
+            {
+                EquipmentManager.Instance.ghostUI.Hide();
+            }
+
+            // ë¹ˆ í—ˆê³µ í´ë¦­ ì‹œ ì¥ì°© í•´ì œ (ì´ì „ ë¡œì§ ìœ ì§€)
+            if (Input.GetMouseButtonDown(0) && EquipmentManager.Instance.equippedItem != null)
+            {
+                EquipmentManager.Instance.Unequip();
+            }
+        }
     }
 
-    // µğ¹ö±×¿ë: ¾À ºä¿¡¼­ ÇÃ·¹ÀÌ¾î ÁÖº¯ »óÈ£ÀÛ¿ë ¹üÀ§¸¦ ´«À¸·Î º¸¿©ÁÜ
+    // ë””ë²„ê·¸ìš©: ì”¬ ë·°ì—ì„œ í”Œë ˆì´ì–´ ì£¼ë³€ ìƒí˜¸ì‘ìš© ë²”ìœ„ë¥¼ ëˆˆìœ¼ë¡œ ë³´ì—¬ì¤Œ
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;

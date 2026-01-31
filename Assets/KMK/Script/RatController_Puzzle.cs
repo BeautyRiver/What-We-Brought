@@ -26,6 +26,9 @@ public class RatController_Puzzle : MonoBehaviour
 
     private void Update()
     {
+        if (!(GameManager.instance.CurrentState == GameState.Puzzle))
+            return;
+
         ProcessInput();
 
         // 디버그용 Ray 그리기

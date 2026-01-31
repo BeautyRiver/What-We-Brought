@@ -8231,6 +8231,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8923331695901928312, guid: 63ca49f9e996ded40941bdad83961647, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.91
+      objectReference: {fileID: 0}
+    - target: {fileID: 8923331695901928312, guid: 63ca49f9e996ded40941bdad83961647, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.91
+      objectReference: {fileID: 0}
+    - target: {fileID: 8923331695901928312, guid: 63ca49f9e996ded40941bdad83961647, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.91
+      objectReference: {fileID: 0}
     - target: {fileID: 9136750345148477466, guid: 63ca49f9e996ded40941bdad83961647, type: 3}
       propertyPath: m_Name
       value: Rat_ByPuzzle

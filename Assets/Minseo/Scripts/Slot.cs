@@ -15,7 +15,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler
             outline.enabled = on;
     }
 
-    private Item _item;
+    private Item _item;    
     public Item item
     {
         get { return _item; }
@@ -61,16 +61,5 @@ public class Slot : MonoBehaviour, IPointerClickHandler
                 eq.SetEquippedSlot(this);
             }
         }
-    }
-
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

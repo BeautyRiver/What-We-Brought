@@ -4,21 +4,22 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
+    public static Inventory instance; 
     public List<Item> items;
 
-    [SerializeField]
-    private Transform slotParent;
-    [SerializeField]
-    private Slot[] slots;
-
+    [SerializeField] private Transform slotParent;
+    [SerializeField] private Slot[] slots;
 #if UNITY_EDITOR
     private void OnValidate()
     {
         slots = slotParent.GetComponentsInChildren<Slot>();
     }
 #endif
-    void Awake()
+    private void Awake()
     {
+        if (instance == null) instance = this;
+        else Destroy(this);
+
         FreshSlot();
     }
 
@@ -45,6 +46,21 @@ public class Inventory : MonoBehaviour
         else
         {
             print("슬롯이 가득 차 있습니다.");
+        }
+    }
+
+    public void RemoveItem(Item item)
+    {
+        if (items.Contains(item))
+        {
+            items.Remove(item);
+            FreshSlot(); // 슬롯 갱신
+
+            // 만약 들고 있던 아이템이 사라졌으면 장착 해제
+            if (EquipmentManager.Instance.equippedItem == item)
+            {
+                EquipmentManager.Instance.Unequip();
+            }
         }
     }
 }

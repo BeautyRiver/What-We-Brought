@@ -5,6 +5,7 @@ public class Highlightable : MonoBehaviour
     [Header("설정")]
     [Tooltip("체크하면 게임 시작 시 투명하게 숨겨집니다.")]
     public bool isHiddenByDefault = true; // 기본값을 true로 설정
+    public bool IsVisible => myRenderer != null && myRenderer.enabled;
 
     private SpriteRenderer myRenderer;
     private Material originalMaterial;
@@ -54,7 +55,7 @@ public class Highlightable : MonoBehaviour
         if (myRenderer.material.HasProperty("_MainTex"))
         {
             myRenderer.material.SetTexture("_MainTex", currentTexture);
-        }
+        }     
     }
 
     // Crow.cs가 능력이 끝나면 이 함수를 부릅니다

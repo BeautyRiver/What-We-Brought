@@ -108,7 +108,29 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: inventory-background_0
+      rect:
+        serializedVersion: 2
+        x: 1758
+        y: 235
+        width: 134
+        height: 700
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 29, y: 95, z: 18, w: 81}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7031cb0e4fb7ad4cae8b4f9bc85ed4c
+      internalID: -629932144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -122,7 +144,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      inventory-background_0: -629932144
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

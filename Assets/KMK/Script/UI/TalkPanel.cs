@@ -21,15 +21,18 @@ public class TalkPanel : MonoBehaviour
     {
         talkPanelRect = gameObject.GetComponent<RectTransform>();
         talkPanelRect.transform.position = new Vector3(talkPanelRect.transform.position.x, talkPanelDownYPos, talkPanelRect.transform.position.z);
+        gameObject.SetActive(true);
     }
     public void OpenPanel()
     {
+        gameObject.SetActive(true);
         talkPanelRect.DOAnchorPos(new Vector2(0, talkPanelUpYPos), 0.2f).SetEase(Ease.OutQuad);
         talkText.text = "";
     }
 
     public void ClosePanel()
     {
+        gameObject.SetActive(false);
         talkText.text = "";
         talkPanelRect.DOAnchorPos(new Vector2(0, talkPanelDownYPos), 0.2f).SetEase(Ease.InQuad);
     }
@@ -48,7 +51,7 @@ public class TalkPanel : MonoBehaviour
         talkText.DOText(content, totalInterval).SetEase(Ease.Linear).OnComplete(() => IsTyping = false);
     }
 
-    public void CompeleteText()
+    public void CompleteText()
     {
         talkText.DOKill();
         talkText.text = currentFullText;
