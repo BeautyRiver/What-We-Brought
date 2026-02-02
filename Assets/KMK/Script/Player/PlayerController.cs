@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
         if (GameManager.instance.CurrentState == GameState.Playing)
         {
             SetMoveDir();
-            interaction.HandleInteraction();
+            //interaction.HandleInteraction();
             crow.HadleCrowAbility();
         }
     }
