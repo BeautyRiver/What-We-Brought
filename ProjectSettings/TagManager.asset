@@ -10,6 +10,7 @@ TagManager:
   - Clue
   - Goal
   - Rat
+  - Out
   layers:
   - Default
   - TransparentFX

@@ -36,6 +36,14 @@ public class RatController_Puzzle : MonoBehaviour
         Debug.DrawRay(startPos, recentlyDirection * moveDistance, Color.red);
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Out"))
+        {
+            gameObject.GetComponentInParent<RatPuzzle>().StartSwitchCamera(false);
+        }
+    }
+    
     // 입력 처리
     private void ProcessInput()
     {
@@ -71,7 +79,6 @@ public class RatController_Puzzle : MonoBehaviour
 
         animator.SetBool("isMoving", isMoving);
     }
-
     private void MoveAndPush()
     {        
         Vector2 startPos = (Vector2)transform.position; // 현재 위치
@@ -126,6 +133,25 @@ public class RatController_Puzzle : MonoBehaviour
         obj.position = endPosition;
         isMoving = false;
     }
- 
 
+    public void ResetRatState()
+    {
+        // 이동 중이던 상태 취소
+        isMoving = false;
+        StopAllCoroutines(); 
+
+        // 바라보는 방향을 기본값으로 초기화
+        recentlyDirection = Vector2.right;
+
+        // 입력 값 초기화
+        prevH = 0;
+        prevV = 0;
+        direction = Vector2.zero;
+
+        // 회전 각도 0으로 강제 적용
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+
+        // 애니메이션 초기화 (가만히 서있는 상태로)
+        if (animator != null) animator.SetBool("isMoving", false);
+    }
 }

@@ -32,7 +32,6 @@ public class BumpTomasCutScene : CutsceneDirector
     {
         // 플레이어 조작 잠금
         GameManager.instance.SetGameState(GameState.Dialogue);
-        playerModel.gameObject.GetComponent<PlayerController>().StopMove();
         // 토마스 등장 및 이동
         if (tomasAnimator != null)
         {
