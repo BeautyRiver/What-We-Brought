@@ -23,6 +23,7 @@ MonoBehaviour:
     - 8e8b50c5c138977428b9438caa619da8
     - 9ae83a276f624ba47a5f713661c5511b
     - becaf2af2755bd74bb48008ab939ccb8
+    - f1a4b247ccb03514f9d5a0325245347c
     values:
     - iconNameOrGuid: Material Icon
       colorIndex: 7
@@ -57,6 +58,10 @@ MonoBehaviour:
       isIconRecursive: 0
       isColorRecursive: 0
     - iconNameOrGuid: 
+      colorIndex: 5
+      isIconRecursive: 0
+      isColorRecursive: 0
+    - iconNameOrGuid: cs Script Icon
       colorIndex: 5
       isIconRecursive: 0
       isColorRecursive: 0

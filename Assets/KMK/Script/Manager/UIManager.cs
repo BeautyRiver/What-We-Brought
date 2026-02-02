@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     public TalkPanel talkPanel;
     public NotePanel notePanel;
     public InfoPanel infoPanel;
+    public TooltipPanel tooltipPanel;
     public GameObject itemPanel;
 
     public CanvasGroup fadeCanvasGroup;
@@ -99,6 +100,26 @@ public class UIManager : MonoBehaviour
     public void HideItemPanel()
     {
         itemPanel.gameObject.SetActive(false);
+    
+    }
+    // ------------------ 툴팁 UI --------------------------
+    public void ShowTooltip(string content)
+    {
+        if (tooltipPanel != null)
+            tooltipPanel.Show(content, 0f); // 0f = 안 사라짐
+    }
+
+    // 특정 시간 동안만 보여줌 (클릭 알림 등)
+    public void ShowTooltip(string content, float duration)
+    {
+        if (tooltipPanel != null)
+            tooltipPanel.Show(content, duration);
+    }
+
+    public void HideTooltip()
+    {
+        if (tooltipPanel != null)
+            tooltipPanel.Hide();
     }
 
     // ------------------ 페이드 인 아웃 UI --------------------------
@@ -124,5 +145,5 @@ public class UIManager : MonoBehaviour
 
     }
 
-
+    
 }

@@ -59,13 +59,6 @@ public class CharacterSwapManager : MonoBehaviour
     {
         _isControlHuman = !_isControlHuman; // 상태 반전
 
-        //// 변신 이펙트
-        //if (transformationEffect != null)
-        //{
-        //    transformationEffect.transform.position = _isControlHuman ? ratObject.transform.position : humanObject.transform.position;
-        //    transformationEffect.Play();
-        //}
-
         if (_isControlHuman)
         {            
             // 카메라 타겟 변경
@@ -99,5 +92,11 @@ public class CharacterSwapManager : MonoBehaviour
                 _humanController.StopMove();
             }
         }
+    }
+
+    public void StopAllCharacter()
+    {
+        _humanController.StopMove();
+        _ratController.StopMove();
     }
 }
