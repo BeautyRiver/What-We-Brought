@@ -54,9 +54,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case GameState.Puzzle:
-                characterSwapManager.StopAllCharacter();
-                // 1. 일반 UI(인벤토리 등) 숨기기
-                //UIManager.instance.HideAllPanels();
+                characterSwapManager.StopAllCharacter();                
                 break;
         }
     }   

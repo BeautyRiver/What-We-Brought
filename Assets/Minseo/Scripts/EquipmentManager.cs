@@ -26,7 +26,6 @@ public class EquipmentManager : MonoBehaviour
             ghostUI.SetItemSprite(item); // 이미지 교체
             ghostUI.Hide();              // 일단 숨김
         }
-
         Debug.Log($"손에 듦: {item.itemName}");
     }
 

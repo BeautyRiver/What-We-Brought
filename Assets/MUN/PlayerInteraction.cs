@@ -21,7 +21,6 @@ public class PlayerInteraction : MonoBehaviour
                 EquipmentManager.Instance.ghostUI.Hide();
             return;
         }
-
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         bool isHitInteractable = false; // 상호작용 물체를 찾았는지 여부
@@ -29,6 +28,12 @@ public class PlayerInteraction : MonoBehaviour
         // 2. 레이캐스트 확인
         if (Physics.Raycast(ray, out hit, 100f, interactableLayer))
         {
+            // 맞았을 때 초록색
+            Debug.DrawLine(ray.origin, hit.point, Color.green);
+
+            // 맞은 위치에 구체 표시
+            Debug.DrawRay(hit.point, Vector3.up * 0.2f, Color.yellow);
+
             float distance = Vector3.Distance(transform.position, hit.transform.position);
 
             if (distance <= interactionRange)
@@ -71,6 +76,12 @@ public class PlayerInteraction : MonoBehaviour
                     }
                 }
             }
+        }
+
+        else
+        {
+            // 안 맞았을 때 → 빨간색
+            Debug.DrawRay(ray.origin, ray.direction * 100f, Color.red);
         }
 
         // 3. 아무것도 안 닿았거나 상호작용 대상이 아니라면?

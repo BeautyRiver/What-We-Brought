@@ -79,7 +79,7 @@ public class PuzzleGameManager : MonoBehaviour
                 onPuzzleOut.Invoke();
             }
             UIManager.instance.ShowItemPanel(); // UI º¹±¸
-            UIManager.instance.ShowInfoPanel();
+            //UIManager.instance.ShowInfoPanel("");
 
             // ¹à¾ÆÁü + »óÅÂ º¹±¸
             UIManager.instance.FadeInOut(true, fadeDuration, () => {

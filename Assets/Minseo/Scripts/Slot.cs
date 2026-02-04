@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Slot : MonoBehaviour, IPointerClickHandler
+public class Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] Image image;
     [SerializeField] Outline outline;   // Slot Item¿¡ ÀÖ´Â Outline
@@ -61,5 +61,18 @@ public class Slot : MonoBehaviour, IPointerClickHandler
                 eq.SetEquippedSlot(this);
             }
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (_item != null)
+        {
+            Debug.Log(_item.itemName);
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        
     }
 }
