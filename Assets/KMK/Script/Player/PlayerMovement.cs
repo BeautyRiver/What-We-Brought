@@ -62,4 +62,9 @@ public class PlayerMovement : MonoBehaviour
                 anim.transform.localScale = new Vector3(1, 1, 1);
         }
     }
+
+    public void SetPlayerMovingForCutScene(bool isMoving)
+    {
+        this.isMoving = isMoving;
+    }
 }

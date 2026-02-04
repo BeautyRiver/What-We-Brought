@@ -7,6 +7,12 @@ public abstract class Item : ScriptableObject
     public Sprite itemImage;
     [TextArea] public string description;
 
-    // 반환값 bool: true면 사용 후 삭제(소모), false면 유지
-    public abstract bool Use();
+    // 사용하면 사라지는가
+    public bool isConsumable = false;
+
+    // 사용 시도 성공했는지 
+    public virtual bool OnUseOnSelf()
+    {
+        return false;
+    }
 }

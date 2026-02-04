@@ -1,23 +1,27 @@
 using UnityEngine;
 
 public class PlayerSelfInteract : MonoBehaviour, IInteractable
-{
+{    
+    [SerializeField] private string content = "사용할 수 없을 것 같다.";
     public void Interact()
     {
-        // 현재 손에 든 아이템 가져오기
         Item currentItem = EquipmentManager.Instance.equippedItem;
-
-        // 아무것도 안 들고 있으면 반응 X
         if (currentItem == null) return;
 
-        if (currentItem is ReadableItem)
-        {
-            currentItem.Use();
+        // 아이템 사용 시도 (성공 여부 확인)        
+        if (currentItem.OnUseOnSelf()) // 바로 사용이 가능한 아이템들 (쪽지...)
+        {    
             EquipmentManager.Instance.Unequip();
+            if (currentItem.isConsumable)
+            {
+                // 인벤토리에서 삭제 & 손에서 없애기
+                Inventory.instance.RemoveItem(currentItem);
+            }
         }
         else
-        {            
-            Debug.Log("이건 나한테 사용할 수 없어."); // UI로 띄워도 ㄱㅊ을듯
+        {
+            // 사용 실패 
+            UIManager.instance.ShowTooltip(content, transform, 2f);
         }
     }
 }

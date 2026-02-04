@@ -21,6 +21,8 @@ MonoBehaviour:
     - 5085336dd0540cf459d5e6f84141f37d
     - 774d41134c5f0674ab6a3772d6bedbf9
     - 8c4de03dcc52ed245ad1c3ff16c99a8b
+    - 6d9ff9c2fc283604499149b5fb04e75d
+    - 242bde75b39a5f24781ad2ecb23bde1b
     values:
     - goDatas_byGlobalId:
         keys: []
@@ -102,6 +104,8 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-263938396-0
         - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-1843034409-0
         - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-1471077212-0
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-1880318096-0
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-1699999296642286304-6553371160533537274
         values:
         - colorIndex: 0
           iconNameOrGuid: Camera Icon
@@ -145,6 +149,10 @@ MonoBehaviour:
           iconNameOrGuid: Settings Icon
         - colorIndex: 0
           iconNameOrGuid: StandaloneInputModule Icon
+        - colorIndex: 0
+          iconNameOrGuid: Camera Icon
+        - colorIndex: 0
+          iconNameOrGuid: StandaloneInputModule Icon
     - goDatas_byGlobalId:
         keys:
         - globalObjectIdString: GlobalObjectId_V1-2-8c4de03dcc52ed245ad1c3ff16c99a8b-1804395383-0
@@ -175,3 +183,21 @@ MonoBehaviour:
           iconNameOrGuid: Canvas Icon
         - colorIndex: 0
           iconNameOrGuid: Settings Icon
+    - goDatas_byGlobalId:
+        keys:
+        - globalObjectIdString: GlobalObjectId_V1-2-6d9ff9c2fc283604499149b5fb04e75d-4091453693419641903-1462561267
+        values:
+        - colorIndex: 0
+          iconNameOrGuid: Canvas Icon
+    - goDatas_byGlobalId:
+        keys:
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-7816277460908544713-2121208439
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-162768327-0
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-1880949043-0
+        values:
+        - colorIndex: 0
+          iconNameOrGuid: Camera Icon
+        - colorIndex: 0
+          iconNameOrGuid: Camera Icon
+        - colorIndex: 0
+          iconNameOrGuid: StandaloneInputModule Icon

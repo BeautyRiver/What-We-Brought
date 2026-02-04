@@ -10,25 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 36baaa8bdcb9d8b49b9199833965d2c3, type: 3}
-  m_Name: Puzzle Camera
+  m_Name: Blend Setting
   m_EditorClassIdentifier: 
   CustomBlends:
   - From: '**ANY CAMERA**'
-    To: PuzzleCamera
+    To: GateCamera
     Blend:
-      Style: 0
-      Time: 0
+      Style: 1
+      Time: 2
       CustomCurve:
         serializedVersion: 2
         m_Curve: []
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 0
-  - From: PuzzleCamera
-    To: '**ANY CAMERA**'
+  - From: GateCamera
+    To: CinemachineCamera_Player
     Blend:
-      Style: 0
-      Time: 0
+      Style: 1
+      Time: 2
       CustomCurve:
         serializedVersion: 2
         m_Curve: []
