@@ -37,6 +37,8 @@ public class InfoPanel : MonoBehaviour
 
     public void HideInfo()
     {
+        
+
         tutorialText.text = "";
 
         if (currentRoutine != null)

@@ -18,7 +18,7 @@ public class GuardAI : MonoBehaviour
     // [2. 인스펙터 설정 변수들]
     // =========================================================
     [Header("기본 설정")]
-    public Transform player;          // 쫓아야 할 플레이어 (Drag & Drop)
+    public Transform player;          // 쫓아야 할 플레이어
     public LayerMask obstacleMask;    // 벽 인식 레이어
 
     [Header("순찰 설정")]
@@ -28,9 +28,11 @@ public class GuardAI : MonoBehaviour
     [Header("감지 설정")]
     public float viewAngle = 90f;
     public float viewDistance = 10f;
+    public GameObject alertIcon;      // [추가] 발견 시 머리 위에 뜰 느낌표(!) 오브젝트
 
     [Header("AI 행동 설정")]
     public float giveUpDistance = 15f;
+    public float catchDistance = 1.0f; // [추가] 플레이어를 잡는 거리
     public float wanderRadius = 4f;
     public float wanderDuration = 3f;
 
@@ -41,15 +43,16 @@ public class GuardAI : MonoBehaviour
     // [3. 내부 변수]
     // =========================================================
     private NavMeshAgent agent;
-    private Animator anim;            // 애니메이션 제어용 변수 추가
+    private Animator anim;
     public State currentState = State.Patrol;
 
     private float waitTimer = 0f;
     private float wanderTimer = 0f;
     private Vector3 guardPostPosition;
 
-    // 캐릭터의 원래 크기(스케일)를 저장할 변수 (0.8 크기 유지용)
+    // 캐릭터의 원래 크기 및 회전값 저장용
     private Vector3 originalScale;
+    private Quaternion originalRotation; // [추가] 초기 회전값 저장용
 
     // =========================================================
     // [4. 초기화] 
@@ -57,15 +60,19 @@ public class GuardAI : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        anim = GetComponent<Animator>(); // 애니메이터 가져오기
+        anim = GetComponent<Animator>();
 
         agent.updateRotation = false;
-        agent.updateUpAxis = false;
+        agent.updateUpAxis = true;
 
         guardPostPosition = transform.position;
-
-        // 현재 설정된 크기(0.8, 0.8, 1)를 기억해둠
         originalScale = transform.localScale;
+
+        // [추가] 게임 시작 시 설정해둔 회전값(기울기 등)을 기억함
+        originalRotation = transform.rotation;
+
+        // [추가] 시작할 때 느낌표 끄기
+        if (alertIcon != null) alertIcon.SetActive(false);
 
         if (waypoints != null && waypoints.Length > 0 && waypoints[0] != null)
         {
@@ -80,16 +87,15 @@ public class GuardAI : MonoBehaviour
     {
         agent.speed = moveSpeed;
 
-        // 1. 방향 전환 및 애니메이션 처리 (문워킹 수정됨)
         HandleAnimationAndRotation();
 
-        // 2. 플레이어 감지 (추격 중이 아닐 때만)
+        // [2. 플레이어 감지 로직]
         if (currentState != State.Alert && CheckForPlayer())
         {
-            currentState = State.Alert;
+            EnterAlertState(); // [변경] 상태 전환 함수로 분리
         }
 
-        // 3. 상태별 행동 실행
+        // [3. 상태별 행동 실행]
         switch (currentState)
         {
             case State.Patrol:
@@ -107,46 +113,48 @@ public class GuardAI : MonoBehaviour
         }
     }
 
+    // [추가] X축 각도가 0이 되는 문제 해결을 위해 LateUpdate에서 회전 고정
+    void LateUpdate()
+    {
+        // NavMeshAgent가 멋대로 회전을 바꾸지 못하게 초기 회전값으로 강제 고정
+        // (만약 Z축 회전도 막고 싶다면 이 코드가 유효함. 2D 게임이면 보통 Z축 회전만 필요하므로, 
+        // 3D 뷰에서 기울인 X축을 유지하려면 이 방식이 필수)
+        transform.rotation = originalRotation;
+    }
+
     // =========================================================
-    // [6. 보조 기능] 시각 처리 및 감지 로직
+    // [6. 보조 기능] 
     // =========================================================
 
-    // [수정 완료] 원본 그림이 왼쪽을 보는 경우를 위해 로직 반전
     void HandleAnimationAndRotation()
     {
-        // 1. 걷기 애니메이션 (속도가 있으면 true, 멈추면 false)
         bool isMoving = agent.velocity.sqrMagnitude > 0.1f;
         if (anim != null)
         {
             anim.SetBool("isWalking", isMoving);
         }
 
-        // 2. 방향 전환 (좌우 반전)
+        // 방향 전환 (Scale.x 반전)
         // Alert 상태일 때는 플레이어를 바라봄
         if (currentState == State.Alert && player != null)
         {
-            if (player.position.x > transform.position.x) // 플레이어가 오른쪽에 있음
+            if (player.position.x > transform.position.x) // 플레이어가 오른쪽
             {
-                // 원본이 왼쪽을 보므로, 오른쪽을 보게 하려면 뒤집어야(-) 함
                 transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
             }
-            else // 플레이어가 왼쪽에 있음
+            else // 플레이어가 왼쪽
             {
-                // 원본이 왼쪽을 보므로, 그냥 그대로(+) 둠
                 transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
             }
         }
-        // 평소에는 이동 방향을 바라봄
-        else
+        else // 평소에는 이동 방향
         {
-            if (agent.velocity.x > 0.1f) // 오른쪽으로 이동 중
+            if (agent.velocity.x > 0.1f) // 오른쪽 이동
             {
-                // 오른쪽을 보게 하려면 뒤집어야(-) 함
                 transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
             }
-            else if (agent.velocity.x < -0.1f) // 왼쪽으로 이동 중
+            else if (agent.velocity.x < -0.1f) // 왼쪽 이동
             {
-                // 왼쪽을 보게 하려면 그대로(+) 둠
                 transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
             }
         }
@@ -161,6 +169,8 @@ public class GuardAI : MonoBehaviour
 
         if (dstToPlayer < viewDistance)
         {
+            // 2D 게임의 경우 transform.forward 대신 transform.right나 up을 써야 할 수도 있음 (설정에 따라 다름)
+            // 일단 기존 코드를 유지하되, Z축 이슈가 있다면 Physics.Raycast 대신 Physics2D 사용 고려 필요
             if (Vector3.Angle(transform.forward, dirToPlayer) < viewAngle / 2)
             {
                 if (!Physics.Raycast(transform.position, dirToPlayer, dstToPlayer, obstacleMask))
@@ -175,6 +185,13 @@ public class GuardAI : MonoBehaviour
     // =========================================================
     // [7. 상태별 행동 함수들] 
     // =========================================================
+
+    // [추가] 추격 상태 진입 (느낌표 켜기)
+    void EnterAlertState()
+    {
+        currentState = State.Alert;
+        if (alertIcon != null) alertIcon.SetActive(true);
+    }
 
     void Patrol()
     {
@@ -197,8 +214,20 @@ public class GuardAI : MonoBehaviour
     {
         if (player == null) return;
         agent.SetDestination(player.position);
+        float dist = Vector3.Distance(transform.position, player.position);
 
-        if (Vector3.Distance(transform.position, player.position) > giveUpDistance)
+        // [추가] 플레이어 잡힘 이벤트
+        if (dist <= catchDistance)
+        {
+            Debug.Log("플레이어 잡힘! (Game Over)");
+            // 여기서 GameManager.instance.GameOver(); 등을 호출하면 됨
+            // 잡힌 후 가드가 멈추게 하려면:
+            agent.isStopped = true;
+            return;
+        }
+
+        // 추격 포기
+        if (dist > giveUpDistance)
         {
             EnterSuspicionState();
         }
@@ -207,6 +236,10 @@ public class GuardAI : MonoBehaviour
     void EnterSuspicionState()
     {
         currentState = State.Suspicion;
+
+        // [추가] 추격이 끝났으니 느낌표 끄기
+        if (alertIcon != null) alertIcon.SetActive(false);
+
         wanderTimer = 0f;
         MoveToRandomLocation();
     }
@@ -223,6 +256,7 @@ public class GuardAI : MonoBehaviour
         if (wanderTimer > wanderDuration)
         {
             currentState = State.Return;
+            // 느낌표는 이미 꺼져 있음
             int closestIndex = GetClosestWaypointIndex();
             if (closestIndex != -1)
             {
@@ -235,7 +269,7 @@ public class GuardAI : MonoBehaviour
             }
         }
 
-        if (CheckForPlayer()) currentState = State.Alert;
+        if (CheckForPlayer()) EnterAlertState();
     }
 
     void ReturnToPatrol()
@@ -245,7 +279,7 @@ public class GuardAI : MonoBehaviour
             currentState = State.Patrol;
             waitTimer = 0f;
         }
-        if (CheckForPlayer()) currentState = State.Alert;
+        if (CheckForPlayer()) EnterAlertState();
     }
 
     // =========================================================
@@ -286,13 +320,19 @@ public class GuardAI : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, viewDistance);
 
-        Gizmos.color = Color.red;
+        // 시야각 그리기 (간략화)
         Vector3 leftRay = Quaternion.Euler(0, -viewAngle / 2, 0) * transform.forward;
         Vector3 rightRay = Quaternion.Euler(0, viewAngle / 2, 0) * transform.forward;
+        Gizmos.color = Color.red;
         Gizmos.DrawRay(transform.position, leftRay * viewDistance);
         Gizmos.DrawRay(transform.position, rightRay * viewDistance);
 
+        // 추격 포기 거리
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, giveUpDistance);
+
+        // [추가] 잡히는 거리 표시
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, catchDistance);
     }
 }

@@ -194,6 +194,7 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-7816277460908544713-2121208439
         - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-162768327-0
         - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-1880949043-0
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-821224661-0
         values:
         - colorIndex: 0
           iconNameOrGuid: Camera Icon
@@ -201,3 +202,5 @@ MonoBehaviour:
           iconNameOrGuid: Camera Icon
         - colorIndex: 0
           iconNameOrGuid: StandaloneInputModule Icon
+        - colorIndex: 9
+          iconNameOrGuid: 
