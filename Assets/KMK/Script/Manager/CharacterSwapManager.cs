@@ -34,6 +34,9 @@ public class CharacterSwapManager : MonoBehaviour
 
     void Update()
     {
+        if (!(GameManager.instance.CurrentState == GameState.Playing))
+            return;
+        
         if (Input.GetKeyDown(KeyCode.E))
         {
             SwapCharacter();
@@ -55,7 +58,7 @@ public class CharacterSwapManager : MonoBehaviour
             GameManager.instance.ChangeCharacter(PlayerCharacter.Human);
     }
 
-    private void SwapCharacter()
+    public void SwapCharacter()
     {
         _isControlHuman = !_isControlHuman; // 상태 반전
 

@@ -1,19 +1,12 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Quest Data", menuName = "Quest System/Quest Data")]
+[CreateAssetMenu(fileName = "StoryQuest", menuName = "Quest System/Story Quest")]
 public class QuestData : ScriptableObject
 {
-    [Header("기본 정보")]
-    public int questID;
-    public string title;
-    [TextArea] public string guideText;
+    [Header("퀘스트 식별")]
+    public string questID;      
 
-    [Header("목표 설정")]
-    public int targetEnemyID; // 허수아비의 ID (예: 100)
-    public int targetCount;   // 목표 마리 수 (예: 5)
-
-    [Header("대화")]
-    public DialogueData startDialogue;
-    public DialogueData progressDialogue;
-    public DialogueData completeDialogue;
+    [Header("UI 표시용")]
+    public string title;         // 예: "시장 정보 수집"
+    [TextArea] public string description; // 예: "창문을 엿듣고 쪽지를 찾아라."
 }

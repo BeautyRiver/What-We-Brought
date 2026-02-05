@@ -8,7 +8,7 @@ public class FieldRatHole : MonoBehaviour, IInteractable
 {
     public string PuzzleID => ratPuzzle.PuzzleID;
 
-    [SerializeField] private string toolTipContent = "더이상 들어갈 필요가 없을것 같다..";
+    private string toolTipContent = "더이상 들어갈 필요가 없을것 같다..";
     public RatPuzzle ratPuzzle;
     public GameObject showObject;
 

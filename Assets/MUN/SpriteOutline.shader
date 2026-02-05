@@ -1,11 +1,15 @@
-Shader "Custom/SpriteOutline_Improved"
+ï»¿Shader "Custom/SpriteOutline_Ghost"
 {
     Properties
     {
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
         _Color ("Tint", Color) = (1,1,1,1)
-        [HDR] _OutlineColor ("Outline Color", Color) = (1,1,0,1) // HDR Ãß°¡·Î ¹ß±¤ È¿°ú ´ëºñ
-        _OutlineWidth ("Outline Width", Range(0, 10)) = 1
+        [HDR] _OutlineColor ("Outline Color", Color) = (1,1,0,1)
+        _OutlineWidth ("Outline Width", Range(0, 30)) = 1
+        
+        // â­ ìƒˆë¡œ ì¶”ê°€ëœ ì†ì„±: ëª¸ì²´ì˜ íˆ¬ëª…ë„ë§Œ ë”°ë¡œ ì¡°ì ˆ (0 = íˆ¬ëª…, 1 = ë¶ˆíˆ¬ëª…)
+        _BodyAlpha ("Body Alpha", Range(0, 1)) = 1 
+        
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
     }
 
@@ -23,7 +27,7 @@ Shader "Custom/SpriteOutline_Improved"
         Cull Off
         Lighting Off
         ZWrite Off
-        Blend One OneMinusSrcAlpha
+        Blend One OneMinusSrcAlpha // í”„ë¦¬ë©€í‹°í”Œë¼ì´ë“œ ì•ŒíŒŒ ë¸”ë Œë”© (íˆ¬ëª…ë„ ì²˜ë¦¬ ê°œì„ )
 
         Pass
         {
@@ -50,8 +54,9 @@ Shader "Custom/SpriteOutline_Improved"
             fixed4 _Color;
             fixed4 _OutlineColor;
             float _OutlineWidth;
+            float _BodyAlpha; // â­ ë³€ìˆ˜ ì„ ì–¸
             sampler2D _MainTex;
-            float4 _MainTex_TexelSize; // ÅØ½ºÃ³ÀÇ ÇÈ¼¿ »çÀÌÁî (1/width, 1/height)
+            float4 _MainTex_TexelSize;
 
             v2f vert(appdata_t IN)
             {
@@ -69,38 +74,30 @@ Shader "Custom/SpriteOutline_Improved"
             {
                 fixed4 c = tex2D(_MainTex, IN.texcoord);
                 
-                // ÀÌ¹Ì »öÀÌ ÀÖ´Ù¸é(Ä³¸¯ÅÍ ³»ºÎ) ±×³É Ãâ·Â
-                if (c.a > 0.1) return c * IN.color;
-
-                // --- ¿Ü°û¼± °Ë»ç ·ÎÁ÷ ½ÃÀÛ ---
-                
-                // ÇÈ¼¿ ´ÜÀ§·Î ¿ÀÇÁ¼Â °è»ê (X, YÃà)
+                // ì™¸ê³½ì„  ê³„ì‚°ì„ ìœ„í•œ ì˜¤í”„ì…‹
                 float2 offset = _MainTex_TexelSize.xy * _OutlineWidth;
 
-                // 8¹æÇâ °Ë»ç (»óÇÏÁÂ¿ì + ´ë°¢¼±)
-                // ÇÏ³ª¶óµµ ¾ËÆÄ°ªÀÌ ÀÖÀ¸¸é ¿Ü°û¼±À¸·Î ÆÇÁ¤
+                // 8ë°©í–¥ ì£¼ë³€ ì•ŒíŒŒê°’ ê²€ì‚¬
                 float alphaSum = 0;
+                alphaSum += tex2D(_MainTex, IN.texcoord + float2(0, offset.y)).a;        // Up
+                alphaSum += tex2D(_MainTex, IN.texcoord - float2(0, offset.y)).a;        // Down
+                alphaSum += tex2D(_MainTex, IN.texcoord + float2(offset.x, 0)).a;        // Right
+                alphaSum += tex2D(_MainTex, IN.texcoord - float2(offset.x, 0)).a;        // Left
+                alphaSum += tex2D(_MainTex, IN.texcoord + float2(offset.x, offset.y)).a; // TR
+                alphaSum += tex2D(_MainTex, IN.texcoord + float2(-offset.x, offset.y)).a;// TL
+                alphaSum += tex2D(_MainTex, IN.texcoord + float2(offset.x, -offset.y)).a;// BR
+                alphaSum += tex2D(_MainTex, IN.texcoord + float2(-offset.x, -offset.y)).a;// BL
 
-                // »óÇÏÁÂ¿ì
-                alphaSum += tex2D(_MainTex, IN.texcoord + float2(0, offset.y)).a;  // Up
-                alphaSum += tex2D(_MainTex, IN.texcoord - float2(0, offset.y)).a;  // Down
-                alphaSum += tex2D(_MainTex, IN.texcoord + float2(offset.x, 0)).a;  // Right
-                alphaSum += tex2D(_MainTex, IN.texcoord - float2(offset.x, 0)).a;  // Left
-
-                // ´ë°¢¼± (Ç°ÁúÀ» À§ÇØ Ãß°¡, ¼º´ÉÀÌ Áß¿äÇÏ´Ù¸é Á¦°Å °¡´É)
-                alphaSum += tex2D(_MainTex, IN.texcoord + float2(offset.x, offset.y)).a;   // Top-Right
-                alphaSum += tex2D(_MainTex, IN.texcoord + float2(-offset.x, offset.y)).a;  // Top-Left
-                alphaSum += tex2D(_MainTex, IN.texcoord + float2(offset.x, -offset.y)).a;  // Bottom-Right
-                alphaSum += tex2D(_MainTex, IN.texcoord + float2(-offset.x, -offset.y)).a; // Bottom-Left
-
-                // ÁÖº¯¿¡ ºÒÅõ¸íÇÑ ÇÈ¼¿ÀÌ ÇÏ³ª¶óµµ ¹ß°ßµÇ¾ú´Ù¸é
-                if (alphaSum > 0.1)
+                // ë¡œì§ ë³€ê²½: 
+                // 1. ë‚´ í”½ì…€ì´ ë¹„ì–´ìžˆëŠ”ë°(c.a <= 0.1) ì£¼ë³€ì— í”½ì…€ì´ ìžˆë‹¤(alphaSum > 0.1) -> ì™¸ê³½ì„ 
+                if (c.a <= 0.1 && alphaSum > 0.1)
                 {
                     return _OutlineColor;
                 }
-                // -------------------------
 
-                return c * IN.color;
+                // 2. ê·¸ ì™¸(ìºë¦­í„° ë‚´ë¶€) -> ëª¸ì²´ ìƒ‰ìƒ ì¶œë ¥í•˜ë˜ íˆ¬ëª…ë„ ì¡°ì ˆ ì ìš©
+                c.rgb *= c.a; // Pre-multiplied alpha ì ìš©
+                return c * IN.color * _BodyAlpha; 
             }
         ENDCG
         }

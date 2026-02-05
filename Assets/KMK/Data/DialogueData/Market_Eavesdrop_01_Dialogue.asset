@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d4bc8742422ba140ac8cde40316b7a5, type: 3}
+  m_Name: Market_Eavesdrop_01_Dialogue
+  m_EditorClassIdentifier: 
+  textLines:
+  - speakerName: ???
+    text: "\uADF8 \uC598\uAE30 \uB4E4\uC5C8\uB2C8"
+  - speakerName: ???
+    text: "\u3134\u3134"
+  - speakerName: ???
+    text: "\u3147\u314B"

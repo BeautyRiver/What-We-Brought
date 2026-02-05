@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public abstract class GoalCheck : MonoBehaviour
+public class GoalCheck : MonoBehaviour
 {
-    [SerializeField] protected FieldRatHole fieldRatHole;
-    protected void OnTriggerEnter2D(Collider2D collision)
+    [SerializeField] private FieldRatHole fieldRatHole;
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Goal"))
         {            
@@ -13,5 +13,9 @@ public abstract class GoalCheck : MonoBehaviour
         }
     }
 
-    protected abstract void GoalEvent();    
+    public void GoalEvent()
+    {
+        fieldRatHole.ShowObejct();
+        PuzzleGameManager.instance.ClearPuzzle(fieldRatHole.PuzzleID);
+    }
 }

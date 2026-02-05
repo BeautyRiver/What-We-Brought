@@ -44,6 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c8ce9569aeb9144d8a4fb394232a10a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  virtualCamera: {fileID: 311615942438818197, guid: a8d8ac12457c63040a6a70829fcc09bb, type: 3}
-  humanObject: {fileID: 5316088918833687629, guid: 4ac3a3e4e5692af4c865e8371a203cd6, type: 3}
-  ratObject: {fileID: 7606894165200506342, guid: 2f944adc47867fa49987110e66681f60, type: 3}
+  virtualCamera: {fileID: 0}
+  humanObject: {fileID: 0}
+  ratObject: {fileID: 0}
