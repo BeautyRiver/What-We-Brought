@@ -107,6 +107,20 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-1880318096-0
         - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-1699999296642286304-6553371160533537274
         - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-117948553-0
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-4290224536139751298-882536416
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-3082498219605020257-882536416
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-3693404141813232294-882536416
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-7378670665620602415-2911564506502478520
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-9025283999144953798-2911564506502478520
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-4145327446628306930-2911564506502478520
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-6344955296727269947-2911564506502478520
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-4347603061720498898-2911564506502478520
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-3377168345087902071-2911564506502478520
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-4719740440867801404-2911564506502478520
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-7173259356904984196-2911564506502478520
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-763271683249485239-2911564506502478520
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-6341207447564417057-2911564506502478520
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-9126495194127778295-0
         values:
         - colorIndex: 0
           iconNameOrGuid: Camera Icon
@@ -156,6 +170,34 @@ MonoBehaviour:
           iconNameOrGuid: StandaloneInputModule Icon
         - colorIndex: 0
           iconNameOrGuid: Light Icon
+        - colorIndex: 0
+          iconNameOrGuid: Camera Icon
+        - colorIndex: 0
+          iconNameOrGuid: Camera Icon
+        - colorIndex: 0
+          iconNameOrGuid: Camera Icon
+        - colorIndex: 0
+          iconNameOrGuid: Camera Icon
+        - colorIndex: 0
+          iconNameOrGuid: Camera Icon
+        - colorIndex: 0
+          iconNameOrGuid: Camera Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Canvas Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: DirectionalLight Icon
+        - colorIndex: 0
+          iconNameOrGuid: StandaloneInputModule Icon
     - goDatas_byGlobalId:
         keys:
         - globalObjectIdString: GlobalObjectId_V1-2-8c4de03dcc52ed245ad1c3ff16c99a8b-1804395383-0
@@ -215,6 +257,10 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-50112279-0
         - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-1600953804558584309-0
         - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-2220133119941735285-1559423764
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-7942374349298616899-0
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-1411546850533661733-0
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-1315987715324389188-5946126683306594346
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-1885389791565227880-1884780274532576313
         values:
         - colorIndex: 0
           iconNameOrGuid: Camera Icon
@@ -258,3 +304,11 @@ MonoBehaviour:
           iconNameOrGuid: Settings Icon
         - colorIndex: 0
           iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: StandaloneInputModule Icon
+        - colorIndex: 0
+          iconNameOrGuid: StandaloneInputModule Icon
+        - colorIndex: 0
+          iconNameOrGuid: Camera Icon
+        - colorIndex: 0
+          iconNameOrGuid: Camera Icon
