@@ -25,10 +25,32 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 0
   - From: GateCamera
-    To: CinemachineCamera_Player
+    To: '**ANY CAMERA**'
     Blend:
       Style: 1
       Time: 2
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - From: CinemachineCamera_Rat
+    To: CinemachineCamera_Human
+    Blend:
+      Style: 1
+      Time: 1.25
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - From: CinemachineCamera_Human
+    To: CinemachineCamera_Rat
+    Blend:
+      Style: 1
+      Time: 1.25
       CustomCurve:
         serializedVersion: 2
         m_Curve: []

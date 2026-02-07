@@ -24,7 +24,13 @@ public class BumpTomasCutScene : CutsceneDirector
     public Transform sewerTransform; // 하수구 구멍
     public Transform spawnPoint; // 생성 위치
 
+    [Header("컷씬 이후")]
+    public GameObject sewerFuction;
 
+    private void Start()
+    {
+        sewerFuction.SetActive(false); 
+    }
     public override void PlayCutscene()
     {
         StartCoroutine(CutsceneSequence());
@@ -34,9 +40,11 @@ public class BumpTomasCutScene : CutsceneDirector
     {
         yield return null;
         yield return null;
+        if (GameManager.instance.CurrentCharacter == PlayerCharacter.Rat)
+            GameManager.instance.SwapCharacter();
 
         // 플레이어 조작 잠금
-        GameManager.instance.SetGameState(GameState.Dialogue);
+        GameManager.instance.SetGameState(GameState.CutScene);
 
         // 하수구 근처까지 천천히 걸어감..
         var pMovement = playerTransform.GetComponent<PlayerMovement>();
@@ -122,7 +130,7 @@ public class BumpTomasCutScene : CutsceneDirector
         yield return new WaitForSeconds(1f);        
 
         // 대화 
-        DialogueManager.instance.StartDialogue(dialogueData, EndCutscene);
+        DialogueManager.instance.StartDialogue(dialogueData, EndCutscene, false);
     }
 
     private void ThrowBottleToSewer()
@@ -141,16 +149,13 @@ public class BumpTomasCutScene : CutsceneDirector
     }
     private void EndCutscene()
     {
-        StartCoroutine(OnPlaerController());
         StartCoroutine(TomasRun());
-        Debug.Log("[CutScene Off] - Tomas Bump");
         
     }
 
     IEnumerator OnPlaerController()
     {
         yield return new WaitForSeconds(2f);
-        GameManager.instance.SetGameState(GameState.Playing);
     }
     IEnumerator TomasRun()
     {
@@ -187,7 +192,9 @@ public class BumpTomasCutScene : CutsceneDirector
 
             yield return null;
         }
-
+        
+        GameManager.instance.SetGameState(GameState.Playing);
         tomasTransform.gameObject.SetActive(false);
+        sewerFuction.SetActive(true);
     }
 }

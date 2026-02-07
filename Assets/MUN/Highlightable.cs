@@ -1,81 +1,102 @@
-using UnityEngine;
+ï»¿using UnityEngine;
+using DG.Tweening; // â­ DOTween í•„ìˆ˜
 
 public class Highlightable : MonoBehaviour
 {
-    [Header("¼³Á¤")]
-    [Tooltip("Ã¼Å©ÇÏ¸é °ÔÀÓ ½ÃÀÛ ½Ã Åõ¸íÇÏ°Ô ¼û°ÜÁı´Ï´Ù.")]
-    public bool isHiddenByDefault = true; // ±âº»°ªÀ» true·Î ¼³Á¤
+    [Header("ê¸°ë³¸ ì„¤ì •")]
+    [Tooltip("ì²´í¬í•˜ë©´ ê²Œì„ ì‹œì‘ ì‹œ íˆ¬ëª…í•˜ê²Œ ìˆ¨ê²¨ì§‘ë‹ˆë‹¤.")]
+    public bool isHiddenByDefault = true;
     public bool IsVisible => myRenderer != null && myRenderer.enabled;
 
+    [Header("ì¡°ëª… ì—°ì¶œ ì„¤ì •")]
+    [Tooltip("ìì‹ ì˜¤ë¸Œì íŠ¸ì— ìˆëŠ” Lightë¥¼ ì—°ê²°í•˜ì„¸ìš”. (ì—†ìœ¼ë©´ ì•Œì•„ì„œ ì°¾ìŒ)")]
+    public Light highlightLight;
+
+    [Tooltip("ë¹›ì´ ì¼œì§€ê³  êº¼ì§€ëŠ” ì‹œê°„ (ì´ˆ)")]
+    public float fadeDuration = 0.5f; // ğŸ’¡ ì¼œì§€ëŠ” ì‹œê°„ ë³€ìˆ˜
+
+    // ë‚´ë¶€ ë³€ìˆ˜
     private SpriteRenderer myRenderer;
-    private Material originalMaterial;
     private bool isHighlighted = false;
+    private float originalIntensity; // ğŸ’¡ ì›ë˜ ì„¤ì •í•´ë‘” ë°ê¸° ê¸°ì–µìš©
 
     void Awake()
     {
         myRenderer = GetComponent<SpriteRenderer>();
         if (myRenderer == null) myRenderer = GetComponentInChildren<SpriteRenderer>();
 
-        if (myRenderer != null)
+        // 1. ë¼ì´íŠ¸ ì°¾ê¸°
+        if (highlightLight == null) highlightLight = GetComponentInChildren<Light>();
+
+        // 2. â­ ì›ë˜ ë°ê¸° ê¸°ì–µí•˜ê¸°!
+        if (highlightLight != null)
         {
-            originalMaterial = myRenderer.material;
-        }
-        else
-        {
-            Debug.LogError(gameObject.name + ": SpriteRenderer¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù!");
+            originalIntensity = highlightLight.intensity; // ì¸ìŠ¤í™í„°ì—ì„œ ì„¤ì •í•œ ê°’ ì €ì¥
         }
     }
 
     void Start()
     {
-        // [¼öÁ¤ Æ÷ÀÎÆ®] ½ÃÀÛÇÒ ¶§ ¼³Á¤¿¡ µû¶ó ¸ğ½ÀÀ» ¼û±è
+        // 3. ê¸°ë³¸ì ìœ¼ë¡œ ìˆ¨ê¹€ ì²˜ë¦¬
         if (isHiddenByDefault && myRenderer != null)
         {
-            myRenderer.enabled = false; // ·»´õ·¯¸¦ ²¨¼­ ¾È º¸ÀÌ°Ô ¸¸µê (Ãæµ¹Ã¼´Â »ì¾ÆÀÖÀ½)
+            myRenderer.enabled = false;
+        }
+
+        // 4. ë¼ì´íŠ¸ ì´ˆê¸°í™” (êº¼ë‘ê¸°)
+        if (highlightLight != null)
+        {
+            highlightLight.intensity = 0f; // ë°ê¸° 0ìœ¼ë¡œ ì‹œì‘ (êº¼ì§)
+            highlightLight.enabled = true; // ì»´í¬ë„ŒíŠ¸ëŠ” ì¼œë‘ 
         }
     }
 
-    // Crow.cs°¡ ÀÌ ÇÔ¼ö¸¦ ºÎ¸¨´Ï´Ù
-    public void Highlight(Material outlineMat)
+    // Crow.csì—ì„œ í˜¸ì¶œ
+    public void Highlight(Material outlineMat = null)
     {
-        if (myRenderer == null || isHighlighted) return;
-
+        if (isHighlighted) return;
         isHighlighted = true;
 
-        // [¼öÁ¤ Æ÷ÀÎÆ®] ´É·ÂÀÌ ¹ßµ¿µÇ¸é ÀÏ´Ü º¸ÀÌ°Ô ÄÔ!
-        myRenderer.enabled = true;
-
-        // 1. ÅØ½ºÃ³ º¸Á¸
-        Texture currentTexture = myRenderer.sprite.texture;
-
-        // 2. ¾Æ¿ô¶óÀÎ ÀçÁú·Î ±³Ã¼
-        myRenderer.material = outlineMat;
-
-        // 3. ÅØ½ºÃ³ Àç¿¬°á
-        if (myRenderer.material.HasProperty("_MainTex"))
+        // ë¬¼ì²´ ëª¨ìŠµ ë“œëŸ¬ë‚´ê¸°
+        if (myRenderer != null)
         {
-            myRenderer.material.SetTexture("_MainTex", currentTexture);
-        }     
+            myRenderer.enabled = true;
+            // (ì„ íƒ) íˆ¬ëª…ë„ í˜ì´ë“œì¸ ì¶”ê°€ ê°€ëŠ¥: myRenderer.DOFade(1f, fadeDuration);
+        }
+
+        // â­ ë¹›ì´ ì„œì„œíˆ ë°ì•„ì§ (0 -> ì›ë˜ ë°ê¸°)
+        if (highlightLight != null)
+        {
+            highlightLight.DOKill();
+            // fadeDuration ë³€ìˆ˜ ì‚¬ìš©!
+            highlightLight.DOIntensity(originalIntensity, fadeDuration).SetEase(Ease.OutQuad);
+        }
     }
 
-    // Crow.cs°¡ ´É·ÂÀÌ ³¡³ª¸é ÀÌ ÇÔ¼ö¸¦ ºÎ¸¨´Ï´Ù
+    // Crow.csì—ì„œ í˜¸ì¶œ
     public void Unhighlight()
     {
-        if (myRenderer == null || !isHighlighted) return;
-
+        if (!isHighlighted) return;
         isHighlighted = false;
 
-        // [¼öÁ¤ Æ÷ÀÎÆ®] ¿ø·¡ ¼û°ÜÁø ³à¼®ÀÌ¾ú´Ù¸é ´Ù½Ã ¼û±è
-        if (isHiddenByDefault)
+        // â­ ë¹›ì´ ì„œì„œíˆ ì‚¬ë¼ì§ (í˜„ì¬ ë°ê¸° -> 0)
+        if (highlightLight != null)
         {
-            myRenderer.enabled = false; // ´Ù½Ã ¾È º¸ÀÌ°Ô ²ô±â
-            // ¼û°ÜÁ³À¸´Ï ÀçÁú º¹±¸´Â ±»ÀÌ ¾È ÇØµµ µÇÁö¸¸, ±ò²ûÇÏ°Ô ¿ø·¡´ë·Î
-            myRenderer.material = originalMaterial;
+            highlightLight.DOKill();
+            // fadeDuration ë³€ìˆ˜ ì‚¬ìš©!
+            highlightLight.DOIntensity(0f, fadeDuration).SetEase(Ease.InQuad)
+                .OnComplete(() =>
+                {
+                    // ë¹›ì´ ë‹¤ êº¼ì§„ ë’¤ì— ë¬¼ì²´ ìˆ¨ê¸°ê¸°
+                    if (isHiddenByDefault && myRenderer != null)
+                    {
+                        myRenderer.enabled = false;
+                    }
+                });
         }
         else
         {
-            // ¿ø·¡ º¸ÀÌ´ø ³à¼®ÀÌ¸é ÀçÁú¸¸ ¿ø·¡´ë·Î º¹±¸
-            myRenderer.material = originalMaterial;
+            if (isHiddenByDefault && myRenderer != null) myRenderer.enabled = false;
         }
     }
 }

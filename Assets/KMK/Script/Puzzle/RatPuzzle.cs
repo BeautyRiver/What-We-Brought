@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,11 +24,22 @@ public class RatPuzzle : MonoBehaviour
     [Header("카메라 & UI 연결")]
     private CinemachineCamera puzzleCamera; // 켜질 퍼즐 카메라
 
+    [Header("클리어 후 생성될 오브젝트(아이템)")]
+    private GameObject showObj;
+
     private void Awake()
     {
         puzzleProps = GetComponentsInChildren<RatPuzzleProp>();
         puzzleController = GetComponentInChildren<RatController_Puzzle>();
         puzzleCamera = GetComponentInChildren<CinemachineCamera>();
+
+        if (showObj != null )
+            showObj.SetActive(false);
+    }
+
+    public void SetShowObj(GameObject obj)
+    {
+        showObj = obj;
     }
     public void ResetPuzzleProps()
     {
@@ -47,4 +59,8 @@ public class RatPuzzle : MonoBehaviour
         StartCoroutine(PuzzleGameManager.instance.SwitchCameraRoutine(enterPuzzle, puzzleCamera, ResetPuzzleProps));
     }
 
+    public void ShowObejct()
+    {
+        showObj.SetActive(true);
+    }
 }
