@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using DarkTonic.MasterAudio;
 
 public class Crow : MonoBehaviour
 {
@@ -23,6 +24,9 @@ public class Crow : MonoBehaviour
         // 쿨타임 UI 처리 등은 나중에 추가
         if (Input.GetKeyDown(KeyCode.F))
         {
+
+            MasterAudio.PlaySound3DAtTransform("CrowSound", transform);
+
             if (isAbilityReady)
             {
                 StartCoroutine(CrowAbilityCoroutine());
