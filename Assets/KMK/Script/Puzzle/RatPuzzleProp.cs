@@ -1,4 +1,5 @@
 using UnityEngine;
+using DarkTonic.MasterAudio;
 
 public class RatPuzzleProp : MonoBehaviour
 {
