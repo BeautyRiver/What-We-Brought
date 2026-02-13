@@ -11,7 +11,7 @@ public class GameData
     // 2. 수집한 아이템 ID 목록 (String List)
     public List<string> collectedObjectIDs = new List<string>();
 
-    // 3. 클리어한 퍼즐/퀘스트 ID 목록
+    // 3. 클리어한 퍼즐/퀘스트 ID 목록    
     public List<string> clearedPuzzleIDs = new List<string>();
     public List<string> clearedQuestIDs = new List<string>();
 
