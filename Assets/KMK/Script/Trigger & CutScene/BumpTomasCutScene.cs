@@ -3,6 +3,8 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Experimental.AI;
+using DarkTonic.MasterAudio;
+
 
 public class BumpTomasCutScene : CutsceneDirector
 {
@@ -24,6 +26,11 @@ public class BumpTomasCutScene : CutsceneDirector
     public Transform sewerTransform; // 하수구 구멍
     public Transform spawnPoint; // 생성 위치
 
+
+    [Header("사운드 설정")]
+    public string stepSoundName = "TomasWalk"; // 마스터 오디오 그룹 이름
+    public float stepStride = 1.5f; // 보폭 (이 거리만큼 이동할 때마다 소리 남)
+    private float accumulatedDistance = 0f; // 이동 거리 누적용 변수
 
     public override void PlayCutscene()
     {
@@ -109,6 +116,14 @@ public class BumpTomasCutScene : CutsceneDirector
                 tomasModel.localScale = new Vector3(1, tomasModel.localScale.y, tomasModel.localScale.z);
             }
 
+            // 사운드 관련
+            HandleFootstep(tomasWalkSpeed);
+
+            if (targetPos.x < tomasTransform.position.x)
+                tomasModel.localScale = new Vector3(-1, tomasModel.localScale.y, tomasModel.localScale.z);
+            else
+                tomasModel.localScale = new Vector3(1, tomasModel.localScale.y, tomasModel.localScale.z);
+
             yield return null;
         }
 
@@ -167,6 +182,8 @@ public class BumpTomasCutScene : CutsceneDirector
             tomasRunTransform.position.z
         );
 
+        accumulatedDistance = 0f;
+
         Transform tomasModel = tomasAnimator.transform;
         while (Vector3.Distance(tomasTransform.position, targetPos) > bumpDistance)
         {
@@ -185,9 +202,36 @@ public class BumpTomasCutScene : CutsceneDirector
                 tomasModel.localScale = new Vector3(1, tomasModel.localScale.y, tomasModel.localScale.z);
             }
 
+            HandleFootstep(tomasWalkSpeed);
+
+            if (targetPos.x < tomasTransform.position.x)
+                tomasModel.localScale = new Vector3(-1, tomasModel.localScale.y, tomasModel.localScale.z);
+            else
+                tomasModel.localScale = new Vector3(1, tomasModel.localScale.y, tomasModel.localScale.z);
+
             yield return null;
         }
 
         tomasTransform.gameObject.SetActive(false);
     }
+
+    private void HandleFootstep(float currentSpeed)
+    {
+        if (string.IsNullOrEmpty(stepSoundName)) return;
+
+        // 이동 거리 누적 (속도 * 시간 = 거리)
+        accumulatedDistance += currentSpeed * Time.deltaTime;
+
+        // 누적 거리가 보폭(Stride)을 넘으면 소리 재생
+        if (accumulatedDistance >= stepStride)
+        {
+            // 소리 재생
+            if (MasterAudio.SoundGroupExists(stepSoundName))
+                MasterAudio.PlaySound3DAtTransform(stepSoundName, tomasTransform);
+
+            // 누적 거리 초기화 (0으로 만드는 대신 보폭만큼 빼주면 오차 보정됨)
+            accumulatedDistance = 0f;
+        }
+    }
+
 }

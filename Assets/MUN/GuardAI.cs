@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using DarkTonic.MasterAudio;
 
 public class GuardAI : MonoBehaviour
 {
@@ -38,6 +39,11 @@ public class GuardAI : MonoBehaviour
 
     [Header("속도 설정")]
     public float moveSpeed = 3.5f;
+
+    [Header("사운드 설정")]
+    public float stepInterval = 0.5f; // 발소리 간격 (초 단위)
+    private float stepTimer = 0f;
+    public string footstepSoundName = "GuardFootstep";
 
     // =========================================================
     // [3. 내부 변수]
@@ -133,6 +139,23 @@ public class GuardAI : MonoBehaviour
         {
             anim.SetBool("isWalking", isMoving);
         }
+
+        if (isMoving)
+        {
+            stepTimer += Time.deltaTime;
+
+            // 타이머가 설정한 간격(0.5초 등)을 넘으면 소리 재생
+            if (stepTimer >= stepInterval)
+            {
+           
+                if (!string.IsNullOrEmpty(footstepSoundName))
+                {
+                    MasterAudio.PlaySound3DAtTransform(footstepSoundName, transform);
+                }
+                stepTimer = 0f; 
+            }
+        }
+ 
 
         // 방향 전환 (Scale.x 반전)
         // Alert 상태일 때는 플레이어를 바라봄
