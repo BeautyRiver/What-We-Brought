@@ -5,6 +5,7 @@ using System.Linq;
 using Unity.Cinemachine;
 using UnityEngine;
 using VInspector;
+using DarkTonic.MasterAudio;
 
 public class RatPuzzle : MonoBehaviour
 {
@@ -57,6 +58,8 @@ public class RatPuzzle : MonoBehaviour
     public void StartSwitchCamera(bool enterPuzzle)
     {
         StartCoroutine(PuzzleGameManager.instance.SwitchCameraRoutine(enterPuzzle, puzzleCamera, ResetPuzzleProps));
+
+        MasterAudio.PlaySound3DAtTransform("DigSound", transform);
     }
 
     public void ShowObejct()
