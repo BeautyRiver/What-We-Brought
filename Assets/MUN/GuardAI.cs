@@ -1,333 +1,361 @@
-ï»¿using UnityEngine;
+using UnityEngine;
 using UnityEngine.AI;
+using DarkTonic.MasterAudio;
 
 public class GuardAI : MonoBehaviour
 {
     // =========================================================
-    // [1. ìƒíƒœ ì •ì˜]
+    // [1. »óÅÂ Á¤ÀÇ]
     // =========================================================
-    public enum State { Patrol, Alert, Suspicion, Return }
+    public enum State
+    {
+        Patrol,    // ¼øÂû
+        Alert,     // Ãß°İ
+        Suspicion, // ÀÇ½É(¹èÈ¸)
+        Return     // º¹±Í
+    }
 
     // =========================================================
-    // [2. ì„¤ì • ë³€ìˆ˜]
+    // [2. ÀÎ½ºÆåÅÍ ¼³Á¤ º¯¼öµé]
     // =========================================================
-    [Header("íƒ€ê²Ÿ ë° ì¥ì• ë¬¼")]
-    public Transform player;
-    public LayerMask obstacleMask;
-    public LayerMask ratLayer;
+    [Header("±âº» ¼³Á¤")]
+    public Transform player;          // ÂÑ¾Æ¾ß ÇÒ ÇÃ·¹ÀÌ¾î
+    public LayerMask obstacleMask;    // º® ÀÎ½Ä ·¹ÀÌ¾î
 
-    [Header("ìˆœì°° ê²½ë¡œ")]
-    public Transform[] waypoints;
+    [Header("¼øÂû ¼³Á¤")]
+    public Transform[] waypoints;     // ¼øÂû °æ·Î
+    private int waypointIndex = 0;
 
-    [Header("ê°ì§€ ì„¤ì •")]
-    public float viewAngle = 120f;
-    public float playerViewDist = 10f;
-    public float ratViewDist = 5f;
-    public float visionUpdateRate = 0.2f; // ê°ì§€ ì£¼ê¸° (0.2ì´ˆë§ˆë‹¤ ì²´í¬)
+    [Header("°¨Áö ¼³Á¤")]
+    public float viewAngle = 90f;
+    public float viewDistance = 10f;
+    public GameObject alertIcon;      // [Ãß°¡] ¹ß°ß ½Ã ¸Ó¸® À§¿¡ ¶ã ´À³¦Ç¥(!) ¿ÀºêÁ§Æ®
 
-    [Header("ì•„ì´ì½˜ ì„¤ì •")]
-    public GameObject alertIcon;    // ëŠë‚Œí‘œ (!)
-    public GameObject questionIcon; // ë¬¼ìŒí‘œ (?)
-
-    [Header("í–‰ë™ ì„¤ì •")]
-    public float moveSpeed = 3.5f;
-    public float runSpeed = 5.0f;
-    public float catchDistance = 1.0f;
+    [Header("AI Çàµ¿ ¼³Á¤")]
     public float giveUpDistance = 15f;
+    public float catchDistance = 1.0f; // [Ãß°¡] ÇÃ·¹ÀÌ¾î¸¦ Àâ´Â °Å¸®
     public float wanderRadius = 4f;
-    public float wanderDuration = 4f; // ì˜ì‹¬ ìƒíƒœ ìœ ì§€ ì‹œê°„
+    public float wanderDuration = 3f;
+
+    [Header("¼Óµµ ¼³Á¤")]
+    public float moveSpeed = 3.5f;
+
+    [Header("»ç¿îµå ¼³Á¤")]
+    public float stepInterval = 0.5f; // ¹ß¼Ò¸® °£°İ (ÃÊ ´ÜÀ§)
+    private float stepTimer = 0f;
+    public string footstepSoundName = "GuardFootstep";
 
     // =========================================================
-    // [3. ë‚´ë¶€ ë³€ìˆ˜]
+    // [3. ³»ºÎ º¯¼ö]
     // =========================================================
     private NavMeshAgent agent;
     private Animator anim;
+    public State currentState = State.Patrol;
 
-    // ìƒíƒœ ê´€ë¦¬
-    public State currentState;
-    private Transform currentTarget;
+    private float waitTimer = 0f;
+    private float wanderTimer = 0f;
+    private Vector3 guardPostPosition;
 
-    // íƒ€ì´ë¨¸ ë° ìœ„ì¹˜
-    private float stateTimer = 0f;      // ìƒíƒœë³„ ì‹œê°„ ì²´í¬ìš©
-    private float visionTimer = 0f;     // ì‹œì•¼ ê°ì§€ ì¿¨íƒ€ì„ìš©
-    private int waypointIndex = 0;
-    private Vector3 startPos;
+    // Ä³¸¯ÅÍÀÇ ¿ø·¡ Å©±â ¹× È¸Àü°ª ÀúÀå¿ë
     private Vector3 originalScale;
+    private Quaternion originalRotation; // [Ãß°¡] ÃÊ±â È¸Àü°ª ÀúÀå¿ë
 
+    // =========================================================
+    // [4. ÃÊ±âÈ­] 
+    // =========================================================
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
 
-        // 2D/3D í•˜ì´ë¸Œë¦¬ë“œ í•„ìˆ˜ ì„¤ì • (íšŒì „ ë–¨ë¦¼ ë°©ì§€)
         agent.updateRotation = false;
-        agent.updateUpAxis = false;
+        agent.updateUpAxis = true;
 
-        startPos = transform.position;
+        guardPostPosition = transform.position;
         originalScale = transform.localScale;
 
-        if (alertIcon != null) alertIcon.SetActive(false);
-        if (questionIcon != null) questionIcon.SetActive(false);
+        // [Ãß°¡] °ÔÀÓ ½ÃÀÛ ½Ã ¼³Á¤ÇØµĞ È¸Àü°ª(±â¿ï±â µî)À» ±â¾ïÇÔ
+        originalRotation = transform.rotation;
 
-        // ì´ˆê¸° ìƒíƒœ ì§„ì…
-        ChangeState(State.Patrol);
+        // [Ãß°¡] ½ÃÀÛÇÒ ¶§ ´À³¦Ç¥ ²ô±â
+        if (alertIcon != null) alertIcon.SetActive(false);
+
+        if (waypoints != null && waypoints.Length > 0 && waypoints[0] != null)
+        {
+            agent.SetDestination(waypoints[0].position);
+        }
     }
 
+    // =========================================================
+    // [5. ¸ŞÀÎ ·çÇÁ] 
+    // =========================================================
     void Update()
     {
-        // 1. ì‹œì•¼ ê°ì§€ (ìµœì í™”ë¥¼ ìœ„í•´ ì¼ì • ì£¼ê¸°ë¡œë§Œ ì‹¤í–‰)
-        visionTimer += Time.deltaTime;
-        if (currentState != State.Alert && visionTimer >= visionUpdateRate)
+        agent.speed = moveSpeed;
+
+        HandleAnimationAndRotation();
+
+        // [2. ÇÃ·¹ÀÌ¾î °¨Áö ·ÎÁ÷]
+        if (currentState != State.Alert && CheckForPlayer())
         {
-            LookForIntruders();
-            visionTimer = 0f;
+            EnterAlertState(); // [º¯°æ] »óÅÂ ÀüÈ¯ ÇÔ¼ö·Î ºĞ¸®
         }
 
-        // 2. ìƒíƒœë³„ ë¡œì§ ì‹¤í–‰
-        switch (currentState)
-        {
-            case State.Patrol: UpdatePatrol(); break;
-            case State.Alert: UpdateAlert(); break;
-            case State.Suspicion: UpdateSuspicion(); break;
-            case State.Return: UpdateReturn(); break;
-        }
-
-        // 3. ì• ë‹ˆë©”ì´ì…˜ & ë°©í–¥ ì „í™˜
-        UpdateAnimationAndFacing();
-    }
-
-    // =========================================================
-    // [í•µì‹¬] ìƒíƒœ ì „í™˜ ê´€ë¦¬ì (ê°€ì¥ ì¤‘ìš”í•œ í•¨ìˆ˜!)
-    // =========================================================
-    void ChangeState(State newState)
-    {
-        currentState = newState;
-        stateTimer = 0f;
-
-        if (alertIcon != null) alertIcon.SetActive(false);
-        if (questionIcon != null) questionIcon.SetActive(false);
-
+        // [3. »óÅÂº° Çàµ¿ ½ÇÇà]
         switch (currentState)
         {
             case State.Patrol:
-                agent.speed = moveSpeed;
-                agent.isStopped = false;
-                MoveToNextWaypoint();
+                Patrol();
                 break;
-
             case State.Alert:
-                agent.speed = runSpeed;
-                agent.isStopped = false;
-                if (alertIcon != null) alertIcon.SetActive(true);
+                Chase();
                 break;
-
             case State.Suspicion:
-                agent.speed = moveSpeed;
-                if (questionIcon != null) questionIcon.SetActive(true);
-                MoveToRandomPos();
+                Suspicion();
                 break;
-
             case State.Return:
-                agent.speed = moveSpeed;
-                Vector3 returnPos = (waypoints != null && waypoints.Length > 0)
-                                    ? waypoints[waypointIndex].position
-                                    : startPos;
-                agent.SetDestination(returnPos);
+                ReturnToPatrol();
                 break;
         }
     }
 
+    // [Ãß°¡] XÃà °¢µµ°¡ 0ÀÌ µÇ´Â ¹®Á¦ ÇØ°áÀ» À§ÇØ LateUpdate¿¡¼­ È¸Àü °íÁ¤
+    void LateUpdate()
+    {
+        // NavMeshAgent°¡ ¸Ú´ë·Î È¸ÀüÀ» ¹Ù²ÙÁö ¸øÇÏ°Ô ÃÊ±â È¸Àü°ªÀ¸·Î °­Á¦ °íÁ¤
+        // (¸¸¾à ZÃà È¸Àüµµ ¸·°í ½Í´Ù¸é ÀÌ ÄÚµå°¡ À¯È¿ÇÔ. 2D °ÔÀÓÀÌ¸é º¸Åë ZÃà È¸Àü¸¸ ÇÊ¿äÇÏ¹Ç·Î, 
+        // 3D ºä¿¡¼­ ±â¿ïÀÎ XÃàÀ» À¯ÁöÇÏ·Á¸é ÀÌ ¹æ½ÄÀÌ ÇÊ¼ö)
+        transform.rotation = originalRotation;
+    }
+
     // =========================================================
-    // [ìƒíƒœë³„ ì—…ë°ì´íŠ¸ ë¡œì§] (ë§¤ í”„ë ˆì„ ì‹¤í–‰ë¨)
+    // [6. º¸Á¶ ±â´É] 
     // =========================================================
 
-    void UpdatePatrol()
+    void HandleAnimationAndRotation()
     {
-        // ë„ì°©í–ˆëŠ”ì§€ í™•ì¸
-        if (!agent.pathPending && agent.remainingDistance < 0.2f)
+        bool isMoving = agent.velocity.sqrMagnitude > 0.1f;
+        if (anim != null)
         {
-            stateTimer += Time.deltaTime;
-            if (stateTimer > 2.0f) // 2ì´ˆ ëŒ€ê¸° í›„ ì´ë™
+            anim.SetBool("isWalking", isMoving);
+        }
+
+        if (isMoving)
+        {
+            stepTimer += Time.deltaTime;
+
+            // Å¸ÀÌ¸Ó°¡ ¼³Á¤ÇÑ °£°İ(0.5ÃÊ µî)À» ³ÑÀ¸¸é ¼Ò¸® Àç»ı
+            if (stepTimer >= stepInterval)
             {
-                waypointIndex = (waypointIndex + 1) % waypoints.Length;
-                MoveToNextWaypoint();
-                stateTimer = 0f;
+           
+                if (!string.IsNullOrEmpty(footstepSoundName))
+                {
+                    MasterAudio.PlaySound3DAtTransform(footstepSoundName, transform);
+                }
+                stepTimer = 0f; 
+            }
+        }
+ 
+
+        // ¹æÇâ ÀüÈ¯ (Scale.x ¹İÀü)
+        // Alert »óÅÂÀÏ ¶§´Â ÇÃ·¹ÀÌ¾î¸¦ ¹Ù¶óº½
+        if (currentState == State.Alert && player != null)
+        {
+            if (player.position.x > transform.position.x) // ÇÃ·¹ÀÌ¾î°¡ ¿À¸¥ÂÊ
+            {
+                transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
+            }
+            else // ÇÃ·¹ÀÌ¾î°¡ ¿ŞÂÊ
+            {
+                transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
+            }
+        }
+        else // Æò¼Ò¿¡´Â ÀÌµ¿ ¹æÇâ
+        {
+            if (agent.velocity.x > 0.1f) // ¿À¸¥ÂÊ ÀÌµ¿
+            {
+                transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
+            }
+            else if (agent.velocity.x < -0.1f) // ¿ŞÂÊ ÀÌµ¿
+            {
+                transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
             }
         }
     }
 
-    void UpdateAlert()
+    bool CheckForPlayer()
     {
-        // íƒ€ê²Ÿ ì†Œì‹¤ ì²´í¬
-        if (currentTarget == null || !currentTarget.gameObject.activeInHierarchy)
+        if (player == null) return false;
+
+        Vector3 dirToPlayer = (player.position - transform.position).normalized;
+        float dstToPlayer = Vector3.Distance(transform.position, player.position);
+
+        if (dstToPlayer < viewDistance)
         {
-            ChangeState(State.Suspicion);
-            return;
-        }
-
-        // íƒ€ê²Ÿ ìœ„ì¹˜ë¡œ ê³„ì† ì´ë™ (ì¶”ê²©ì€ ë§¤ í”„ë ˆì„ ê°±ì‹  í•„ìš”)
-        agent.SetDestination(currentTarget.position);
-
-        float dist = Vector3.Distance(transform.position, currentTarget.position);
-
-        // ì¡ì•˜ë‹¤!
-        if (dist <= catchDistance)
-        {
-            agent.isStopped = true;
-            Debug.Log(currentTarget.name + " ì¡í˜!");
-
-            if (currentTarget == player)
+            // 2D °ÔÀÓÀÇ °æ¿ì transform.forward ´ë½Å transform.right³ª upÀ» ½á¾ß ÇÒ ¼öµµ ÀÖÀ½ (¼³Á¤¿¡ µû¶ó ´Ù¸§)
+            // ÀÏ´Ü ±âÁ¸ ÄÚµå¸¦ À¯ÁöÇÏµÇ, ZÃà ÀÌ½´°¡ ÀÖ´Ù¸é Physics.Raycast ´ë½Å Physics2D »ç¿ë °í·Á ÇÊ¿ä
+            if (Vector3.Angle(transform.forward, dirToPlayer) < viewAngle / 2)
             {
-                // ê²Œì„ì˜¤ë²„ ë¡œì§
-            }
-            else
-            {
-                // ì¥ ì¡ìŒ -> ìºë¦­í„° êµì²´ -> ì˜ì‹¬ ëª¨ë“œ
-                GameManager.instance.SwapCharacter();
-                ChangeState(State.Suspicion);
-            }
-            return;
-        }
-
-        // ë†“ì³¤ë‹¤...
-        if (dist > giveUpDistance)
-        {
-            ChangeState(State.Suspicion);
-        }
-    }
-
-    void UpdateSuspicion()
-    {
-        stateTimer += Time.deltaTime;
-
-        // ì „ì²´ ì˜ì‹¬ ì‹œê°„ì´ ëë‚˜ë©´ ë³µê·€
-        if (stateTimer > wanderDuration)
-        {
-            ChangeState(State.Return);
-            return;
-        }
-
-        // ëœë¤ ìœ„ì¹˜ ë„ì°©í–ˆìœ¼ë©´ ì ì‹œ ë©ˆì·„ë‹¤ê°€ ë‹¤ì‹œ ì´ë™
-        if (!agent.pathPending && agent.remainingDistance < 0.2f)
-        {
-            // ë„ì°© í›„ ë°”ë¡œ ì›€ì§ì´ì§€ ì•Šê³  0.5ì´ˆ ì •ë„ í…€ì„ ì¤Œ (ìì—°ìŠ¤ëŸ¬ì›€)
-            // (ì—¬ê¸°ì„  ê°„ë‹¨íˆ ë°”ë¡œ ë‹¤ìŒ ìœ„ì¹˜ë¡œ ê°€ì§€ë§Œ, í•„ìš”í•˜ë©´ ë³„ë„ íƒ€ì´ë¨¸ ì¶”ê°€ ê°€ëŠ¥)
-            MoveToRandomPos();
-        }
-    }
-
-    void UpdateReturn()
-    {
-        // ChangeStateì—ì„œ ì´ë¯¸ ëª©ì ì§€ë¥¼ ì°ì—ˆìœ¼ë¯€ë¡œ, ì—¬ê¸°ì„  ë„ì°©ë§Œ ê°ì‹œí•˜ë©´ ë¨
-        if (!agent.pathPending && agent.remainingDistance < 0.2f)
-        {
-            ChangeState(State.Patrol);
-        }
-    }
-
-    // =========================================================
-    // [ê°ì§€ ë° ìœ í‹¸ë¦¬í‹°]
-    // =========================================================
-
-    void LookForIntruders()
-    {
-        // 1. í”Œë ˆì´ì–´ ê°ì§€
-        if (CanSeeTarget(player, playerViewDist))
-        {
-            currentTarget = player;
-            ChangeState(State.Alert);
-            return;
-        }
-
-        // 2. ì¥ ê°ì§€
-        Collider[] rats = Physics.OverlapSphere(transform.position, ratViewDist, ratLayer);
-        foreach (var rat in rats)
-        {
-            if (CanSeeTarget(rat.transform, ratViewDist))
-            {
-                currentTarget = rat.transform;
-                ChangeState(State.Alert);
-                return;
-            }
-        }
-    }
-
-    bool CanSeeTarget(Transform target, float distLimit)
-    {
-        if (target == null) return false;
-
-        float dist = Vector3.Distance(transform.position, target.position);
-        if (dist > distLimit) return false;
-
-        Vector3 dirToTarget = (target.position - transform.position).normalized;
-
-        // ì‹œì„  ë°©í–¥ (ì¢Œìš° ë°˜ì „ ê³ ë ¤)
-        Vector3 facing = (transform.localScale.x > 0) ? Vector3.right : Vector3.left;
-
-        if (Vector3.Angle(facing, dirToTarget) < viewAngle / 2f)
-        {
-            // ëˆˆ ë†’ì´ ë³´ì •
-            Vector3 eyePos = transform.position + Vector3.up * 0.5f;
-            Vector3 targetPos = target.position + Vector3.up * 0.5f;
-
-            if (!Physics.Raycast(eyePos, (targetPos - eyePos).normalized, dist, obstacleMask))
-            {
-                return true;
+                if (!Physics.Raycast(transform.position, dirToPlayer, dstToPlayer, obstacleMask))
+                {
+                    return true;
+                }
             }
         }
         return false;
     }
 
-    void MoveToNextWaypoint()
+    // =========================================================
+    // [7. »óÅÂº° Çàµ¿ ÇÔ¼öµé] 
+    // =========================================================
+
+    // [Ãß°¡] Ãß°İ »óÅÂ ÁøÀÔ (´À³¦Ç¥ ÄÑ±â)
+    void EnterAlertState()
     {
-        if (waypoints != null && waypoints.Length > 0)
+        currentState = State.Alert;
+        if (alertIcon != null) alertIcon.SetActive(true);
+    }
+
+    void Patrol()
+    {
+        if (waypoints == null || waypoints.Length == 0) return;
+
+        if (!agent.pathPending && agent.remainingDistance < 0.5f)
         {
-            agent.SetDestination(waypoints[waypointIndex].position);
+            waitTimer += Time.deltaTime;
+            if (waitTimer > 2.0f)
+            {
+                waypointIndex = (waypointIndex + 1) % waypoints.Length;
+                if (waypoints[waypointIndex] != null)
+                    agent.SetDestination(waypoints[waypointIndex].position);
+                waitTimer = 0f;
+            }
         }
     }
 
-    void MoveToRandomPos()
+    void Chase()
     {
-        Vector3 randomDir = Random.insideUnitSphere * wanderRadius;
-        randomDir += transform.position;
+        if (player == null) return;
+        agent.SetDestination(player.position);
+        float dist = Vector3.Distance(transform.position, player.position);
+
+        // [Ãß°¡] ÇÃ·¹ÀÌ¾î ÀâÈû ÀÌº¥Æ®
+        if (dist <= catchDistance)
+        {
+            Debug.Log("ÇÃ·¹ÀÌ¾î ÀâÈû! (Game Over)");
+            // ¿©±â¼­ GameManager.instance.GameOver(); µîÀ» È£ÃâÇÏ¸é µÊ
+            // ÀâÈù ÈÄ °¡µå°¡ ¸ØÃß°Ô ÇÏ·Á¸é:
+            agent.isStopped = true;
+            return;
+        }
+
+        // Ãß°İ Æ÷±â
+        if (dist > giveUpDistance)
+        {
+            EnterSuspicionState();
+        }
+    }
+
+    void EnterSuspicionState()
+    {
+        currentState = State.Suspicion;
+
+        // [Ãß°¡] Ãß°İÀÌ ³¡³µÀ¸´Ï ´À³¦Ç¥ ²ô±â
+        if (alertIcon != null) alertIcon.SetActive(false);
+
+        wanderTimer = 0f;
+        MoveToRandomLocation();
+    }
+
+    void Suspicion()
+    {
+        wanderTimer += Time.deltaTime;
+
+        if (!agent.pathPending && agent.remainingDistance < 0.5f)
+        {
+            MoveToRandomLocation();
+        }
+
+        if (wanderTimer > wanderDuration)
+        {
+            currentState = State.Return;
+            // ´À³¦Ç¥´Â ÀÌ¹Ì ²¨Á® ÀÖÀ½
+            int closestIndex = GetClosestWaypointIndex();
+            if (closestIndex != -1)
+            {
+                waypointIndex = closestIndex;
+                agent.SetDestination(waypoints[closestIndex].position);
+            }
+            else
+            {
+                agent.SetDestination(guardPostPosition);
+            }
+        }
+
+        if (CheckForPlayer()) EnterAlertState();
+    }
+
+    void ReturnToPatrol()
+    {
+        if (!agent.pathPending && agent.remainingDistance < 0.5f)
+        {
+            currentState = State.Patrol;
+            waitTimer = 0f;
+        }
+        if (CheckForPlayer()) EnterAlertState();
+    }
+
+    // =========================================================
+    // [8. À¯Æ¿¸®Æ¼] 
+    // =========================================================
+
+    void MoveToRandomLocation()
+    {
+        Vector3 randomDirection = Random.insideUnitSphere * wanderRadius;
+        randomDirection += transform.position;
         NavMeshHit hit;
-        if (NavMesh.SamplePosition(randomDir, out hit, wanderRadius, 1))
+        if (NavMesh.SamplePosition(randomDirection, out hit, wanderRadius, 1))
         {
             agent.SetDestination(hit.position);
         }
     }
 
-    void UpdateAnimationAndFacing()
+    int GetClosestWaypointIndex()
     {
-        bool isMoving = agent.velocity.sqrMagnitude > 0.1f;
-        if (anim != null) anim.SetBool("isWalking", isMoving);
-
-        // ì´ë™ ì¤‘ì´ê±°ë‚˜ ì¶”ê²© ì¤‘ì¼ ë•Œë§Œ ë°©í–¥ ì „í™˜ (ì œìë¦¬ ë–¨ë¦¼ ë°©ì§€)
-        if (!isMoving && currentState != State.Alert) return;
-
-        Vector3 lookTarget;
-        if (currentState == State.Alert && currentTarget != null)
-            lookTarget = currentTarget.position;
-        else if (isMoving)
-            lookTarget = transform.position + agent.velocity;
-        else
-            return;
-
-        // Xì¶• ì°¨ì´ê°€ ë„ˆë¬´ ì‘ìœ¼ë©´ íšŒì „ ì•ˆ í•¨ (ë–¨ë¦¼ ë°©ì§€)
-        if (Mathf.Abs(lookTarget.x - transform.position.x) < 0.1f) return;
-
-        if (lookTarget.x > transform.position.x)
-            transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
-        else
-            transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
+        if (waypoints == null || waypoints.Length == 0) return -1;
+        int closestIndex = 0;
+        float minDistance = Mathf.Infinity;
+        for (int i = 0; i < waypoints.Length; i++)
+        {
+            if (waypoints[i] == null) continue;
+            float dist = Vector3.Distance(transform.position, waypoints[i].position);
+            if (dist < minDistance)
+            {
+                minDistance = dist;
+                closestIndex = i;
+            }
+        }
+        return closestIndex;
     }
 
-    // ë””ë²„ê·¸ ê·¸ë¦¬ê¸° (ì„ íƒ)
     void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, playerViewDist);
-        Gizmos.color = new Color(1, 0.5f, 0);
-        Gizmos.DrawWireSphere(transform.position, ratViewDist);
+        Gizmos.DrawWireSphere(transform.position, viewDistance);
+
+        // ½Ã¾ß°¢ ±×¸®±â (°£·«È­)
+        Vector3 leftRay = Quaternion.Euler(0, -viewAngle / 2, 0) * transform.forward;
+        Vector3 rightRay = Quaternion.Euler(0, viewAngle / 2, 0) * transform.forward;
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(transform.position, leftRay * viewDistance);
+        Gizmos.DrawRay(transform.position, rightRay * viewDistance);
+
+        // Ãß°İ Æ÷±â °Å¸®
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, giveUpDistance);
+
+        // [Ãß°¡] ÀâÈ÷´Â °Å¸® Ç¥½Ã
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, catchDistance);
     }
 }

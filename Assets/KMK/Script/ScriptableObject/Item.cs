@@ -7,6 +7,10 @@ public abstract class Item : ScriptableObject
     public Sprite itemImage;
     [TextArea] public string description;
 
+    [Header("사운드 설정")]
+    public string useSoundName;
+
+
     // 사용하면 사라지는가
     public bool isConsumable = false;
 
