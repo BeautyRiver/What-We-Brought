@@ -155,26 +155,6 @@ public class UIManager : MonoBehaviour
 
     }
 
-    public void FadeInOut(bool isFadeIn, float duration, Action<string> onComplete = null)
-    {
-        float targetAlpha = isFadeIn ? 0f : 1f;
-
-        fadeCanvasGroup.blocksRaycasts = true;
-
-        fadeCanvasGroup.DOFade(targetAlpha, duration)
-        .SetEase(Ease.Linear)
-        .OnComplete(() =>
-        {
-            // 콜백
-            onComplete?.Invoke("ㅎㅇ");
-
-            // 페이드 인 효과면 터치 가능하게 
-            if (isFadeIn)
-            {
-                fadeCanvasGroup.blocksRaycasts = false;
-            }
-        });
-
-    }
+       
 
 }
