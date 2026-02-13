@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 990017774387552226}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.53622055, y: -4.7181563, z: -0.15}
+  m_LocalPosition: {x: -0.70983446, y: -5.11422, z: -0.15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -45,7 +45,7 @@ Light:
   serializedVersion: 11
   m_Type: 2
   m_Color: {r: 0.24528301, g: 0.0983446, b: 0.10836316, a: 1}
-  m_Intensity: 5.4485564
+  m_Intensity: 5.2950673
   m_Range: 14.29
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -410,8 +410,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 2.148, z: -0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5572247329662793444}
   m_Father: {fileID: 3691719020383357461}
@@ -460,7 +460,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 26741e1b4f0461c469b37e52897d4c0f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dfdf36e3c46f9184da6e825f9a00a098, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -511,8 +511,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 2.148, z: -0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5888095518163968790}
   m_Father: {fileID: 3691719020383357461}
@@ -561,7 +561,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 2b51202a228ecf045acc83c6419c083e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a51e9f574580e9a40a58f15ef1916c26, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -618,11 +618,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: d6ec2b2c151b46740aa388b45e8fd2cb, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.93406385
+      value: 0.9340643
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: d6ec2b2c151b46740aa388b45e8fd2cb, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.35710615
+      value: 0.3571048
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: d6ec2b2c151b46740aa388b45e8fd2cb, type: 3}
       propertyPath: m_LocalRotation.y

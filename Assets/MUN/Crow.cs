@@ -107,15 +107,15 @@ public class Crow : MonoBehaviour
         // 4. 유지 시간 대기 (파동 시간 + 지속 시간)
         yield return new WaitForSeconds(scanWaveSpeed + duration);
 
-        // 5. 능력 종료 (하이라이트 끄기)
+        // 5. 능력 종료 (물리적 하이라이트 끄기)
         ClearActiveHighlights();
-        Debug.Log("능력 종료 - 쿨타임 시작");
+        Debug.Log("능력 유지 끝 - 진짜 쿨타임(충전) 시작");
 
         // 6. 쿨타임 대기
         yield return new WaitForSeconds(cooldown);
 
         isAbilityReady = true;
-        Debug.Log("쿨타임 종료 - 사용 가능");
+        Debug.Log("쿨타임 종료 - 시스템적으로 사용 가능");
     }
 
     // 시간차 하이라이트 코루틴

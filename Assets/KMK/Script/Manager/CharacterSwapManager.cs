@@ -65,9 +65,6 @@ public class CharacterSwapManager : MonoBehaviour
 
         if (_isControlHuman)
         {            
-            // 카메라 타겟 변경
-            human_virtualCamera.Follow = humanObject.transform;
-
             ratObject.SetActive(false);
 
             Debug.Log("Mode: Human");
@@ -88,8 +85,6 @@ public class CharacterSwapManager : MonoBehaviour
             if (ratObject.activeSelf == false)
                 ratObject.SetActive(true);
 
-            // 카메라 타겟 변경
-            human_virtualCamera.Follow = ratObject.transform;
 
             Debug.Log("Mode: Rat");
             if (GameManager.instance != null)

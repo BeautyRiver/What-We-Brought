@@ -261,6 +261,15 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-1411546850533661733-0
         - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-1315987715324389188-5946126683306594346
         - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-1885389791565227880-1884780274532576313
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-3632349952009453290-1941805160
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-6945528292466478486-257414506
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-2615377356565473683-360375988
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-5493812817413766317-440819613
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-6384458299617925969-143908380
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-7233950850617453554-994324071
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-4796144931257994487-1308117352
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-5293948290102871940-2113795908
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-7048195569327057204-2012779392
         values:
         - colorIndex: 0
           iconNameOrGuid: Camera Icon
@@ -312,3 +321,21 @@ MonoBehaviour:
           iconNameOrGuid: Camera Icon
         - colorIndex: 0
           iconNameOrGuid: Camera Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 9
+          iconNameOrGuid: Settings Icon

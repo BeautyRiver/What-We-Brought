@@ -13,9 +13,18 @@ MonoBehaviour:
   m_Name: Market_Eavesdrop_02_Dialogue
   m_EditorClassIdentifier: 
   textLines:
-  - speakerName: ???
-    text: "\uADF8 \uC598\uAE30 \uB4E4\uC5C8\uB2C82"
-  - speakerName: ???
-    text: "\u3134\u31342"
-  - speakerName: ???
-    text: "\u3147\u314B2"
+  - speakerName: E
+    text: "\uC694\uC998 \uACBD\uBE44\uAC00 \uB9CE\uC774 \uC0BC\uC5C4\uD574\uC84C\uB354\uAD70"
+  - speakerName: F
+    text: "\uC911\uC2EC\uBD80 \uACBD\uBE44\uAC00 \uC0C1\uB2F9\uD574"
+  - speakerName: E
+    text: "\uC911\uC2EC\uC5D0 \uBB50\uAC00 \uC788\uB2E4\uACE0 \uADF8\uB807\uAC8C\uAE4C\uC9C0
+      \uD558\uB294\uAC70\uC694?"
+  - speakerName: F
+    text: "\uC6B0\uBB3C\uC774 \uC788\uC796\uC544.. \uAC70\uAE30\uC5D0 \uC5ED\uBCD1\uC744
+      \uD37C\uB728\uB9AC\uBA74 \uB2E4 \uB05D\uC774\uC57C.."
+  - speakerName: E
+    text: "\uB204\uAC00 \uADF8\uB7F0 \uC9D3\uC744 \uD558\uACA0\uC18C?"
+  - speakerName: F
+    text: "\uD639\uC2DC \uBAA8\uB974\uC9C0 \uB9C8\uC744 \uBC16 \uC0AC\uB78C\uC774
+      \uC640\uC11C \uD37C\uB728\uB9AC\uACE0 \uAC08\uC9C0.."
