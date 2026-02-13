@@ -3,11 +3,10 @@ using UnityEngine;
 
 public class TutorialManager : MonoBehaviour
 {
-    public bool clearRatTutorial;
     
     public GameObject glassBead;
     
-    public void InstantiateGlassBead()
+    public void ShowGlassBead()
     {
         glassBead.SetActive(true);
     }

@@ -5,7 +5,8 @@ public enum GameState
 {
     Playing,    
     Dialogue,   
-    Puzzle     
+    Puzzle,
+    CutScene
 }
 
 public enum PlayerCharacter
@@ -19,14 +20,10 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     // 상태 변수
-    public GameState CurrentState { get; private set; }
-    public PlayerCharacter CurrentCharacter { get; private set; }
-
-    [Header("카메라 & UI 연결")]
-    [SerializeField] private CinemachineCamera puzzleCamera; // 켜질 퍼즐 카메라
-
-    [SerializeField] private float fadeDuration;
-
+    [field:SerializeField] public GameState CurrentState { get; private set; }
+    [field: SerializeField] public PlayerCharacter CurrentCharacter { get; private set; }
+        
+    [SerializeField] private CharacterSwapManager characterSwapManager;
     private void Awake()
     {
         if (instance == null) { instance = this; }
@@ -39,6 +36,7 @@ public class GameManager : MonoBehaviour
     public void ChangeCharacter(PlayerCharacter character)
     {
         CurrentCharacter = character;
+        characterSwapManager.StopAllCharacter();
     }
 
     public void SetGameState(GameState newState)
@@ -52,46 +50,19 @@ public class GameManager : MonoBehaviour
                 break;
 
             case GameState.Dialogue:
+                characterSwapManager.StopAllCharacter();
                 // 이동 잠금, 대화 UI만 허용
                 break;
 
             case GameState.Puzzle:
-                // 1. 일반 UI(인벤토리 등) 숨기기
-                //UIManager.instance.HideAllPanels();
+                characterSwapManager.StopAllCharacter();                
                 break;
         }
-    }
+    }   
 
-    public void StartSwitchCamera(bool enterPuzzle)
+    public void SwapCharacter()
     {
-        StartCoroutine(SwitchCameraRoutine(enterPuzzle));
-    }        
-    public IEnumerator SwitchCameraRoutine(bool enterPuzzle)
-    {
-        // 퍼즐 시작
-        if (enterPuzzle)
-        {
-            GameManager.instance.SetGameState(GameState.Puzzle);
-
-            UIManager.instance.FadeInOut(false, fadeDuration, () => { puzzleCamera.Priority = 20; });
-            UIManager.instance.HideItemPanel(); // 아이템 UI 숨기기
-            UIManager.instance.HideInfoPanel(); // Info UI 숨기기
-
-            yield return new WaitForSeconds(fadeDuration);
-
-            UIManager.instance.FadeInOut(true, fadeDuration);
-        }
-        else
-        {
-            UIManager.instance.FadeInOut(false, fadeDuration, () => { puzzleCamera.Priority = 0; });
-            UIManager.instance.ShowItemPanel(); // 아이템 UI 다시 켜기
-            UIManager.instance.ShowInfoPanel();
-            yield return new WaitForSeconds(fadeDuration);
-
-            UIManager.instance.FadeInOut(true, fadeDuration, () => { GameManager.instance.SetGameState(GameState.Playing); });
-
-        }
-
+        characterSwapManager.SwapCharacter();
     }
 }
 

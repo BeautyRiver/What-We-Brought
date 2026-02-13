@@ -13,6 +13,9 @@ public class DialogueManager : MonoBehaviour
     private Queue<DialogueLine> sentences = new Queue<DialogueLine>();
     private Action onDialogueEnd;
 
+    // 대화 종료 후 자동으로 Playing 상태로 갈지 여부
+    private bool autoUnlockState = true;
+
     private void Awake()
     {
         if (instance == null) { instance = this; DontDestroyOnLoad(gameObject); }
@@ -25,22 +28,23 @@ public class DialogueManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
         {
-            // ⭐ UIManager를 통해 상태 확인 및 명령
             if (UIManager.instance.IsTalkPanelTyping)
-            {
                 UIManager.instance.CompleteTalkText();
-            }
             else
-            {
                 DisplayNextSentence();
-            }
         }
     }
 
-    public void StartDialogue(DialogueData data, Action endCallback = null)
+    public void StartDialogue(DialogueData data, Action endCallback = null, bool autoUnlock = true)
     {
+        GameManager.instance.SetGameState(GameState.Dialogue);
+
         isDialogueActive = false;
         onDialogueEnd = endCallback;
+
+        // 이번 대화의 설정을 저장
+        this.autoUnlockState = autoUnlock;
+
         sentences.Clear();
 
         if (data == null || data.textLines.Count == 0)
@@ -59,7 +63,7 @@ public class DialogueManager : MonoBehaviour
 
     IEnumerator EnableInputRoutine()
     {
-        yield return null; // 한 프레임 대기
+        yield return null;
         isDialogueActive = true;
     }
 
@@ -72,22 +76,28 @@ public class DialogueManager : MonoBehaviour
         }
 
         var dialogueLine = sentences.Dequeue();
-
-        // ⭐ UI 매니저야, 텍스트 좀 갱신해줘!
         UIManager.instance.UpdateTalkText(dialogueLine.speakerName, dialogueLine.text);
     }
 
     public void EndDialogue()
     {
         isDialogueActive = false;
-
-        // ⭐ UI 매니저야, 대화창 닫아줘!
         UIManager.instance.HideTalkPanel();
 
+        // 자동 잠금 해제 옵션이 켜져있을 때만 Playing으로 변경
+        if (autoUnlockState)
+        {
+            if (GameManager.instance.CurrentState == GameState.Dialogue)
+                GameManager.instance.SetGameState(GameState.Playing);
+        }
+
+        // 콜백 실행
+        // (autoUnlockState가 false라면, 여기서 실행되는 콜백 함수가 나중에 직접 Playing으로 바꿔줘야 함)
         if (onDialogueEnd != null)
         {
-            onDialogueEnd.Invoke();
+            Action callback = onDialogueEnd;
             onDialogueEnd = null;
+            callback.Invoke();
         }
     }
 }

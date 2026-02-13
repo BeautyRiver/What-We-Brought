@@ -10,6 +10,7 @@ TagManager:
   - Clue
   - Goal
   - Rat
+  - Out
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - Interactable
   - Rat_Interactable
   - Rat
-  - 
+  - Object
   - 
   - 
   - UI_highlight

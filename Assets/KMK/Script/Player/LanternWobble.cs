@@ -1,0 +1,40 @@
+using UnityEngine;
+
+[ExecuteInEditMode]
+public class LanternWobble : MonoBehaviour
+{
+    private Light myLight;
+
+    [Header("ºÒºû Èçµé¸² ¼³Á¤")]
+    public float range = 10f;
+    public float minIntensity = 2.0f; // ÃÖ¼Ò ¹à±â
+    public float maxIntensity = 4.0f; // ÃÖ´ë ¹à±â
+    public float flickerSpeed = 5.0f; // ±ôºýÀÌ´Â ¼Óµµ
+
+    [Header("À§Ä¡ Èçµé¸² (¿É¼Ç)")]
+    public bool shakePosition = true;
+    public float shakeAmount = 0.1f;
+    private Vector3 initialPos;
+
+    void Awake()
+    {
+        myLight = GetComponent<Light>();
+        initialPos = transform.localPosition;
+    }
+
+    void Update()
+    {
+        // 1. ¹à±â Èçµé¸² (ÆÞ¸° ³ëÀÌÁî¸¦ ½á¼­ ºÎµå·´°Ô ºÒÅ¸´Â ´À³¦)
+        float noise = Mathf.PerlinNoise(Time.time * flickerSpeed, 0f);
+        myLight.intensity = Mathf.Lerp(minIntensity, maxIntensity, noise);
+        myLight.range = range;
+
+        // 2. À§Ä¡ ¹Ì¼¼ Èçµé¸² (ºÒ²ÉÀÌ ÀÏ··ÀÌ´Â ´À³¦)
+        if (shakePosition)
+        {
+            float x = (Mathf.PerlinNoise(Time.time * flickerSpeed, 1f) - 0.5f) * shakeAmount;
+            float y = (Mathf.PerlinNoise(Time.time * flickerSpeed, 2f) - 0.5f) * shakeAmount;
+            transform.localPosition = initialPos + new Vector3(x, y, 0);
+        }
+    }
+}

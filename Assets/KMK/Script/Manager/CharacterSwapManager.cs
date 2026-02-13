@@ -5,7 +5,8 @@ using Unity.Cinemachine;
 public class CharacterSwapManager : MonoBehaviour
 {
     [Header("카메라 설정")]
-    [SerializeField] private CinemachineCamera virtualCamera; // CM 3.0 기준
+    [SerializeField] private CinemachineCamera human_virtualCamera;
+    [SerializeField] private CinemachineCamera rat_virtualCamera;
 
     [Header("캐릭터 컨트롤러")]
     [SerializeField] private GameObject humanObject;
@@ -34,6 +35,9 @@ public class CharacterSwapManager : MonoBehaviour
 
     void Update()
     {
+        if (!(GameManager.instance.CurrentState == GameState.Playing))
+            return;
+        
         if (Input.GetKeyDown(KeyCode.E))
         {
             SwapCharacter();
@@ -48,34 +52,29 @@ public class CharacterSwapManager : MonoBehaviour
         humanObject.SetActive(true);
         ratObject.SetActive(false);
 
-        virtualCamera.Follow = humanObject.transform;
+        human_virtualCamera.Follow = humanObject.transform;
 
         // GameManager에 알림 (Null 체크 추가)
         if (GameManager.instance != null)
             GameManager.instance.ChangeCharacter(PlayerCharacter.Human);
     }
 
-    private void SwapCharacter()
+    public void SwapCharacter()
     {
         _isControlHuman = !_isControlHuman; // 상태 반전
-
-        //// 변신 이펙트
-        //if (transformationEffect != null)
-        //{
-        //    transformationEffect.transform.position = _isControlHuman ? ratObject.transform.position : humanObject.transform.position;
-        //    transformationEffect.Play();
-        //}
 
         if (_isControlHuman)
         {            
             // 카메라 타겟 변경
-            virtualCamera.Follow = humanObject.transform;
+            human_virtualCamera.Follow = humanObject.transform;
 
             ratObject.SetActive(false);
 
             Debug.Log("Mode: Human");
             if (GameManager.instance != null)
             {
+                rat_virtualCamera.Priority = 1;
+                human_virtualCamera.Priority = 2;
                 GameManager.instance.ChangeCharacter(PlayerCharacter.Human);
                 _ratController.StopMove();
             }
@@ -90,14 +89,22 @@ public class CharacterSwapManager : MonoBehaviour
                 ratObject.SetActive(true);
 
             // 카메라 타겟 변경
-            virtualCamera.Follow = ratObject.transform;
+            human_virtualCamera.Follow = ratObject.transform;
 
             Debug.Log("Mode: Rat");
             if (GameManager.instance != null)
             {
+                human_virtualCamera.Priority = 1;
+                rat_virtualCamera.Priority = 2;
                 GameManager.instance.ChangeCharacter(PlayerCharacter.Rat);
                 _humanController.StopMove();
             }
         }
+    }
+
+    public void StopAllCharacter()
+    {
+        _humanController.StopMove();
+        _ratController.StopMove();
     }
 }
