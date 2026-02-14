@@ -15,7 +15,7 @@ public class UIManager : MonoBehaviour
     public InfoPanel infoPanel;
     public TooltipPanel tooltipPanel;
     public GameObject itemPanel;
-
+    public CrowCoolTime crowCoolTimeUI;
     public CanvasGroup fadeCanvasGroup;
 
     [Header("기본 커서 설정")]
@@ -123,6 +123,14 @@ public class UIManager : MonoBehaviour
         if (tooltipPanel != null)
             tooltipPanel.Hide();
     }
+    // ------------------ 까마귀 쿨타임 UI --------------------------
+    public void StartCrowCooldownUI(float activeTime, float coolTime)
+    {
+        if (crowCoolTimeUI != null)
+        {
+            crowCoolTimeUI.StartCooldown(activeTime, coolTime);
+        }
+    }
 
     // ------------------ 페이드 인 아웃 UI --------------------------
     public void FadeInOut(bool isFadeIn, float duration, Action onComplete = null)
@@ -145,7 +153,5 @@ public class UIManager : MonoBehaviour
             }
         });
 
-    }
-
-    
+    }   
 }

@@ -26,11 +26,18 @@ public class BumpTomasCutScene : CutsceneDirector
     public Transform sewerTransform; // 하수구 구멍
     public Transform spawnPoint; // 생성 위치
 
+    [Header("컷씬 이후")]
+    public BoxCollider sewerFuctioncol;
 
     [Header("사운드 설정")]
     public string stepSoundName = "TomasWalk"; // 마스터 오디오 그룹 이름
     public float stepStride = 1.5f; // 보폭 (이 거리만큼 이동할 때마다 소리 남)
     private float accumulatedDistance = 0f; // 이동 거리 누적용 변수
+
+    private void Start()
+    {
+        sewerFuctioncol.enabled = false;
+    }
 
     public override void PlayCutscene()
     {
@@ -41,9 +48,11 @@ public class BumpTomasCutScene : CutsceneDirector
     {
         yield return null;
         yield return null;
+        if (GameManager.instance.CurrentCharacter == PlayerCharacter.Rat)
+            GameManager.instance.SwapCharacter();
 
         // 플레이어 조작 잠금
-        GameManager.instance.SetGameState(GameState.Dialogue);
+        GameManager.instance.SetGameState(GameState.CutScene);
 
         // 하수구 근처까지 천천히 걸어감..
         var pMovement = playerTransform.GetComponent<PlayerMovement>();
@@ -137,7 +146,7 @@ public class BumpTomasCutScene : CutsceneDirector
         yield return new WaitForSeconds(1f);        
 
         // 대화 
-        DialogueManager.instance.StartDialogue(dialogueData, EndCutscene);
+        DialogueManager.instance.StartDialogue(dialogueData, EndCutscene, false);
     }
 
     private void ThrowBottleToSewer()
@@ -156,16 +165,13 @@ public class BumpTomasCutScene : CutsceneDirector
     }
     private void EndCutscene()
     {
-        StartCoroutine(OnPlaerController());
         StartCoroutine(TomasRun());
-        Debug.Log("[CutScene Off] - Tomas Bump");
         
     }
 
     IEnumerator OnPlaerController()
     {
         yield return new WaitForSeconds(2f);
-        GameManager.instance.SetGameState(GameState.Playing);
     }
     IEnumerator TomasRun()
     {
@@ -211,8 +217,10 @@ public class BumpTomasCutScene : CutsceneDirector
 
             yield return null;
         }
-
+        
+        GameManager.instance.SetGameState(GameState.Playing);
         tomasTransform.gameObject.SetActive(false);
+        sewerFuctioncol.enabled = true;
     }
 
     private void HandleFootstep(float currentSpeed)

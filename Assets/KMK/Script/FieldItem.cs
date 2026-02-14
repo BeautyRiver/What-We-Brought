@@ -1,17 +1,25 @@
-using DarkTonic.MasterAudio;
 using UnityEngine;
-using DarkTonic.MasterAudio;
 
 public class FieldItem : MonoBehaviour, IInteractable
 {
     public Item itemData;
+    public bool isHideWhenStart;
+    public bool isDestory = false;
+
+    private void Start()
+    {
+        if (isHideWhenStart)
+            this.gameObject.SetActive(false);
+    }
     public void Interact()
     {
-        if (Inventory.instance != null)
-            Inventory.instance.AddItem(itemData);
-
-        MasterAudio.PlaySound3DAtVector3("ItemSound", transform.position);
-        Destroy(gameObject);
-      
+        Inventory.instance.AddItem(itemData);        
+        if (isDestory)
+            Destroy(gameObject);
+        else
+        {
+            this.GetComponent<Collider>().enabled = false;
+            
+        }
     }   
 }

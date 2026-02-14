@@ -5,7 +5,8 @@ public enum GameState
 {
     Playing,    
     Dialogue,   
-    Puzzle     
+    Puzzle,
+    CutScene
 }
 
 public enum PlayerCharacter
@@ -19,8 +20,8 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     // 상태 변수
-    public GameState CurrentState { get; private set; }
-    public PlayerCharacter CurrentCharacter { get; private set; }
+    [field:SerializeField] public GameState CurrentState { get; private set; }
+    [field: SerializeField] public PlayerCharacter CurrentCharacter { get; private set; }
         
     [SerializeField] private CharacterSwapManager characterSwapManager;
     private void Awake()
@@ -59,5 +60,9 @@ public class GameManager : MonoBehaviour
         }
     }   
 
+    public void SwapCharacter()
+    {
+        characterSwapManager.SwapCharacter();
+    }
 }
 

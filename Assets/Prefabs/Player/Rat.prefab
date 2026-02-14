@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 1372519150417590779}
   m_Layer: 10
   m_Name: Rat
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -214,7 +214,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1332735813026034242, guid: 79ac519ed5458bc4d9437c7f8654e81b, type: 3}
       propertyPath: m_ReceiveShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332735813026034242, guid: 79ac519ed5458bc4d9437c7f8654e81b, type: 3}
       propertyPath: m_SortingLayerID
@@ -242,7 +242,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1358709607958335713, guid: 79ac519ed5458bc4d9437c7f8654e81b, type: 3}
       propertyPath: m_ReceiveShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1358709607958335713, guid: 79ac519ed5458bc4d9437c7f8654e81b, type: 3}
       propertyPath: m_SortingLayerID
@@ -270,7 +270,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1773074557397392670, guid: 79ac519ed5458bc4d9437c7f8654e81b, type: 3}
       propertyPath: m_ReceiveShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1773074557397392670, guid: 79ac519ed5458bc4d9437c7f8654e81b, type: 3}
       propertyPath: m_SortingLayerID
@@ -298,7 +298,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2258565576326941799, guid: 79ac519ed5458bc4d9437c7f8654e81b, type: 3}
       propertyPath: m_ReceiveShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2258565576326941799, guid: 79ac519ed5458bc4d9437c7f8654e81b, type: 3}
       propertyPath: m_SortingLayerID
@@ -326,7 +326,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5715733597377984057, guid: 79ac519ed5458bc4d9437c7f8654e81b, type: 3}
       propertyPath: m_ReceiveShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5715733597377984057, guid: 79ac519ed5458bc4d9437c7f8654e81b, type: 3}
       propertyPath: m_SortingLayerID
@@ -362,7 +362,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8914849809828432603, guid: 79ac519ed5458bc4d9437c7f8654e81b, type: 3}
       propertyPath: m_ReceiveShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8914849809828432603, guid: 79ac519ed5458bc4d9437c7f8654e81b, type: 3}
       propertyPath: m_SortingLayerID
@@ -390,7 +390,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9117095716905312350, guid: 79ac519ed5458bc4d9437c7f8654e81b, type: 3}
       propertyPath: m_ReceiveShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9117095716905312350, guid: 79ac519ed5458bc4d9437c7f8654e81b, type: 3}
       propertyPath: m_SortingLayerID

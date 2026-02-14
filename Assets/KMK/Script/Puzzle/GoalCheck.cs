@@ -1,17 +1,27 @@
 using UnityEngine;
 
-public abstract class GoalCheck : MonoBehaviour
+public class GoalCheck : MonoBehaviour
 {
-    [SerializeField] protected FieldRatHole fieldRatHole;
-    protected void OnTriggerEnter2D(Collider2D collision)
+    [SerializeField] private FieldRatHole fieldRatHole;
+    private RatPuzzle ratPuzzle;
+
+    private void Awake()
+    {
+        ratPuzzle = GetComponentInParent<RatPuzzle>();
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Goal"))
         {            
             this.gameObject.SetActive(false);
-            gameObject.GetComponentInParent<RatPuzzle>().StartSwitchCamera(false);
+            ratPuzzle.StartSwitchCamera(false);
             GoalEvent();
         }
     }
 
-    protected abstract void GoalEvent();    
+    public void GoalEvent()
+    {
+        ratPuzzle.ShowObejct();
+        PuzzleGameManager.instance.ClearPuzzle(fieldRatHole.PuzzleID);
+    }
 }
