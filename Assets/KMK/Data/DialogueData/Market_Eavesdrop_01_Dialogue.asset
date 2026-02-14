@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d4bc8742422ba140ac8cde40316b7a5, type: 3}
+  m_Name: Market_Eavesdrop_01_Dialogue
+  m_EditorClassIdentifier: 
+  textLines:
+  - speakerName: A
+    text: "\uC544\uCE68\uC5D0 \uB610 \uD55C\uBA85\uC774 \uC4F0\uB7EC\uC84C\uB2E4\uB354\uAD70."
+  - speakerName: B
+    text: "\uBA40\uCA61\uD558\uB358 \uC0AC\uB78C\uC774..."
+  - speakerName: A
+    text: "\uADF8\uB098\uC800\uB098 \uC624\uB298 \uB0AF\uC120 \uC0AC\uB78C \uBCF4\uC168\uC18C?"
+  - speakerName: B
+    text: "\uC678\uBD80\uC778\uC774 \uB4E4\uC5B4\uC654\uB098?"
+  - speakerName: A
+    text: "\uB9C8\uC744 \uC785\uAD6C \uCABD\uC5D0\uC11C \uBD24\uB2E4\uB294 \uC18C\uBB38\uC774.."
+  - speakerName: B
+    text: "\uACBD\uBE44\uBCD1\uC5D0\uAC8C \uC54C\uB824\uC57C\uACA0\uC5B4"

@@ -1,4 +1,4 @@
-using DG.Tweening;
+ï»¿using DG.Tweening;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -6,23 +6,31 @@ using UnityEngine.Experimental.AI;
 
 public class BumpTomasCutScene : CutsceneDirector
 {
-    [Header("Ãâ¿¬Áø")]
-    public Transform playerModel;
+    [Header("ì¶œì—°ì§„")]
+    public Transform playerTransform;
     public Transform tomasTransform;
     public Animator tomasAnimator;
 
-    [Header("Åä¸¶½º Ãæµ¹ ¿¬Ãâ")]
-    public float runSpeed = 6f;
+    [Header("í† ë§ˆìŠ¤ ì¶©ëŒ ì—°ì¶œ")]
+    public Transform walkSewerTransform; // í”Œë ˆì´ì–´ê°€ ê±¸ì–´ê°ˆ í•˜ìˆ˜êµ¬ ê·¼ì²˜ ìœ„ì¹˜
+    public float playerWalkSpeed = 3f;
+    public float tomasWalkSpeed = 6f;
     public float bumpDistance = 1.2f;
     public DialogueData dialogueData;
     public Transform tomasRunTransform;
 
-    [Header("¾àº´ ¶³¾îÁö´Â ¿¬Ãâ")]
+    [Header("ì•½ë³‘ ë–¨ì–´ì§€ëŠ” ì—°ì¶œ")]
     public GameObject bottlePrefab;
-    public Transform sewerTransform; // ÇÏ¼ö±¸ ±¸¸Û
-    public Transform spawnPoint; // »ı¼º À§Ä¡
+    public Transform sewerTransform; // í•˜ìˆ˜êµ¬ êµ¬ë©
+    public Transform spawnPoint; // ìƒì„± ìœ„ì¹˜
 
+    [Header("ì»·ì”¬ ì´í›„")]
+    public BoxCollider sewerFuctioncol;
 
+    private void Start()
+    {
+        sewerFuctioncol.enabled = false;
+    }
     public override void PlayCutscene()
     {
         StartCoroutine(CutsceneSequence());
@@ -30,46 +38,99 @@ public class BumpTomasCutScene : CutsceneDirector
 
     IEnumerator CutsceneSequence()
     {
-        // ÇÃ·¹ÀÌ¾î Á¶ÀÛ Àá±İ
-        GameManager.instance.SetGameState(GameState.Dialogue);
-        // Åä¸¶½º µîÀå ¹× ÀÌµ¿
+        yield return null;
+        yield return null;
+        if (GameManager.instance.CurrentCharacter == PlayerCharacter.Rat)
+            GameManager.instance.SwapCharacter();
+
+        // í”Œë ˆì´ì–´ ì¡°ì‘ ì ê¸ˆ
+        GameManager.instance.SetGameState(GameState.CutScene);
+
+        // í•˜ìˆ˜êµ¬ ê·¼ì²˜ê¹Œì§€ ì²œì²œíˆ ê±¸ì–´ê°..
+        var pMovement = playerTransform.GetComponent<PlayerMovement>();
+        pMovement.SetPlayerMovingForCutScene(true);
+
+        Vector3 targetPos = new Vector3(
+            walkSewerTransform.position.x,
+            playerTransform.position.y, // ë‚´ Yê°’ ìœ ì§€
+            walkSewerTransform.position.z
+        );
+
+        Transform playerModel = playerTransform.GetChild(0);
+        // ëª©í‘œ ì§€ì ê¹Œì§€ ì´ë™ ë£¨í”„
+        while (Vector3.Distance(playerTransform.position, targetPos) > 0.1f)
+        {
+            // ì´ë™
+            playerTransform.position = Vector3.MoveTowards(
+                playerTransform.position,
+                targetPos,
+                playerWalkSpeed * Time.deltaTime
+            );
+
+            // ë°©í–¥ ì „í™˜ (í•˜ìˆ˜êµ¬ê°€ ì™¼ìª½ì— ìˆìœ¼ë©´ ì™¼ìª½ ë´„)
+            if (walkSewerTransform.position.x < playerTransform.position.x)
+                playerModel.localScale = new Vector3(1, playerTransform.localScale.y, playerTransform.localScale.z);
+            else
+                playerModel.localScale = new Vector3(-1, playerTransform.localScale.y, playerTransform.localScale.z);
+
+            yield return null;
+        }
+
+        // ë„ì°© í›„ ë©ˆì¶¤
+        pMovement.SetPlayerMovingForCutScene(false);
+
+        // ë„ì°© í›„ ì ì‹œ ëŒ€ê¸° (ìì—°ìŠ¤ëŸ¬ìš´ ì—°ì¶œì„ ìœ„í•´)
+        yield return new WaitForSeconds(0.25f);
+
+        playerModel.localScale = new Vector3(-1, playerTransform.localScale.y, playerTransform.localScale.z);
+
+        // í† ë§ˆìŠ¤ ë“±ì¥ ë° ì´ë™
         if (tomasAnimator != null)
         {
             tomasAnimator.SetBool("Moving", true);
-            tomasAnimator.SetFloat("MoveSpeed", runSpeed);
+            tomasAnimator.SetFloat("MoveSpeed", tomasWalkSpeed);
         }
 
-        while (Vector3.Distance(tomasTransform.position, playerModel.position) > bumpDistance)
+        targetPos = new Vector3(
+            playerTransform.position.x,
+            tomasTransform.position.y, // ë‚´ Yê°’ ìœ ì§€
+            playerTransform.position.z
+        );
+
+
+        Transform tomasModel = tomasAnimator.transform;
+
+        while (Vector3.Distance(tomasTransform.position, targetPos) > bumpDistance)
         {
             tomasTransform.position = Vector3.MoveTowards(
                 tomasTransform.position,
-                playerModel.position,
-                runSpeed * Time.deltaTime
+                targetPos,
+                tomasWalkSpeed * Time.deltaTime
                 );
 
-            if (playerModel.position.x < tomasTransform.position.x)
+            if (targetPos.x < tomasTransform.position.x)
             {
-                tomasTransform.localScale = new Vector3(-1, tomasTransform.localScale.y, tomasTransform.localScale.z);
+                tomasModel.localScale = new Vector3(-1, tomasModel.localScale.y, tomasModel.localScale.z);
             }
             else
             {
-                tomasTransform.localScale = new Vector3(1, tomasTransform.localScale.y, tomasTransform.localScale.z);
+                tomasModel.localScale = new Vector3(1, tomasModel.localScale.y, tomasModel.localScale.z);
             }
 
             yield return null;
         }
 
-        // µµÂø ÈÄ Á¤Áö (Ãæµ¹)
+        // ë„ì°© í›„ ì •ì§€ (ì¶©ëŒ)
         if (tomasAnimator != null)
             tomasAnimator.SetBool("Moving", false);
 
-        // ¾àº´ ¶³¾îÁö´Â ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı
+        // ì•½ë³‘ ë–¨ì–´ì§€ëŠ” ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ
         ThrowBottleToSewer();
 
         yield return new WaitForSeconds(1f);        
 
-        // ´ëÈ­ 
-        DialogueManager.instance.StartDialogue(dialogueData, EndCutscene);
+        // ëŒ€í™” 
+        DialogueManager.instance.StartDialogue(dialogueData, EndCutscene, false);
     }
 
     private void ThrowBottleToSewer()
@@ -77,57 +138,63 @@ public class BumpTomasCutScene : CutsceneDirector
         Vector3 startPos = spawnPoint.position;
 
         GameObject bottle = Instantiate(bottlePrefab, startPos, Quaternion.identity);
-        bottle.transform.DOJump(sewerTransform.position, 2.0f, 1, 0.8f)
+        bottle.transform.DOJump(sewerTransform.position, 2.5f, 1, 1f)
             .SetEase(Ease.Linear) 
             .OnComplete(() => {
-                Debug.Log("¾àº´ ÇÏ¼ö±¸ °ñÀÎ!");               
+                Debug.Log("ì•½ë³‘ í•˜ìˆ˜êµ¬ ê³¨ì¸!");               
                 Destroy(bottle, 0.5f);
             });
 
-        bottle.transform.DORotate(new Vector3(0, 0, 360), 0.8f, RotateMode.FastBeyond360);
+        bottle.transform.DORotate(new Vector3(0, 0, 450), 1.3f, RotateMode.FastBeyond360);
     }
     private void EndCutscene()
     {
-        StartCoroutine(OnPlaerController());
         StartCoroutine(TomasRun());
-        Debug.Log("[CutScene Off] - Tomas Bump");
         
     }
 
     IEnumerator OnPlaerController()
     {
         yield return new WaitForSeconds(2f);
-        GameManager.instance.SetGameState(GameState.Playing);
     }
     IEnumerator TomasRun()
     {
         if (tomasAnimator != null)
         {
-            runSpeed += 1f;
+            tomasWalkSpeed += 1f;
             tomasAnimator.SetBool("Moving", true);
-            tomasAnimator.SetFloat("MoveSpeed", runSpeed);
+            tomasAnimator.SetFloat("MoveSpeed", tomasWalkSpeed);
         }
 
-        while (Vector3.Distance(tomasTransform.position, tomasRunTransform.position) > bumpDistance)
+        Vector3 targetPos = new Vector3(
+            tomasRunTransform.position.x,
+            tomasTransform.position.y, // ë‚´ Yê°’ ìœ ì§€
+            tomasRunTransform.position.z
+        );
+
+        Transform tomasModel = tomasAnimator.transform;
+        while (Vector3.Distance(tomasTransform.position, targetPos) > bumpDistance)
         {
             tomasTransform.position = Vector3.MoveTowards(
                 tomasTransform.position,
-                tomasRunTransform.position,
-                runSpeed * Time.deltaTime
+                targetPos,
+                tomasWalkSpeed * Time.deltaTime
                 );
 
-            if (tomasRunTransform.position.x < tomasTransform.position.x)
+            if (targetPos.x < tomasTransform.position.x)
             {
-                tomasTransform.localScale = new Vector3(-1, tomasTransform.localScale.y, tomasTransform.localScale.z);
+                tomasModel.localScale = new Vector3(-1, tomasModel.localScale.y, tomasModel.localScale.z);
             }
             else
             {
-                tomasTransform.localScale = new Vector3(1, tomasTransform.localScale.y, tomasTransform.localScale.z);
+                tomasModel.localScale = new Vector3(1, tomasModel.localScale.y, tomasModel.localScale.z);
             }
 
             yield return null;
         }
-
-        Destroy(tomasTransform.gameObject);
+        
+        GameManager.instance.SetGameState(GameState.Playing);
+        tomasTransform.gameObject.SetActive(false);
+        sewerFuctioncol.enabled = true;
     }
 }

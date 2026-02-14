@@ -6,7 +6,7 @@ public class FieldTooltip : MonoBehaviour, IInteractable
     [SerializeField] private string content;
     public void Interact()
     {
-        UIManager.instance.ShowTooltip(content, 2f);
+        UIManager.instance.ShowTooltip(content, transform, 2f);
     }
     
 

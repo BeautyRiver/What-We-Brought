@@ -61,7 +61,7 @@ public class SoundManager : MonoBehaviour
 
         AudioSource source = GetPooledSFX(clipName);
         source.clip = clip;
-        source.Play();
+        source.Play();        
     }
 
     private AudioSource GetPooledSFX(string clipName)

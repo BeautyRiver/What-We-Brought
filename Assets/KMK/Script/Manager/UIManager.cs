@@ -15,7 +15,7 @@ public class UIManager : MonoBehaviour
     public InfoPanel infoPanel;
     public TooltipPanel tooltipPanel;
     public GameObject itemPanel;
-
+    public CrowCoolTime crowCoolTimeUI;
     public CanvasGroup fadeCanvasGroup;
 
     [Header("기본 커서 설정")]
@@ -42,12 +42,14 @@ public class UIManager : MonoBehaviour
     }
     
     // ------------------ Info UI --------------------------
-    public void ShowInfoPanel(string content = null)
+    public void ShowInfoPanel(string content)
     {
-        infoPanel.gameObject.SetActive(true);
+        infoPanel.ShowInfo(content);
+    }
 
-        if (content != null)
-            infoPanel.ShowInfo(content);
+    public void ShowInfoPanel(string content, float showTime)
+    {
+        infoPanel.ShowInfo(content, showTime);
     }
 
     public void HideInfoPanel()
@@ -103,23 +105,31 @@ public class UIManager : MonoBehaviour
     
     }
     // ------------------ 툴팁 UI --------------------------
-    public void ShowTooltip(string content)
+    public void ShowTooltip(string content, Transform target)
     {
         if (tooltipPanel != null)
-            tooltipPanel.Show(content, 0f); // 0f = 안 사라짐
+            tooltipPanel.Show(content, target, 0f); // 0f = 안 사라짐
     }
 
     // 특정 시간 동안만 보여줌 (클릭 알림 등)
-    public void ShowTooltip(string content, float duration)
+    public void ShowTooltip(string content, Transform target, float duration)
     {
         if (tooltipPanel != null)
-            tooltipPanel.Show(content, duration);
+            tooltipPanel.Show(content, target, duration);
     }
 
     public void HideTooltip()
     {
         if (tooltipPanel != null)
             tooltipPanel.Hide();
+    }
+    // ------------------ 까마귀 쿨타임 UI --------------------------
+    public void StartCrowCooldownUI(float activeTime, float coolTime)
+    {
+        if (crowCoolTimeUI != null)
+        {
+            crowCoolTimeUI.StartCooldown(activeTime, coolTime);
+        }
     }
 
     // ------------------ 페이드 인 아웃 UI --------------------------
@@ -143,7 +153,5 @@ public class UIManager : MonoBehaviour
             }
         });
 
-    }
-
-    
+    }   
 }

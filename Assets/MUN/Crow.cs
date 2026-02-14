@@ -1,48 +1,86 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
+using System; // â­ DOTween ì‚¬ìš© í•„ìˆ˜
 
 public class Crow : MonoBehaviour
 {
-    [Header("´É·Â ¼³Á¤")]
-    public float duration = 20.0f; // ±âÈ¹¼­ ±âÁØ 20ÃÊ
-    public float cooldown = 120.0f; // ±âÈ¹¼­ ³­ÀÌµµº° 2~3ºĞ
-    public float detectionRadius = 15.0f; // ¹üÀ§ ¼³Á¤
+    [Header("ëŠ¥ë ¥ ì„¤ì •")]
+    public float duration = 20.0f;        // í•˜ì´ë¼ì´íŠ¸ ìœ ì§€ ì‹œê°„
+    public float cooldown = 120.0f;       // ì¿¨íƒ€ì„
+    public float detectionRadius = 15.0f; // íƒì§€ ë°˜ê²½
 
-    [Header("Å½Áö ¼³Á¤")]
-    public string highlightTag = "Clue"; // ÅÂ±× È®ÀÎ
-    public LayerMask clueLayer; // [Ãß°¡] ÃÖÀûÈ­¸¦ À§ÇØ ´Ü¼­ ¾ÆÀÌÅÛ¸¸ ÀÖ´Â ·¹ÀÌ¾î¸¦ ¼±ÅÃÇÏ¼¼¿ä.
+    [Header("íƒì§€ ì„¤ì •")]
+    public string highlightTag = "Clue";  // íƒì§€í•  íƒœê·¸
+    public LayerMask clueLayer;           // íƒì§€í•  ë ˆì´ì–´ (ìµœì í™”ìš©)
 
-    [Header("½Ã°¢ È¿°ú")]
-    public Material outlineEffectMaterial; // [ÇÊ¼ö] 'Sprite Outline' ½¦ÀÌ´õ°¡ Àû¿ëµÈ ÀçÁú
+    [Header("ì‹œê° íš¨ê³¼ ì„¤ì •")]
+    public Material outlineEffectMaterial; // í•˜ì´ë¼ì´íŠ¸ ì¬ì§ˆ
+    public Material outlineEffectMaterialTransparent; // í•˜ì´ë¼ì´íŠ¸ ì¬ì§ˆ(íˆ¬ëª…)
 
-    private bool isAbilityReady = true;
+    public GameObject scanEffectPrefab;    // ë°˜íˆ¬ëª… êµ¬ì²´ Prefab
+    public float scanWaveSpeed = 1.5f;     // íŒŒë™ì´ í¼ì§€ëŠ” ì†ë„ (ì´ˆ)
+
+    private bool isAbilityReady = true;    // ì¿¨íƒ€ì„ ì²´í¬ìš©
+
+    // í™œì„±í™”ëœ í•˜ì´ë¼ì´íŠ¸ ëª©ë¡ (ëŠ¥ë ¥ ì¢…ë£Œ ì‹œ ë„ê¸° ìœ„í•´ ì €ì¥)
+    private List<Highlightable> activeHighlights = new List<Highlightable>();
 
     public void HadleCrowAbility()
     {
-        // ÄğÅ¸ÀÓ UI Ã³¸® µîÀº ³ªÁß¿¡ Ãß°¡
+        // Fí‚¤ë¥¼ ëˆŒëŸ¬ ëŠ¥ë ¥ ì‚¬ìš©
         if (Input.GetKeyDown(KeyCode.F))
         {
             if (isAbilityReady)
             {
-                StartCoroutine(CrowAbilityCoroutine());
+                StartCoroutine(CrowAbilityRoutine());
             }
             else
             {
-                Debug.Log("ÄğÅ¸ÀÓ ÁßÀÔ´Ï´Ù!"); // ³ªÁß¿¡ UI ¸Ş½ÃÁö·Î ¿¬°á
+                Debug.Log("ì¿¨íƒ€ì„ ì¤‘ì…ë‹ˆë‹¤!");
             }
         }
     }
-    IEnumerator CrowAbilityCoroutine()
+
+    IEnumerator CrowAbilityRoutine()
     {
         isAbilityReady = false;
-        Debug.Log("±î¸¶±Í Å½Áö ½ÃÀÛ [F]");
+        Debug.Log("ê¹Œë§ˆê·€ íƒì§€ ì‹œì‘ [F]");
 
-        // [Áß¿ä] 3D Collider(BoxCollider)¸¦ °¡Áø ¿ÀºêÁ§Æ®¸¸ °ËÃâÇÕ´Ï´Ù.
-        // clueLayer¿¡ ÇØ´çÇÏ´Â ¿ÀºêÁ§Æ®¸¸ °Ë»çÇÏ¿© ¼º´É ÃÖÀûÈ­
+        // 1. ê¸°ì¡´ í•˜ì´ë¼ì´íŠ¸ ì •ë¦¬ (ì•ˆì „ì¥ì¹˜)
+        ClearActiveHighlights();
+
+        // 2. ìŠ¤ìº” ì´í™íŠ¸(íŒŒë™) ìƒì„± ë° DOTween ì—°ì¶œ
+        if (scanEffectPrefab != null)
+        {
+            GameObject scanVFX = Instantiate(scanEffectPrefab, transform.position, Quaternion.identity);
+            Transform t = scanVFX.transform;
+            Renderer r = scanVFX.GetComponent<Renderer>();
+
+            // [ì´ˆê¸° ìƒíƒœ] í¬ê¸°ëŠ” 0, ì•ŒíŒŒê°’ì€ ì ˆë°˜ ì •ë„
+            t.localScale = Vector3.zero;
+            Color startColor = r.material.color;
+            startColor.a = 0.5f;
+            r.material.color = startColor;
+
+            // [DOTween ì‹œí€€ìŠ¤] ì»¤ì§€ë©´ì„œ + ì‚¬ë¼ì§€ê¸°
+            Sequence seq = DOTween.Sequence();
+
+            // 1) í¬ê¸° í™•ëŒ€: ì§€ë¦„(Scale)ì„ ë°˜ì§€ë¦„ * 2 ë§Œí¼ í‚¤ì›€
+            seq.Join(t.DOScale(Vector3.one * detectionRadius * 2f, scanWaveSpeed)
+                .SetEase(Ease.OutQuad)); // ìŠ‰~ í¼ì§€ëŠ” ëŠë‚Œ
+
+            // 2) íˆ¬ëª…ë„ ê°ì†Œ: ì„œì„œíˆ íˆ¬ëª…í•´ì§ (Fade Out)
+            seq.Join(r.material.DOFade(0f, scanWaveSpeed)
+                .SetEase(Ease.InQuad));  // ëì—ì„œ ìì—°ìŠ¤ëŸ½ê²Œ ì‚¬ë¼ì§
+
+            // 3) ì¢…ë£Œ í›„ ì‚­ì œ
+            seq.OnComplete(() => Destroy(scanVFX));
+        }
+
+        // 3. ì£¼ë³€ ë‹¨ì„œ íƒì§€ ë° ê±°ë¦¬ë³„ ì§€ì—° íš¨ê³¼
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius, clueLayer);
-
-        List<Highlightable> activeHighlights = new List<Highlightable>();
 
         foreach (Collider col in hitColliders)
         {
@@ -51,34 +89,64 @@ public class Crow : MonoBehaviour
                 Highlightable h = col.GetComponent<Highlightable>();
                 if (h != null)
                 {
-                    h.Highlight(outlineEffectMaterial);
+                    // ê±°ë¦¬ ê³„ì‚°
+                    float distance = Vector3.Distance(transform.position, col.transform.position);
+
+                    // íŒŒë™ì´ ì´ ë¬¼ì²´ì— ë„ë‹¬í•˜ëŠ” ì‹œê°„ ê³„ì‚° (ê±°ë¦¬ ë¹„ë¡€)
+                    float arrivalTime = (distance / detectionRadius) * scanWaveSpeed;
+
+                    // íŒŒë™ì´ ë‹¿ëŠ” íƒ€ì´ë°ì— ë§ì¶° í•˜ì´ë¼ì´íŠ¸ ì¼œê¸°
+                    StartCoroutine(DelayedHighlight(h, arrivalTime));
+
+                    // ê´€ë¦¬ ëª©ë¡ì— ì¶”ê°€
                     activeHighlights.Add(h);
                 }
             }
         }
 
-        // Áö¼Ó ½Ã°£ ´ë±â
-        yield return new WaitForSeconds(duration);
+        // 4. ìœ ì§€ ì‹œê°„ ëŒ€ê¸° (íŒŒë™ ì‹œê°„ + ì§€ì† ì‹œê°„)
+        yield return new WaitForSeconds(scanWaveSpeed + duration);
 
-        // ²ô±â (½Ã°£ Á¾·á)
+        // 5. ëŠ¥ë ¥ ì¢…ë£Œ (ë¬¼ë¦¬ì  í•˜ì´ë¼ì´íŠ¸ ë„ê¸°)
+        ClearActiveHighlights();
+        Debug.Log("ëŠ¥ë ¥ ìœ ì§€ ë - ì§„ì§œ ì¿¨íƒ€ì„(ì¶©ì „) ì‹œì‘");
+
+        // 6. ì¿¨íƒ€ì„ ëŒ€ê¸°
+        yield return new WaitForSeconds(cooldown);
+
+        isAbilityReady = true;
+        Debug.Log("ì¿¨íƒ€ì„ ì¢…ë£Œ - ì‹œìŠ¤í…œì ìœ¼ë¡œ ì‚¬ìš© ê°€ëŠ¥");
+    }
+
+    // ì‹œê°„ì°¨ í•˜ì´ë¼ì´íŠ¸ ì½”ë£¨í‹´
+    IEnumerator DelayedHighlight(Highlightable target, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        // ëŠ¥ë ¥ì´ ìœ íš¨í•œ ìƒíƒœì¸ì§€ í™•ì¸ í›„ ì¼œê¸°
+        if (target != null && !isAbilityReady)
+        {
+            target.Highlight(outlineEffectMaterial);
+
+        }
+    }
+
+    // í•˜ì´ë¼ì´íŠ¸ í•´ì œ í—¬í¼ í•¨ìˆ˜
+    void ClearActiveHighlights()
+    {
         foreach (Highlightable h in activeHighlights)
         {
             if (h != null) h.Unhighlight();
         }
         activeHighlights.Clear();
-
-        Debug.Log("´É·Â Á¾·á - ÄğÅ¸ÀÓ ½ÃÀÛ");
-
-        // ÄğÅ¸ÀÓ ´ë±â
-        yield return new WaitForSeconds(cooldown);
-
-        isAbilityReady = true;
-        Debug.Log("ÄğÅ¸ÀÓ Á¾·á - »ç¿ë °¡´É");
     }
 
+    // ë””ë²„ê·¸ìš© ê¸°ì¦ˆëª¨ (ë²”ìœ„ í‘œì‹œ)
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
+
+
 }

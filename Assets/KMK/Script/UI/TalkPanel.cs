@@ -26,7 +26,10 @@ public class TalkPanel : MonoBehaviour
     public void OpenPanel()
     {
         gameObject.SetActive(true);
+
+        if (talkPanelRect != null)
         talkPanelRect.DOAnchorPos(new Vector2(0, talkPanelUpYPos), 0.2f).SetEase(Ease.OutQuad);
+
         talkText.text = "";
     }
 

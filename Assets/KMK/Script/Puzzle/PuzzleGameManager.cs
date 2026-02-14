@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Cinemachine;
@@ -7,62 +7,65 @@ using UnityEngine;
 public class PuzzleGameManager : MonoBehaviour
 {
     public static PuzzleGameManager instance;
-
-    // Å¬¸®¾îÇÑ ÆÛÁñÀÇ ID¸¦ ¸ð¾ÆµÒ
-    private HashSet<string> clearedPuzzleIDs = new HashSet<string>();
     [SerializeField] private float fadeDuration = 0.5f;
+
     private void Awake()
     {
         if (instance == null) { instance = this; DontDestroyOnLoad(gameObject); }
         else Destroy(gameObject);
     }
 
-    // ÆÛÁñ Å¬¸®¾î Ã³¸®
+    // í¼ì¦ í´ë¦¬ì–´ ì²˜ë¦¬
     public void ClearPuzzle(string puzzleID)
     {
-        if (!clearedPuzzleIDs.Contains(puzzleID))
-        {
-            clearedPuzzleIDs.Add(puzzleID);
-            Debug.Log($"ÆÛÁñ Å¬¸®¾î ±â·ÏµÊ: {puzzleID}");
+        // DataManagerê°€ ì—†ìœ¼ë©´ ì—ëŸ¬ ë°©ì§€
+        if (DataManager.instance == null) return;
 
-            // (¼±ÅÃ) ¿©±â¼­ ¹Ù·Î SaveSystem.Save() È£Ãâ °¡´É
+        // ì´ë¯¸ ê¹¬ ê±´ì§€ ë°ì´í„° ë§¤ë‹ˆì €ì—ê²Œ ë¬¼ì–´ë´„
+        if (!DataManager.instance.currentData.clearedPuzzleIDs.Contains(puzzleID))
+        {
+            // 1. ë°ì´í„° ë§¤ë‹ˆì € ëª…ë‹¨ì— ì¶”ê°€
+            DataManager.instance.currentData.clearedPuzzleIDs.Add(puzzleID);
+
+            // 2. ì¦‰ì‹œ ì €ìž¥ (ì„ íƒ ì‚¬í•­)
+            DataManager.instance.SaveGame();
+
+            Debug.Log($"[PuzzleManager] í¼ì¦ í´ë¦¬ì–´ ì €ìž¥ë¨: {puzzleID}");
         }
     }
 
-    // ÀÌ¹Ì ±ü ÆÛÁñÀÎÁö È®ÀÎ
+    // ì´ë¯¸ ê¹¬ í¼ì¦ì¸ì§€ í™•ì¸
     public bool IsPuzzleCleared(string puzzleID)
     {
-        return clearedPuzzleIDs.Contains(puzzleID);
+        if (DataManager.instance == null) return false;
+
+        // ë°ì´í„° ë§¤ë‹ˆì € ëª…ë‹¨ í™•ì¸
+        return DataManager.instance.currentData.clearedPuzzleIDs.Contains(puzzleID);
     }
 
-
+    // =========================================================
+    // ì—°ì¶œ ë¶€ë¶„ 
     public IEnumerator SwitchCameraRoutine(bool enterPuzzle, CinemachineCamera puzzleCamera, Action onPuzzleOut = null)
     {
         if (enterPuzzle)
         {
-            // »óÅÂ º¯°æ 
             GameManager.instance.SetGameState(GameState.Puzzle);
 
-            // ¾îµÎ¿öÁü
             bool fadeOutDone = false;
             UIManager.instance.FadeInOut(false, fadeDuration, () => {
                 fadeOutDone = true;
             });
 
-            // ÆäÀÌµå ¾Æ¿ôÀÌ ³¡³¯ ¶§±îÁö ´ë±â
             yield return new WaitUntil(() => fadeOutDone);
 
-            // ¾ÏÀü »óÅÂ¿¡¼­ Ä«¸Þ¶ó ÀüÈ¯ ¹× UI ¼û±â±â
             puzzleCamera.Priority = 20;
             UIManager.instance.HideItemPanel();
             UIManager.instance.HideInfoPanel();
 
-            // ¹à¾ÆÁü
             UIManager.instance.FadeInOut(true, fadeDuration);
         }
         else
         {
-            // ¾îµÎ¿öÁü
             bool fadeOutDone = false;
             UIManager.instance.FadeInOut(false, fadeDuration, () => {
                 fadeOutDone = true;
@@ -70,18 +73,14 @@ public class PuzzleGameManager : MonoBehaviour
 
             yield return new WaitUntil(() => fadeOutDone);
 
-            // ¾ÏÀü »óÅÂ¿¡¼­ Á¤¸® ÀÛ¾÷ 
-            puzzleCamera.Priority = 0; // Ä«¸Þ¶ó º¹±Í
+            puzzleCamera.Priority = 0;
 
-            // Àü´Þ¹ÞÀº ÇÔ¼ö ½ÇÇà
             if (onPuzzleOut != null)
             {
                 onPuzzleOut.Invoke();
             }
-            UIManager.instance.ShowItemPanel(); // UI º¹±¸
-            UIManager.instance.ShowInfoPanel();
+            UIManager.instance.ShowItemPanel();
 
-            // ¹à¾ÆÁü + »óÅÂ º¹±¸
             UIManager.instance.FadeInOut(true, fadeDuration, () => {
                 GameManager.instance.SetGameState(GameState.Playing);
             });
