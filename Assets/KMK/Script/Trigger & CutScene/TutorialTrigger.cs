@@ -12,7 +12,7 @@ public class TutorialTrigger : EventTrigger
         myCollider = GetComponent<Collider>();
     }
 
-    protected override void StartEvent()
+    protected override void StartEvent(Collider other)
     {
         if (isOneShot)
         {
@@ -30,7 +30,7 @@ public class TutorialTrigger : EventTrigger
         }
     }
 
-    protected override void EndEvent()
+    protected override void EndEvent(Collider other)
     {
         if (isOneShot) return;
 

@@ -1,17 +1,10 @@
-using System;
+ï»¿using System;
 using UnityEngine;
-using DarkTonic.MasterAudio;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("¼³Á¤")]
+    [Header("ì„¤ì •")]
     public float moveSpeed = 5f;
-
-   
-    // Master Audio ±×·ì ÀÌ¸§°ú Á¤È®È÷ ÀÏÄ¡ÇØ¾ß ÇÕ´Ï´Ù!
-    private const string HUMAN_SOUND = "HumanSound";
-    private const string RAT_SOUND = "RatStep";
-    private const string TRANSFORM_SOUND = "Rat";
 
     private Rigidbody rb;
     private Animator anim;
@@ -20,8 +13,14 @@ public class PlayerMovement : MonoBehaviour
 
     private PlayerCharacter lastCharacter;
 
-    [Tooltip("Ã¼Å©ÇÏ¸é: ¿ø·¡ ¿ŞÂÊ º¸´Â Ä³¸¯ÅÍ·Î ÀÎ½ÄÇÔ")]
+
+    [Tooltip("ì²´í¬í•˜ë©´: ì›ë˜ ì™¼ìª½ ë³´ëŠ” ìºë¦­í„°ë¡œ ì¸ì‹í•¨")]
     public bool isLeftLookingDefault = false;
+
+    [Header("ì˜¤ë””ì˜¤ ì„¤ì •")]
+    public string footstepSoundGroup = "Footsteps";
+    public float stepInterval = 0.4f;
+    private float nextStepTime;
 
     void Awake()
     {
@@ -35,58 +34,43 @@ public class PlayerMovement : MonoBehaviour
             lastCharacter = GameManager.instance.CurrentCharacter;
     }
 
-    void Update()
-    {
-        if (GameManager.instance.CurrentCharacter == PlayerCharacter.Rat &&
-            lastCharacter != PlayerCharacter.Rat)
-        {
-           
-            MasterAudio.PlaySound(TRANSFORM_SOUND);
-        }
 
-        lastCharacter = GameManager.instance.CurrentCharacter;
-    }
-
-    private string GetCurrentSoundGroup()
-    {
-        if (GameManager.instance.CurrentCharacter == PlayerCharacter.Rat)
-        {
-            return RAT_SOUND; 
-        }
-        return HUMAN_SOUND;  
-    }
-
-    public void Move(Vector3 dir)
+    public void SetMoveDir(Vector3 dir)
     {
         currentMoveDir = dir;
         isMoving = true;
 
-        string soundToPlay = GetCurrentSoundGroup();
-        MasterAudio.PlaySound3DAtTransform(soundToPlay, transform);
     }
 
     public void StopMove()
     {
         currentMoveDir = Vector3.zero;
         isMoving = false;
-
-        // [¼öÁ¤µÊ] »ó¼ö »ç¿ë
-        MasterAudio.PauseSoundGroup(HUMAN_SOUND);
-        MasterAudio.PauseSoundGroup(RAT_SOUND);
     }
-
-    private void FixedUpdate()
+ 
+    public void Move()
     {
         if (isMoving)
         {
-            Vector3 moveStep = currentMoveDir.normalized * moveSpeed * Time.fixedDeltaTime;
+            Vector3 moveStep = moveSpeed * Time.fixedDeltaTime * currentMoveDir.normalized;
             rb.MovePosition(rb.position + moveStep);
             LookAtDirection(currentMoveDir);
+
+            HandleFootstepSound();
         }
-        anim.SetBool("Moving", isMoving);
+        anim.SetBool("isMoving", isMoving);
+    }
+    private void HandleFootstepSound()
+    {
+        if (Time.time >= nextStepTime)
+        {
+            SoundManager.instance.PlaySound3D(footstepSoundGroup, transform);
+
+            nextStepTime = Time.time + stepInterval;
+        }
     }
 
-    private void LookAtDirection(Vector3 dir)
+    public void LookAtDirection(Vector3 dir)
     {
         if (isLeftLookingDefault)
         {
@@ -100,8 +84,25 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void SetPlayerMovingForCutScene(bool isMoving)
+    public void LookAtDirectionWithTarget(Vector3 targetPos)
     {
-        this.isMoving = isMoving;
+        // íƒ€ê²Ÿ ìœ„ì¹˜ì™€ ë‚´ ìœ„ì¹˜ì˜ ì°¨ì´ë¥¼ êµ¬í•¨
+        float dirX = targetPos.x - transform.position.x;
+
+        Vector3 dir = new Vector3(dirX, 0, 0);
+        LookAtDirection(dir);
+    }
+
+    public void SetPlayerMoving(bool active)
+    {
+        this.isMoving = active;   // ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ ì—¬ë¶€
+        anim.SetBool("isMoving", isMoving);
+
+        // ì»·ì‹ ì´ ì¼œì§ˆ ë•Œ, í˜¹ì‹œ ë‚¨ì•„ìˆì„ ë¬¼ë¦¬ ì†ë„ë‚˜ ë°©í–¥ì„ ì´ˆê¸°í™”
+        if (active)
+        {
+            rb.linearVelocity = Vector3.zero; // ë¯¸ë„ëŸ¬ì§ ë°©ì§€
+            currentMoveDir = Vector3.zero;
+        }
     }
 }

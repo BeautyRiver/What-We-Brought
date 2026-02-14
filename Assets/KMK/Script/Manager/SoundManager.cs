@@ -1,3 +1,4 @@
+﻿using DarkTonic.MasterAudio;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,18 +6,7 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager instance;
-
-    [Header("BGM")]
-    [SerializeField] private GameObject bgmPrefab;
-    [SerializeField] private AudioClip[] bgmClips;
-    private AudioSource bgmSource;
-
-    [Header("SFX")]
-    [SerializeField] private GameObject sfxPrefab;
-    [SerializeField] private AudioClip[] sfxClips;
-    private Queue<AudioSource> sfxPool = new Queue<AudioSource>();
-    private Dictionary<string, AudioClip> sfxClipDict = new Dictionary<string, AudioClip>();
-
+ 
     private void Awake()
     {
         if (instance == null)
@@ -27,64 +17,44 @@ public class SoundManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
-        }
-
-        foreach (var clip in sfxClips)
-        {
-            if (clip != null)
-            {
-                string key = clip.name;
-                sfxClipDict.Add(key, clip);
-            }
-        }
+        }      
     }
 
-    public void PlayBGM(int index)
+    public void PlaySound(string soundName)
     {
-        if (index < 0 || index >= bgmClips.Length) return;
-
-        if (bgmSource == null)
-        {
-            GameObject go = Instantiate(bgmPrefab, transform);
-            bgmSource = go.GetComponent<AudioSource>();
-        }
-
-        if (bgmSource.isPlaying && bgmSource.clip == bgmClips[index]) return;
-
-        bgmSource.clip = bgmClips[index];
-        bgmSource.Play();
+        MasterAudio.PlaySound(soundName);        
     }
 
-    public void PlaySFX(string clipName)
+    public void PlaySound3D(string soundName, Transform transform)
     {
-        if (!sfxClipDict.TryGetValue(clipName, out AudioClip clip)) return;
-
-        AudioSource source = GetPooledSFX(clipName);
-        source.clip = clip;
-        source.Play();        
+        MasterAudio.PlaySound3DAtTransform(soundName, transform);
     }
 
-    private AudioSource GetPooledSFX(string clipName)
+    public void PauseSoundGroup(string soundName)
     {
-        foreach (var s in sfxPool)
-        {
-            if (!s.isPlaying) return s;
-        }
-
-        GameObject go = Instantiate(sfxPrefab, transform);
-        go.name = "SFX_Source: " + clipName;
-        AudioSource newSource = go.GetComponent<AudioSource>();
-        sfxPool.Enqueue(newSource);
-        return newSource;
+        MasterAudio.PauseSoundGroup(soundName);
     }
 
-    public AudioClip GetSFXClip(string clipName)
+    public void UnpauseSoundGroup(string soundName)
     {
-        if (sfxClipDict.TryGetValue(clipName, out AudioClip clip))
-        {
-            return clip;
-        }
-        Debug.LogWarning($"SoundManager: {clipName}�� ã�� �� �����ϴ�!");
-        return null;
+        MasterAudio.UnpauseSoundGroup(soundName);
     }
+
+    public void PlayAmbient(string soundGroupName)
+    {
+        // 앰비언트는 보통 2D로(어디서나 들리게) 재생함
+        MasterAudio.PlaySoundAndForget(soundGroupName);
+    }
+
+    public void StopAmbient(string soundGroupName)
+    {
+        MasterAudio.StopAllOfSound(soundGroupName);
+    }
+
+    public void PlayBGM(string playlistName)
+    {
+        // Master Audio의 Playlist Controller를 찾아서 재생
+        MasterAudio.TriggerPlaylistClip(playlistName);
+    }
+
 }

@@ -385,7 +385,7 @@ Transform:
   m_GameObject: {fileID: 1578054379562860832}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.9442702, w: -0.3291713}
-  m_LocalPosition: {x: -0.117, y: -0.591, z: -0.008}
+  m_LocalPosition: {x: -0.85620475, y: -4.710102, z: -0.008}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -402,7 +402,7 @@ Light:
   serializedVersion: 11
   m_Type: 2
   m_Color: {r: 0.9622642, g: 0.7273062, b: 0.503827, a: 1}
-  m_Intensity: 1
+  m_Intensity: 2.9113173
   m_Range: 0.36
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1214,6 +1214,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   isLeftLookingDefault: 1
+  footstepSoundGroup: HumanStep
+  stepInterval: 0.45
 --- !u!114 &624616052694789959
 MonoBehaviour:
   m_ObjectHideFlags: 0

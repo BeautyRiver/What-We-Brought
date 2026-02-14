@@ -6,15 +6,15 @@ public class RatTutorialTrigger : TutorialTrigger
     public Highlightable questMouseHole;
     public Material outlineEffectMaterial;
 
-    protected override void StartEvent()
+    protected override void StartEvent(Collider other)
     {
-        base.StartEvent();
+        base.StartEvent(other);
         questMouseHole.Highlight(outlineEffectMaterial);
     }
 
-    protected override void EndEvent()
+    protected override void EndEvent(Collider other)
     {
-        base.EndEvent();
+        base.EndEvent(other);
         questMouseHole.Unhighlight();
     }
 }

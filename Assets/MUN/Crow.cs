@@ -46,6 +46,7 @@ public class Crow : MonoBehaviour
     IEnumerator CrowAbilityRoutine()
     {
         isAbilityReady = false;
+        SoundManager.instance.PlaySound("CrowSound");
         Debug.Log("까마귀 탐지 시작 [F]");
 
         // 1. 기존 하이라이트 정리 (안전장치)
@@ -103,6 +104,7 @@ public class Crow : MonoBehaviour
                 }
             }
         }
+        UIManager.instance.StartCrowCooldownUI(scanWaveSpeed + duration, cooldown);
 
         // 4. 유지 시간 대기 (파동 시간 + 지속 시간)
         yield return new WaitForSeconds(scanWaveSpeed + duration);

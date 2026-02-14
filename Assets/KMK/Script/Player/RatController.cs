@@ -26,6 +26,10 @@ public class RatController : MonoBehaviour
             interaction.HandleInteraction();
         }
     }
+    private void FixedUpdate()
+    {
+        movement.Move();
+    }
 
     private void SetMoveDir()
     {
@@ -48,8 +52,9 @@ public class RatController : MonoBehaviour
 
         Vector3 dir = (camForward * z) + (camRight * x);
 
-        movement.Move(dir);
+        movement.SetMoveDir(dir);
     }
+
 
     public void StopMove()
     {

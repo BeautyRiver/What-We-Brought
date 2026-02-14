@@ -49,14 +49,14 @@ public class BumpTomasCutScene : CutsceneDirector
         yield return null;
         yield return null;
         if (GameManager.instance.CurrentCharacter == PlayerCharacter.Rat)
-            GameManager.instance.SwapCharacter();
+            GameManager.instance.SwapToHuman();
 
         // 플레이어 조작 잠금
         GameManager.instance.SetGameState(GameState.CutScene);
 
         // 하수구 근처까지 천천히 걸어감..
         var pMovement = playerTransform.GetComponent<PlayerMovement>();
-        pMovement.SetPlayerMovingForCutScene(true);
+        pMovement.SetPlayerMoving(true);
 
         Vector3 targetPos = new Vector3(
             walkSewerTransform.position.x,
@@ -85,7 +85,7 @@ public class BumpTomasCutScene : CutsceneDirector
         }
 
         // 도착 후 멈춤
-        pMovement.SetPlayerMovingForCutScene(false);
+        pMovement.SetPlayerMoving(false);
 
         // 도착 후 잠시 대기 (자연스러운 연출을 위해)
         yield return new WaitForSeconds(0.25f);

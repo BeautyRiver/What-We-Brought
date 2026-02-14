@@ -6,7 +6,7 @@ public class CutsceneTrigger : EventTrigger
 
     public CutsceneDirector targetCutscene;
 
-    protected override void StartEvent()
+    protected override void StartEvent(Collider other)
     {
         if (targetCutscene != null)
         {
@@ -14,4 +14,5 @@ public class CutsceneTrigger : EventTrigger
             gameObject.SetActive(false);
         }
     }
+
 }

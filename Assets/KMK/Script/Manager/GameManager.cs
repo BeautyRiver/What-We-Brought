@@ -33,6 +33,11 @@ public class GameManager : MonoBehaviour
         CurrentCharacter = PlayerCharacter.Human;
     }
 
+    private void Start()
+    {
+        SoundManager.instance.PlayAmbient("Forest_ambient");
+        SoundManager.instance.PlayAmbient("CrowAmbient");
+    }
     public void ChangeCharacter(PlayerCharacter character)
     {
         CurrentCharacter = character;
@@ -60,9 +65,9 @@ public class GameManager : MonoBehaviour
         }
     }   
 
-    public void SwapCharacter()
+    public void SwapToHuman()
     {
-        characterSwapManager.SwapCharacter();
+        characterSwapManager.SwapToHuman();
     }
 }
 

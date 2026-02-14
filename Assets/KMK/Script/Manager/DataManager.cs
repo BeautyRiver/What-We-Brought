@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using VInspector;
 
 [System.Serializable] 
 public class GameData
@@ -62,4 +63,15 @@ public class DataManager : MonoBehaviour
             currentData = new GameData(); // 새 게임 데이터 생성
         }
     }
+
+    [Button]
+    public void ResetData()
+    {
+        currentData = new GameData();
+        ES3.DeleteKey("MyGameData");
+        ES3.Save("MyGameData", currentData);
+        Debug.Log("데이터 리셋 + 새 데이터 저장 완료!");
+    }
+
+
 }

@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 1372519150417590779}
   m_Layer: 10
   m_Name: Rat
-  m_TagString: Player
+  m_TagString: Rat
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -103,6 +103,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   isLeftLookingDefault: 0
+  footstepSoundGroup: RatStep
+  stepInterval: 0.25
 --- !u!114 &4510793413354951133
 MonoBehaviour:
   m_ObjectHideFlags: 0

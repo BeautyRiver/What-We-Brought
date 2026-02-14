@@ -186,7 +186,7 @@ public class GuardAI : MonoBehaviour
             else
             {
                 // 쥐 잡음 -> 캐릭터 교체 -> 의심 모드
-                GameManager.instance.SwapCharacter();
+                GameManager.instance.SwapToHuman();
                 ChangeState(State.Suspicion);
             }
             return;

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening; // ⭐ DOTween 필수
+using DG.Tweening;
+using System.Collections; // ⭐ DOTween 필수
 
 public class CrowCoolTime : MonoBehaviour
 {
@@ -47,7 +48,7 @@ public class CrowCoolTime : MonoBehaviour
         // [동작 3] 1까지 다 차오르면 대망의 하이라이트 연출 실행!
         cooldownSeq.OnComplete(() => PlayReadyEffect());
     }
-
+    
     // ⭐ 스킬 준비 완료 DOTween 연출
     private void PlayReadyEffect()
     {
@@ -55,6 +56,7 @@ public class CrowCoolTime : MonoBehaviour
 
         // 통통 튀는 효과
         skillIcon.transform.DOPunchScale(new Vector3(0.2f, 0.2f, 0f), 0.5f, 5, 1f);
+        fillImage.transform.DOPunchScale(new Vector3(0.2f, 0.2f, 0f), 0.5f, 5, 1f);
 
         // 하얗게 번쩍! 하는 효과
         skillIcon.DOColor(Color.white, 0.15f)

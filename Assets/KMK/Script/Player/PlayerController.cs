@@ -29,6 +29,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        movement.Move();
+    }
+
     private void SetMoveDir()
     {
         float x = Input.GetAxisRaw("Horizontal");
@@ -50,7 +55,7 @@ public class PlayerController : MonoBehaviour
 
         Vector3 dir = (camForward * z) + (camRight * x);
 
-        movement.Move(dir);
+        movement.SetMoveDir(dir);
     }
 
     public void StopMove()

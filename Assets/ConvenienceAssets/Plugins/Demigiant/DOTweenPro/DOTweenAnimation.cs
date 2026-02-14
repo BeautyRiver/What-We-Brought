@@ -119,7 +119,7 @@ namespace DG.Tweening
             if (!isActive || !autoGenerate) return;
 
             if (animationType != AnimationType.Move || !useTargetAsV3) {
-                // Don't create tweens if we're using a RectTransform as a Move target,
+                // Don't create tweens if we're using a RectTransform as a SetMoveDir target,
                 // because that will work only inside Start
                 CreateTween(false, autoPlay);
                 _tweenAutoGenerationCalled = true;
