@@ -18,6 +18,7 @@ public class FieldRatHole : MonoBehaviour, IInteractable
     private void Start()
     {
         ratPuzzle.SetShowObj(rewardItem);
+        rewardItem.SetActive(false);
         CheckPuzzleState();
     }
 

@@ -57,7 +57,7 @@ public class GuardAI : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        anim = GetComponent<Animator>();
+        anim = GetComponentInChildren<Animator>();
 
         // 2D/3D 하이브리드 필수 설정 (회전 떨림 방지)
         agent.updateRotation = false;
@@ -178,7 +178,10 @@ public class GuardAI : MonoBehaviour
 
             if (currentTarget == player)
             {
-                // 게임오버 로직
+                // 게임오버 로직 추가하기
+
+                ChangeState(State.Return); // 또는 Patrol
+                return;
             }
             else
             {
@@ -300,7 +303,7 @@ public class GuardAI : MonoBehaviour
     void UpdateAnimationAndFacing()
     {
         bool isMoving = agent.velocity.sqrMagnitude > 0.1f;
-        if (anim != null) anim.SetBool("isWalking", isMoving);
+        if (anim != null) anim.SetBool("isMoving", isMoving);
 
         // 이동 중이거나 추격 중일 때만 방향 전환 (제자리 떨림 방지)
         if (!isMoving && currentState != State.Alert) return;

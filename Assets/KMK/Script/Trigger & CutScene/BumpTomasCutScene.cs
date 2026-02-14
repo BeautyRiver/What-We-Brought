@@ -25,11 +25,11 @@ public class BumpTomasCutScene : CutsceneDirector
     public Transform spawnPoint; // 생성 위치
 
     [Header("컷씬 이후")]
-    public GameObject sewerFuction;
+    public BoxCollider sewerFuctioncol;
 
     private void Start()
     {
-        sewerFuction.SetActive(false); 
+        sewerFuctioncol.enabled = false;
     }
     public override void PlayCutscene()
     {
@@ -195,6 +195,6 @@ public class BumpTomasCutScene : CutsceneDirector
         
         GameManager.instance.SetGameState(GameState.Playing);
         tomasTransform.gameObject.SetActive(false);
-        sewerFuction.SetActive(true);
+        sewerFuctioncol.enabled = true;
     }
 }
