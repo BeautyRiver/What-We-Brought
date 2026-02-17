@@ -52,7 +52,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 282293197758618526, guid: 225f3a5485adeba468933902802fcf26, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -73
+      value: 127
       objectReference: {fileID: 0}
     - target: {fileID: 282293197758618526, guid: 225f3a5485adeba468933902802fcf26, type: 3}
       propertyPath: m_LocalRotation.w
@@ -118,15 +118,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5181763718368399496, guid: 790f8a460f3275b468eef4038c89e465, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -101.61
+      value: -167.2
       objectReference: {fileID: 0}
     - target: {fileID: 5181763718368399496, guid: 790f8a460f3275b468eef4038c89e465, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.2800007
+      value: 1.9400005
       objectReference: {fileID: 0}
     - target: {fileID: 5181763718368399496, guid: 790f8a460f3275b468eef4038c89e465, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -71.2
+      value: -74.4
       objectReference: {fileID: 0}
     - target: {fileID: 5181763718368399496, guid: 790f8a460f3275b468eef4038c89e465, type: 3}
       propertyPath: m_LocalRotation.w
@@ -184,15 +184,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1202983264287748077, guid: be2ff82fd6f38d64b982f12fb445dcf5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -101.61
+      value: -167.2
       objectReference: {fileID: 0}
     - target: {fileID: 1202983264287748077, guid: be2ff82fd6f38d64b982f12fb445dcf5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.2800007
+      value: 1.9400005
       objectReference: {fileID: 0}
     - target: {fileID: 1202983264287748077, guid: be2ff82fd6f38d64b982f12fb445dcf5, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -71.2
+      value: -74.4
       objectReference: {fileID: 0}
     - target: {fileID: 1202983264287748077, guid: be2ff82fd6f38d64b982f12fb445dcf5, type: 3}
       propertyPath: m_LocalRotation.w
@@ -236,11 +236,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4476274882767316217, guid: be2ff82fd6f38d64b982f12fb445dcf5, type: 3}
       propertyPath: fogStart
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4476274882767316217, guid: be2ff82fd6f38d64b982f12fb445dcf5, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8526282366396407148, guid: be2ff82fd6f38d64b982f12fb445dcf5, type: 3}
+      propertyPath: UpdateMethod
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8526282366396407148, guid: be2ff82fd6f38d64b982f12fb445dcf5, type: 3}
+      propertyPath: BlendUpdateMethod
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -269,7 +277,7 @@ AudioSource:
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
-  m_Pitch: 2.43
+  m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0

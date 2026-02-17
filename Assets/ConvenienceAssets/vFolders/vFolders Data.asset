@@ -24,6 +24,8 @@ MonoBehaviour:
     - 9ae83a276f624ba47a5f713661c5511b
     - becaf2af2755bd74bb48008ab939ccb8
     - f1a4b247ccb03514f9d5a0325245347c
+    - 8d8a2ff604e60f142961083ad9b3a211
+    - 2567f9ec043211642a51744e6cec87e2
     values:
     - iconNameOrGuid: Material Icon
       colorIndex: 7
@@ -63,6 +65,14 @@ MonoBehaviour:
       isColorRecursive: 0
     - iconNameOrGuid: cs Script Icon
       colorIndex: 5
+      isIconRecursive: 0
+      isColorRecursive: 0
+    - iconNameOrGuid: SceneAsset Icon
+      colorIndex: 0
+      isIconRecursive: 0
+      isColorRecursive: 0
+    - iconNameOrGuid: AudioSource Icon
+      colorIndex: 0
       isIconRecursive: 0
       isColorRecursive: 0
   bookmarks:

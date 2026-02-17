@@ -3,13 +3,7 @@ using UnityEngine;
 
 public class GateTrigger : EventTrigger
 {
-    private CinemachineCamera gateCamera;
-
-
-    private void Awake()
-    {
-        gateCamera = GetComponentInChildren<CinemachineCamera>();    
-    }
+    [SerializeField] private CinemachineCamera gateCamera;
 
     protected override void StartEvent(Collider other)
     {

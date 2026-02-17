@@ -21,7 +21,6 @@ public class TalkPanel : MonoBehaviour
     {
         talkPanelRect = gameObject.GetComponent<RectTransform>();
         talkPanelRect.transform.position = new Vector3(talkPanelRect.transform.position.x, talkPanelDownYPos, talkPanelRect.transform.position.z);
-        gameObject.SetActive(true);
     }
     public void OpenPanel()
     {

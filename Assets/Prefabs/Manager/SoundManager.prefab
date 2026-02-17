@@ -44,8 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bbb6104f5624524696482d3663cc7f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bgmPrefab: {fileID: 8505279393293822247, guid: 75d54e658fa12ed4a9f602b835d53aa2, type: 3}
-  bgmClips:
-  - {fileID: 8300000, guid: 3908643f2e30f1c47b5cd825c788244a, type: 3}
-  sfxPrefab: {fileID: 4712373732864826645, guid: d1ba7747764359d489d4638c79c4fc21, type: 3}
-  sfxClips: []
+  sfxBusName: SFX
+  force2DBusName: Force2D
+  currentBGMName: 
+  defaultValue: 0.75

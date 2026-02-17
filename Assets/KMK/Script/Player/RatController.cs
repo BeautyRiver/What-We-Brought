@@ -14,6 +14,11 @@ public class RatController : MonoBehaviour
         interaction = GetComponent<PlayerInteraction>();
     }
 
+    private void Start()
+    {
+        gameObject.SetActive(false);
+    }
+
     private void Update()
     {      
         // 인간 상태면 리턴

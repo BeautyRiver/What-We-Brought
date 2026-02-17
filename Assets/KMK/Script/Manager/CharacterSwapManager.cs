@@ -10,8 +10,8 @@ public class CharacterSwapManager : MonoBehaviour
     [SerializeField] private CinemachineCamera rat_virtualCamera;
 
     [Header("캐릭터 오브젝트")]
-    [SerializeField] private GameObject humanObject;
-    [SerializeField] private GameObject ratObject;
+    public GameObject humanObject;
+    public GameObject ratObject;
 
     [Header("연출 설정")]
     [SerializeField] private float ratReturnSpeed = 8f; // 쥐가 돌아오는 속도
@@ -57,20 +57,25 @@ public class CharacterSwapManager : MonoBehaviour
     }
 
     private void InitCharacterState()
-    {
+    {        
+
+        if (GameManager.instance != null)
+        {
+            if (GameManager.instance.CurrentCharacter == PlayerCharacter.Human)
+                return;
+            else
+                GameManager.instance.ChangeCharacter(PlayerCharacter.Human);
+        }
+
+        UIManager.instance.ChangeCharStateSprite("Human");
+
         _isControlHuman = true;
         _isSwapping = false;
-
-        humanObject.SetActive(true);
-        ratObject.SetActive(false);
 
         // 카메라는 사람 따라가기
         human_virtualCamera.Follow = humanObject.transform;
 
         SetCameraPriority(true);
-
-        if (GameManager.instance != null)
-            GameManager.instance.ChangeCharacter(PlayerCharacter.Human);
     }
 
     // 사람 -> 쥐 (기존과 거의 동일 + 즉시 변신)
@@ -104,6 +109,9 @@ public class CharacterSwapManager : MonoBehaviour
 
         Debug.Log("Mode: Rat");
         SoundManager.instance.PlaySound(ratSwapSoundGroup);
+
+        UIManager.instance.ChangeCharStateSprite("Rat");
+
     }
 
     // 쥐 -> 사람 (DOTween 연출 추가)
@@ -161,7 +169,7 @@ public class CharacterSwapManager : MonoBehaviour
         }
 
         Debug.Log("Mode: Human (Return Complete)");
-        // SoundManager.instance.PlaySound(humanSwapSoundGroup); // 사운드 재생
+        UIManager.instance.ChangeCharStateSprite("Human");
     }
 
     // 카메라 우선순위 설정 헬퍼 함수

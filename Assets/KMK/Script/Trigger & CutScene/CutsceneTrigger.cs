@@ -10,8 +10,7 @@ public class CutsceneTrigger : EventTrigger
     {
         if (targetCutscene != null)
         {
-            targetCutscene.PlayCutscene();
-            gameObject.SetActive(false);
+            targetCutscene.PlayCutscene();            
         }
     }
 

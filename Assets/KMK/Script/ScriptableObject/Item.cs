@@ -4,6 +4,7 @@ public abstract class Item : ScriptableObject
 {
     [Header("공통 데이터")]
     public string itemName;
+    public string itemID;
     public Sprite itemImage;
     [TextArea] public string description;
 

@@ -17,7 +17,7 @@ public abstract class EventTrigger : MonoBehaviour
         if (CheckTags(other))
         {
             hasTriggered = true;
-            // [변경점] 누가 들어왔는지(other)를 같이 넘겨줌!
+            // 누가 들어왔는지(other)를 같이 넘겨줌!
             StartEvent(other);
         }
     }
@@ -26,7 +26,7 @@ public abstract class EventTrigger : MonoBehaviour
     {
         if (CheckTags(other))
         {
-            // [변경점] 나갈 때도 누가 나갔는지 알려줌
+            // 나갈 때도 누가 나갔는지 알려줌
             EndEvent(other);
         }
     }

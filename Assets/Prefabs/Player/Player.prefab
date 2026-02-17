@@ -402,8 +402,8 @@ Light:
   serializedVersion: 11
   m_Type: 2
   m_Color: {r: 0.9622642, g: 0.7273062, b: 0.503827, a: 1}
-  m_Intensity: 2.9113173
-  m_Range: 0.36
+  m_Intensity: 1.5649657
+  m_Range: 5
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -486,7 +486,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1578054379562860832}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b72c53a6856125041a5bf1e0c3bfb881, type: 3}
   m_Name: 
@@ -495,7 +495,7 @@ MonoBehaviour:
   minIntensity: 1
   maxIntensity: 3
   flickerSpeed: 3
-  shakePosition: 1
+  shakePosition: 0
   shakeAmount: 0.2
 --- !u!1 &1792797285133618875
 GameObject:
@@ -772,7 +772,7 @@ Transform:
   m_GameObject: {fileID: 2594191256363294926}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.9442702, w: -0.3291713}
-  m_LocalPosition: {x: 0.51, y: 0.129, z: -0.521}
+  m_LocalPosition: {x: 0.63, y: -0.96, z: -0.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -789,13 +789,13 @@ Light:
   serializedVersion: 11
   m_Type: 2
   m_Color: {r: 0.9622642, g: 0.7273062, b: 0.503827, a: 1}
-  m_Intensity: 3
-  m_Range: 7
+  m_Intensity: 1.5649657
+  m_Range: 5
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -873,7 +873,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2594191256363294926}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b72c53a6856125041a5bf1e0c3bfb881, type: 3}
   m_Name: 
@@ -882,7 +882,7 @@ MonoBehaviour:
   minIntensity: 1
   maxIntensity: 3
   flickerSpeed: 3
-  shakePosition: 1
+  shakePosition: 0
   shakeAmount: 0.2
 --- !u!1 &3379499204127505064
 GameObject:
@@ -1215,7 +1215,7 @@ MonoBehaviour:
   moveSpeed: 5
   isLeftLookingDefault: 1
   footstepSoundGroup: HumanStep
-  stepInterval: 0.45
+  stepDistance: 2
 --- !u!114 &624616052694789959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1228,7 +1228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a3b10913b078c84a9a461b97f07cd3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactionRange: 12
+  interactionRange: 6
   interactableLayer:
     serializedVersion: 2
     m_Bits: 264

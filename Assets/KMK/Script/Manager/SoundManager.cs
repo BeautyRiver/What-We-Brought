@@ -2,11 +2,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VInspector;
 
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager instance;
- 
+
+    [Header("Bus 이름")]
+    public string sfxBusName = "SFX";
+    public string force2DBusName = "Force2D";
+
+    [Header("현재 재생 중인 BGM")]
+    public string currentBGMName = "";
+
+    [Header("기본 값")]
+    public float defaultValue = 0.75f;
     private void Awake()
     {
         if (instance == null)
@@ -20,6 +30,47 @@ public class SoundManager : MonoBehaviour
         }      
     }
 
+    private void Start()
+    {
+        InitVolume();
+    }
+    private void InitVolume()
+    {
+        // 1. ES3에서 저장된 값 불러오기
+        float savedBGM = ES3.Load<float>("BGM_Volume", defaultValue);
+        float savedSFX = ES3.Load<float>("SFX_Volume", defaultValue);
+
+        // 2. Master Audio에 바로 적용
+        SetBGMVolume(savedBGM);
+        SetSFXVolume(savedSFX);
+    }
+
+    // UI 슬라이더에서 호출할 함수 (BGM)
+    public void SetBGMVolume(float volume)
+    {
+        // Master Audio 버스 볼륨 조절
+        MasterAudio.PlaylistMasterVolume = volume;
+        // 값 변경될 때마다 저장 
+        ES3.Save("BGM_Volume", volume);
+    }
+
+    // UI 슬라이더에서 호출할 함수 (SFX)
+    public void SetSFXVolume(float volume)
+    {
+        MasterAudio.SetBusVolumeByName(sfxBusName, volume);
+        MasterAudio.SetBusVolumeByName(force2DBusName, volume);
+
+        ES3.Save("SFX_Volume", volume);
+    }
+    [Button]
+    public void ResetSoundSettings()
+    {
+        // 사운드 매니저 값을 기본값(1.0)으로 돌려놓기        
+        SetBGMVolume(defaultValue);
+        SetSFXVolume(defaultValue);
+
+        Debug.Log("사운드 설정이 초기화됐어!");
+    }
     public void PlaySound(string soundName)
     {
         MasterAudio.PlaySound(soundName);        
@@ -51,10 +102,17 @@ public class SoundManager : MonoBehaviour
         MasterAudio.StopAllOfSound(soundGroupName);
     }
 
-    public void PlayBGM(string playlistName)
+    public void PlayBGM(string bgmName)
     {
+        // 1. 이미 그 노래가 나오고 있다면? -> 아무것도 안 함 (끊김 방지)
+        if (currentBGMName == bgmName) return;
+
+        // 2. 다른 노래라면? -> 교체 시작
+        currentBGMName = bgmName;
+
         // Master Audio의 Playlist Controller를 찾아서 재생
-        MasterAudio.TriggerPlaylistClip(playlistName);
+        MasterAudio.ChangePlaylistByName(bgmName, true);
     }
+    
 
 }

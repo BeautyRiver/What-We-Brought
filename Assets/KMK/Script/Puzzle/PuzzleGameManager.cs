@@ -52,7 +52,7 @@ public class PuzzleGameManager : MonoBehaviour
             GameManager.instance.SetGameState(GameState.Puzzle);
 
             bool fadeOutDone = false;
-            UIManager.instance.FadeInOut(false, fadeDuration, () => {
+            LoadAsyncSceneManager.instance.FadeInOut(false, fadeDuration, () => {
                 fadeOutDone = true;
             });
 
@@ -62,12 +62,15 @@ public class PuzzleGameManager : MonoBehaviour
             UIManager.instance.HideItemPanel();
             UIManager.instance.HideInfoPanel();
 
-            UIManager.instance.FadeInOut(true, fadeDuration);
+            LoadAsyncSceneManager.instance.FadeInOut(true, fadeDuration);
+
+            // 캐릭터 상태 쥐로
+            UIManager.instance.ChangeCharStateSprite("Rat");
         }
         else
         {
             bool fadeOutDone = false;
-            UIManager.instance.FadeInOut(false, fadeDuration, () => {
+            LoadAsyncSceneManager.instance.FadeInOut(false, fadeDuration, () => {
                 fadeOutDone = true;
             });
 
@@ -81,9 +84,14 @@ public class PuzzleGameManager : MonoBehaviour
             }
             UIManager.instance.ShowItemPanel();
 
-            UIManager.instance.FadeInOut(true, fadeDuration, () => {
+            LoadAsyncSceneManager.instance.FadeInOut(true, fadeDuration, () => {
                 GameManager.instance.SetGameState(GameState.Playing);
             });
+
+
+            // 캐릭터 상태 사람으로
+            UIManager.instance.ChangeCharStateSprite("Human");
+
         }
     }
 }

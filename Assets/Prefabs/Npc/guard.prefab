@@ -678,8 +678,8 @@ GameObject:
   - component: {fileID: 4244739907122797418}
   - component: {fileID: 1032324529879980058}
   - component: {fileID: 4051220531175370301}
-  m_Layer: 0
-  m_Name: Guard
+  m_Layer: 12
+  m_Name: guard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -693,7 +693,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3209215603953343256}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.3605967, y: 0, z: 0, w: 0.93272185}
+  m_LocalRotation: {x: 0.36059916, y: 0, z: 0, w: 0.93272096}
   m_LocalPosition: {x: 29, y: -1.69, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -736,6 +736,11 @@ MonoBehaviour:
   giveUpDistance: 8.5
   wanderRadius: 4
   wanderDuration: 4
+  deportScenename: Tutorial
+  deportPortalname: Spawn_From_Market
+  footstepSoundGroup: GuardWalk
+  walkStepInterval: 0.4
+  runStepInterval: 0.35
   currentState: 0
 --- !u!195 &1032324529879980058
 NavMeshAgent:
@@ -2197,7 +2202,7 @@ Light:
   serializedVersion: 11
   m_Type: 2
   m_Color: {r: 0.16037738, g: 0.07195648, b: 0, a: 1}
-  m_Intensity: 3.6597009
+  m_Intensity: 3.997259
   m_Range: 14.29
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208

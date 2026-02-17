@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DarkTonic.MasterAudio;
+using UnityEngine;
 using UnityEngine.AI;
 
 // Npc를 상속받음 -> Interact 기능 자동 포함됨!
@@ -10,6 +11,18 @@ public class FleeingNpc : Npc
     [SerializeField] private float fleeDistance = 3f;    // 도망 거리
     [SerializeField] private float moveSpeed = 3.5f;
     [SerializeField] private float runSpeed = 5.0f;
+
+    [Header("👣 발소리 설정")]
+    public string footstepSoundGroup = "GuardWalk";
+    // 걷는 발소리 간격 (초 단위)
+    public float walkStepInterval = 0.4f;
+    // 뛰는 발소리 간격 (초 단위)
+    public float runStepInterval = 0.2f;
+
+    private float nextStepTime;
+
+    private float accumulatedDistance;
+    private bool isRunning = false; // 현재 뛰고 있는지 체크
 
     // 내부 변수
     private NavMeshAgent agent;
@@ -60,7 +73,28 @@ public class FleeingNpc : Npc
 
         // 3. 애니메이션 & 방향
         HandleAnimationAndFacing();
+        HandleFootstepSound();
     }
+
+    void HandleFootstepSound()
+    {
+        // 1. 움직이고 있는지 확인 (속도가 0.1 이상일 때만)
+        if (agent.velocity.sqrMagnitude > 0.1f)
+        {
+            if (Time.time >= nextStepTime)
+            {
+                // 2. 현재 상태에 따라 발소리 간격 조절 (뛰면 더 빠르게)
+                float interval = isRunning == true ? runStepInterval : walkStepInterval;
+
+                // 3. 3D 사운드 재생 (Master Audio)
+                // PlaySound3DAtTransform: 이 오브젝트 위치에서 소리가 남 -> 멀어지면 작게 들림!
+                SoundManager.instance.PlaySound3D(footstepSoundGroup, transform);
+
+                nextStepTime = Time.time + interval;
+            }
+        }
+    }
+
 
     // =========================================================
     // [부모(Npc)의 기능을 덮어쓰기(Override)]

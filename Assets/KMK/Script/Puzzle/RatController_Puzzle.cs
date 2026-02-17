@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UIElements;
 
 public class RatController_Puzzle : MonoBehaviour
@@ -13,6 +14,10 @@ public class RatController_Puzzle : MonoBehaviour
     [SerializeField] private float moveDuration = 0.1f;
     [SerializeField] private LayerMask wallLayer; // 벽 레이어
     [SerializeField] private LayerMask pushableLayer;  // 밀 수 있는 오브젝트 레이어
+
+    [Header("오디오 설정")]
+    public string footstepSoundGroup = "RatStep";
+    public string pushSoundGroup = "PushSound";
 
     // 플레이어가 마지막으로 바라보 방향
     private Vector2 recentlyDirection = Vector2.right;
@@ -43,7 +48,7 @@ public class RatController_Puzzle : MonoBehaviour
             gameObject.GetComponentInParent<RatPuzzle>().StartSwitchCamera(false);
         }
     }
-    
+
     // 입력 처리
     private void ProcessInput()
     {
@@ -80,12 +85,12 @@ public class RatController_Puzzle : MonoBehaviour
         animator.SetBool("isMoving", isMoving);
     }
     private void MoveAndPush()
-    {        
+    {
         Vector2 startPos = (Vector2)transform.position; // 현재 위치
         Vector2 targetPos = startPos + direction * moveDistance; // 목표 위치
 
         // 벽 체크 Ray
-        RaycastHit2D wallHit = Physics2D.Raycast(startPos, direction, moveDistance, wallLayer); 
+        RaycastHit2D wallHit = Physics2D.Raycast(startPos, direction, moveDistance, wallLayer);
 
         // 벽이 있으면 이동하지 않음
         if (wallHit.collider != null)
@@ -94,7 +99,7 @@ public class RatController_Puzzle : MonoBehaviour
             return;
         }
         // pushableObject 오브젝트 체크 Ray
-        RaycastHit2D boxHit = Physics2D.Raycast(startPos, direction, moveDistance, pushableLayer); 
+        RaycastHit2D boxHit = Physics2D.Raycast(startPos, direction, moveDistance, pushableLayer);
         if (boxHit.collider != null)
         {
             // 박스를 밀 수 있는지 확인 (박스 뒤 체크)
@@ -102,18 +107,18 @@ public class RatController_Puzzle : MonoBehaviour
             Vector2 boxTargetPos = (Vector2)box.position + direction * moveDistance;
 
             // 벽과 pushableObject 둘다 체크
-            LayerMask obstacaleLayer = wallLayer | pushableLayer; 
+            LayerMask obstacaleLayer = wallLayer | pushableLayer;
 
             // pushableObject 뒤 체크 Ray             
-            RaycastHit2D boxBehindHit = Physics2D.Raycast(box.position, direction, moveDistance, obstacaleLayer); 
+            RaycastHit2D boxBehindHit = Physics2D.Raycast(box.position, direction, moveDistance, obstacaleLayer);
             if (boxBehindHit.collider != null)
             {
                 // 뒤에 벽이나 상자 있으니까 못밈
                 print("뒤에 물체가 존재함");
                 return;
-            }            
+            }
             else StartCoroutine(MoveSmooth(box, boxTargetPos, moveDuration)); // pushableObject 이동
-        }        
+        }
         StartCoroutine(MoveSmooth(transform, targetPos, moveDuration)); // 쥐 이동
     }
 
@@ -121,6 +126,17 @@ public class RatController_Puzzle : MonoBehaviour
     IEnumerator MoveSmooth(Transform obj, Vector2 endPosition, float duration)
     {
         isMoving = true;
+
+        if (obj == transform)
+        {
+            SoundManager.instance.PlaySound3D(footstepSoundGroup, transform);
+        }
+        // 움직이는 오브젝트가 '박스'라면 미는 소리 재생 (선택사항)
+        else
+        {
+            SoundManager.instance.PlaySound3D(pushSoundGroup, obj.transform);
+        }
+
         float elapsedTime = 0f;
         Vector2 startPosition = obj.position;
 
@@ -138,7 +154,7 @@ public class RatController_Puzzle : MonoBehaviour
     {
         // 이동 중이던 상태 취소
         isMoving = false;
-        StopAllCoroutines(); 
+        StopAllCoroutines();
 
         // 바라보는 방향을 기본값으로 초기화
         recentlyDirection = Vector2.right;

@@ -4,6 +4,8 @@ public class MapExitTrigger : EventTrigger
 {
     [SerializeField] private string nextSceneName; // 인스펙터에서 입력
 
+    [SerializeField] private string targetSpawnPointID;
+
     [Header("메시지 설정")]
     public string ratMessage = "쥐로는 문을 지나갈 수 없습니다.";
 
@@ -19,9 +21,14 @@ public class MapExitTrigger : EventTrigger
         {
             hasTriggered = true;
 
-            if (LoadAsyncSceneManager.Instance != null)
+            if (DataManager.instance != null)
             {
-                LoadAsyncSceneManager.Instance.FadeToScene(nextSceneName);
+                DataManager.instance.nextSpawnPointID = targetSpawnPointID;
+            }
+
+            if (LoadAsyncSceneManager.instance != null)
+            {
+                LoadAsyncSceneManager.instance.FadeToScene(nextSceneName);
             }
             else
             {

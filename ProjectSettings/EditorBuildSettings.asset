@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Minseo/Scene/Title.unity
-    guid: cb9968ab5cd2ac247bc37d97c9c99b68
+    path: Assets/KMK/Scene/Game/Title.unity
+    guid: fc876a9340282d04b98785baca8d2567
   - enabled: 1
     path: Assets/KMK/Scene/Game/Tutorial.unity
     guid: 774d41134c5f0674ab6a3772d6bedbf9

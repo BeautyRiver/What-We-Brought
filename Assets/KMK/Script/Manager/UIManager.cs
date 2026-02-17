@@ -14,9 +14,10 @@ public class UIManager : MonoBehaviour
     public NotePanel notePanel;
     public InfoPanel infoPanel;
     public TooltipPanel tooltipPanel;
+    public PausePanel pausePanel;
+    public CharacterStatePanel charStatePanel;
     public GameObject itemPanel;
     public CrowCoolTime crowCoolTimeUI;
-    public CanvasGroup fadeCanvasGroup;
 
     [Header("기본 커서 설정")]
     public Texture2D defaultInteractCursor;
@@ -36,11 +37,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        if (talkPanel != null) talkPanel.ClosePanel();
-    }
-    
     // ------------------ Info UI --------------------------
     public void ShowInfoPanel(string content)
     {
@@ -123,6 +119,23 @@ public class UIManager : MonoBehaviour
         if (tooltipPanel != null)
             tooltipPanel.Hide();
     }
+    // ------------------ Pause UI --------------------------
+    public void ShowPausePanel()
+    {
+        pausePanel.ShowPausePanel();
+    }
+    public void HidePausePanel()
+    {
+        pausePanel.HidePausePanel();
+    }
+
+    // ------------------ 현재 캐릭터 상태 UI --------------------------
+    public void ChangeCharStateSprite(string name)
+    {
+        charStatePanel.ChangSprite(name);
+    }
+
+
     // ------------------ 까마귀 쿨타임 UI --------------------------
     public void StartCrowCooldownUI(float activeTime, float coolTime)
     {
@@ -132,26 +145,5 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // ------------------ 페이드 인 아웃 UI --------------------------
-    public void FadeInOut(bool isFadeIn, float duration, Action onComplete = null)
-    {
-        float targetAlpha = isFadeIn ? 0f : 1f;
 
-        fadeCanvasGroup.blocksRaycasts = true;
-
-        fadeCanvasGroup.DOFade(targetAlpha, duration)
-        .SetEase(Ease.Linear)
-        .OnComplete(() =>
-        {
-            // 콜백
-            onComplete?.Invoke();
-
-            // 페이드 인 효과면 터치 가능하게 
-            if (isFadeIn)
-            {
-                fadeCanvasGroup.blocksRaycasts = false;
-            }
-        });
-
-    }   
 }
