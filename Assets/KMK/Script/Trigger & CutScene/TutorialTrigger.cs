@@ -11,8 +11,12 @@ public class TutorialTrigger : EventTrigger
     {
         myCollider = GetComponent<Collider>();
     }
-
-    protected override void StartEvent()
+    private void Start()
+    {
+        if (DataManager.instance.currentData.isTutorialCleared)
+            gameObject.SetActive(false);
+    }
+    protected override void StartEvent(Collider other)
     {
         if (isOneShot)
         {
@@ -30,7 +34,7 @@ public class TutorialTrigger : EventTrigger
         }
     }
 
-    protected override void EndEvent()
+    protected override void EndEvent(Collider other)
     {
         if (isOneShot) return;
 

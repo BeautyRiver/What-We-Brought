@@ -23,6 +23,7 @@ MonoBehaviour:
     - 8c4de03dcc52ed245ad1c3ff16c99a8b
     - 6d9ff9c2fc283604499149b5fb04e75d
     - 242bde75b39a5f24781ad2ecb23bde1b
+    - fc876a9340282d04b98785baca8d2567
     values:
     - goDatas_byGlobalId:
         keys: []
@@ -121,6 +122,18 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-763271683249485239-2911564506502478520
         - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-6341207447564417057-2911564506502478520
         - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-9126495194127778295-0
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-5245243066596246481-262798335
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-1934863794-0
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-6945528292466478486-5783760591325274908
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-6384458299617925969-1727402355823835084
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-3632349952009453290-5660668492645697377
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-5493812817413766317-7350608416804288757
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-7233950850617453554-4430200149905129481
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-5070258327487184260-7406330645294884748
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-7048195569327057204-1672262290713844742
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-1070729053-0
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-570931970-0
+        - globalObjectIdString: GlobalObjectId_V1-2-774d41134c5f0674ab6a3772d6bedbf9-8888541552309389420-608992310539869251
         values:
         - colorIndex: 0
           iconNameOrGuid: Camera Icon
@@ -198,6 +211,30 @@ MonoBehaviour:
           iconNameOrGuid: DirectionalLight Icon
         - colorIndex: 0
           iconNameOrGuid: StandaloneInputModule Icon
+        - colorIndex: 0
+          iconNameOrGuid: Camera Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: AudioSource Icon
+        - colorIndex: 0
+          iconNameOrGuid: AudioSource Icon
+        - colorIndex: 0
+          iconNameOrGuid: AudioClip Icon
     - goDatas_byGlobalId:
         keys:
         - globalObjectIdString: GlobalObjectId_V1-2-8c4de03dcc52ed245ad1c3ff16c99a8b-1804395383-0
@@ -261,6 +298,23 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-1411546850533661733-0
         - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-1315987715324389188-5946126683306594346
         - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-1885389791565227880-1884780274532576313
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-3632349952009453290-1941805160
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-6945528292466478486-257414506
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-2615377356565473683-360375988
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-5493812817413766317-440819613
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-6384458299617925969-143908380
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-7233950850617453554-994324071
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-4796144931257994487-1308117352
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-5293948290102871940-2113795908
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-7048195569327057204-2012779392
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-1461803874-0
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-772980185-0
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-8888541552309389420-1538201821
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-1838202988-0
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-6112018584413721421-2066858748
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-1228857718238383006-1389310758
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-8888541552309389420-1563289526
+        - globalObjectIdString: GlobalObjectId_V1-2-242bde75b39a5f24781ad2ecb23bde1b-6063540590098157092-2012779392
         values:
         - colorIndex: 0
           iconNameOrGuid: Camera Icon
@@ -312,3 +366,43 @@ MonoBehaviour:
           iconNameOrGuid: Camera Icon
         - colorIndex: 0
           iconNameOrGuid: Camera Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 9
+          iconNameOrGuid: Settings Icon
+        - colorIndex: 0
+          iconNameOrGuid: MeshCollider Icon
+        - colorIndex: 0
+          iconNameOrGuid: AudioSource Icon
+        - colorIndex: 0
+          iconNameOrGuid: AudioSource Icon
+        - colorIndex: 0
+          iconNameOrGuid: AudioSource Icon
+        - colorIndex: 0
+          iconNameOrGuid: AudioSource Icon
+        - colorIndex: 0
+          iconNameOrGuid: AudioSource Icon
+        - colorIndex: 0
+          iconNameOrGuid: AudioSource Icon
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
+    - goDatas_byGlobalId:
+        keys:
+        - globalObjectIdString: GlobalObjectId_V1-2-fc876a9340282d04b98785baca8d2567-1493041103-0
+        values:
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon

@@ -1,39 +1,41 @@
-using UnityEngine;
+ï»¿using UnityEngine;
+using System; // Guid ì‚¬ìš©ì„ ìœ„í•´ í•„ìš”
 
 public class SaveableObject : MonoBehaviour
 {
-    [Header("°íÀ¯ ½Äº°ÀÚ (ÇÊ¼ö)")]
-    [Tooltip("¸ÊÀÌ¸§_¿ÀºêÁ§Æ®¸í_¹øÈ£ Çü½Ä")]
+    [Header("ê³ ìœ  ì‹ë³„ì (í•„ìˆ˜)")]
     public string objectID;
 
     private void Start()
     {
         if (DataManager.instance == null) return;
-
-        // 2. "»ç¶óÁø ¿ÀºêÁ§Æ® ¸í´Ü"¿¡ ³» ÀÌ¸§ÀÌ ÀÖ´ÂÁö È®ÀÎ
         if (DataManager.instance.currentData.collectedObjectIDs.Contains(objectID))
         {
             gameObject.SetActive(false);
         }
     }
 
-    // ¿ÜºÎ¿¡¼­ È£Ãâ: "³ª ÀÌÁ¦ ÇÒ ÀÏ ´Ù ÇßÀ¸´Ï ±â·ÏÇÏ°í »ç¶óÁú°Ô"
     public void MarkAsGone()
     {
         if (DataManager.instance == null) return;
-
-        // ¸í´Ü¿¡ ¾øÀ¸¸é Ãß°¡
         if (!DataManager.instance.currentData.collectedObjectIDs.Contains(objectID))
         {
             DataManager.instance.currentData.collectedObjectIDs.Add(objectID);
-
-            // µ¥ÀÌÅÍ º¯°æµÆÀ¸´Ï Áï½Ã ÀúÀå (ÇÊ¿ä¿¡ µû¶ó ÁÖ¼® Ã³¸® °¡´É)
             DataManager.instance.SaveGame();
-
-            Debug.Log($"[SaveableObject] »óÅÂ ÀúÀåµÊ: {objectID}");
         }
-
-        // ¿ÀºêÁ§Æ® ²ô±â
         gameObject.SetActive(false);
+    }
+
+    // ğŸ‘‡ [ê¿€íŒ] ì¸ìŠ¤í™í„°ì—ì„œ ìš°í´ë¦­í•˜ë©´ ID ìë™ ìƒì„±!
+    [ContextMenu("Generate Unique ID")]
+    private void GenerateID()
+    {
+        // ì”¬ ì´ë¦„ + ì˜¤ë¸Œì íŠ¸ ì´ë¦„ + ëœë¤ì½”ë“œ ì¡°í•©
+        objectID = System.Guid.NewGuid().ToString();
+
+        // ì—ë””í„°ì—ì„œ ë³€ê²½ì‚¬í•­ ì €ì¥ë˜ê²Œ í‘œì‹œ
+#if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+#endif
     }
 }

@@ -6,7 +6,8 @@ public enum GameState
     Playing,    
     Dialogue,   
     Puzzle,
-    CutScene
+    CutScene,
+    Pause
 }
 
 public enum PlayerCharacter
@@ -21,18 +22,46 @@ public class GameManager : MonoBehaviour
 
     // 상태 변수
     [field:SerializeField] public GameState CurrentState { get; private set; }
+    private GameState stateBeforePause;
     [field: SerializeField] public PlayerCharacter CurrentCharacter { get; private set; }
         
-    [SerializeField] private CharacterSwapManager characterSwapManager;
+    public CharacterSwapManager characterSwapManager;    
     private void Awake()
     {
         if (instance == null) { instance = this; }
         else Destroy(gameObject);
 
         CurrentState = GameState.Playing;
+        stateBeforePause = CurrentState;
         CurrentCharacter = PlayerCharacter.Human;
     }
 
+    private void Start()
+    {
+        SoundManager.instance.PlayAmbient("Forest_ambient");
+        SoundManager.instance.PlayAmbient("CrowAmbient");
+        SoundManager.instance.PlayBGM("InGame");
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (CurrentState != GameState.Pause)
+            {
+                stateBeforePause = CurrentState;
+
+                UIManager.instance.ShowPausePanel();
+                SetGameState(GameState.Pause);
+            }
+            else
+            {
+                UIManager.instance.HidePausePanel();
+                SetGameState(stateBeforePause);
+            }
+        }
+
+    }
     public void ChangeCharacter(PlayerCharacter character)
     {
         CurrentCharacter = character;
@@ -41,8 +70,9 @@ public class GameManager : MonoBehaviour
 
     public void SetGameState(GameState newState)
     {
-        CurrentState = newState;
+        if (CurrentState == newState) return;
 
+        CurrentState = newState;
         switch (newState)
         {
             case GameState.Playing:
@@ -60,9 +90,9 @@ public class GameManager : MonoBehaviour
         }
     }   
 
-    public void SwapCharacter()
+    public void SwapToHuman()
     {
-        characterSwapManager.SwapCharacter();
+        characterSwapManager.SwapToHuman();
     }
 }
 

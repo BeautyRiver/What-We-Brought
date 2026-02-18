@@ -17,7 +17,7 @@ MonoBehaviour:
     To: GateCamera
     Blend:
       Style: 1
-      Time: 2
+      Time: 2.5
       CustomCurve:
         serializedVersion: 2
         m_Curve: []
@@ -35,8 +35,8 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 0
-  - From: CinemachineCamera_Rat
-    To: CinemachineCamera_Human
+  - From: Camera_Rat
+    To: Camera_Human
     Blend:
       Style: 1
       Time: 1.25
@@ -46,8 +46,8 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 0
-  - From: CinemachineCamera_Human
-    To: CinemachineCamera_Rat
+  - From: Camera_Human
+    To: Camera_Rat
     Blend:
       Style: 1
       Time: 1.25

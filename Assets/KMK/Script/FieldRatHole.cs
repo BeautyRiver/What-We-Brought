@@ -18,6 +18,7 @@ public class FieldRatHole : MonoBehaviour, IInteractable
     private void Start()
     {
         ratPuzzle.SetShowObj(rewardItem);
+        rewardItem.SetActive(false);
         CheckPuzzleState();
     }
 
@@ -27,10 +28,8 @@ public class FieldRatHole : MonoBehaviour, IInteractable
         if (PuzzleGameManager.instance.IsPuzzleCleared(PuzzleID))
         {
             // 보상 아이템 처리:
-            // 보상 아이템이 있고 + 아직 안 먹었다면(SaveableObject가 켜져있다면) -> 보이게 켜줌
             if (rewardItem != null)
-            {
-                // SaveableObject가 스스로 꺼지는 로직(Start)이 있으므로, 
+            {                
                 // 여기선 일단 켜주기만 하면 됨 (먹었으면 알아서 꺼짐)
                 rewardItem.SetActive(true);
             }
@@ -38,7 +37,8 @@ public class FieldRatHole : MonoBehaviour, IInteractable
         else
         {
             // 아직 안 깼으면 보상 아이템 숨김
-            if (rewardItem != null) rewardItem.SetActive(false);
+            if (rewardItem != null) 
+                rewardItem.SetActive(false);
         }
     }
     public void Interact()

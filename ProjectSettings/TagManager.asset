@@ -24,8 +24,8 @@ TagManager:
   - Rat_Interactable
   - Rat
   - Object
-  - 
-  - 
+  - Npc
+  - RatNoEnter
   - UI_highlight
   - 
   - 

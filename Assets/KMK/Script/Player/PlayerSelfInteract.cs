@@ -1,3 +1,4 @@
+using DarkTonic.MasterAudio;
 using UnityEngine;
 
 public class PlayerSelfInteract : MonoBehaviour, IInteractable
@@ -10,7 +11,14 @@ public class PlayerSelfInteract : MonoBehaviour, IInteractable
 
         // 아이템 사용 시도 (성공 여부 확인)        
         if (currentItem.OnUseOnSelf()) // 바로 사용이 가능한 아이템들 (쪽지...)
-        {    
+        {
+
+            if (!string.IsNullOrEmpty(currentItem.useSoundName))
+            {
+                MasterAudio.PlaySoundAndForget(currentItem.useSoundName);
+            }
+
+
             EquipmentManager.Instance.Unequip();
             if (currentItem.isConsumable)
             {

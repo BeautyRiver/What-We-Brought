@@ -48,3 +48,6 @@ MonoBehaviour:
   rat_virtualCamera: {fileID: 0}
   humanObject: {fileID: 0}
   ratObject: {fileID: 0}
+  ratReturnSpeed: 8
+  ratSwapSoundGroup: RatSwap
+  humanSwapSoundGroup: HumanReturn

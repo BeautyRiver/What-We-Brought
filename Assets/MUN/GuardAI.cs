@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class GuardAI : MonoBehaviour
 {
@@ -35,7 +36,18 @@ public class GuardAI : MonoBehaviour
     public float catchDistance = 1.0f;
     public float giveUpDistance = 15f;
     public float wanderRadius = 4f;
-    public float wanderDuration = 4f; // 의심 상태 유지 시간
+    public float wanderDuration = 4f; // 의심 상태 유지 시간 
+    public string deportScenename;
+    public string deportPortalname;
+
+    [Header("오디오 설정")]
+    public string footstepSoundGroup = "GuardWalk";
+    // 걷는 발소리 간격 (초 단위)
+    public float walkStepInterval = 0.4f;
+    // 뛰는 발소리 간격 (초 단위)
+    public float runStepInterval = 0.2f;
+
+    private float nextStepTime;
 
     // =========================================================
     // [3. 내부 변수]
@@ -57,7 +69,7 @@ public class GuardAI : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        anim = GetComponent<Animator>();
+        anim = GetComponentInChildren<Animator>();
 
         // 2D/3D 하이브리드 필수 설정 (회전 떨림 방지)
         agent.updateRotation = false;
@@ -75,6 +87,10 @@ public class GuardAI : MonoBehaviour
 
     void Update()
     {
+        // Play중일때만 순찰돌기
+        if (!(GameManager.instance.CurrentState == GameState.Playing))
+            return;
+
         // 1. 시야 감지 (최적화를 위해 일정 주기로만 실행)
         visionTimer += Time.deltaTime;
         if (currentState != State.Alert && visionTimer >= visionUpdateRate)
@@ -94,6 +110,30 @@ public class GuardAI : MonoBehaviour
 
         // 3. 애니메이션 & 방향 전환
         UpdateAnimationAndFacing();
+
+        HandleFootstepSound();
+    }
+
+    // =========================================================
+    // [발소리]
+    // =========================================================
+    void HandleFootstepSound()
+    {
+        // 1. 움직이고 있는지 확인 (속도가 0.1 이상일 때만)
+        if (agent.velocity.sqrMagnitude > 0.1f)
+        {
+            if (Time.time >= nextStepTime)
+            {
+                // 2. 현재 상태에 따라 발소리 간격 조절 (뛰면 더 빠르게)
+                float interval = (currentState == State.Alert) ? runStepInterval : walkStepInterval;
+
+                // 3. 3D 사운드 재생 (Master Audio)
+                // PlaySound3DAtTransform: 이 오브젝트 위치에서 소리가 남 -> 멀어지면 작게 들림!
+                SoundManager.instance.PlaySound3D(footstepSoundGroup, transform);
+
+                nextStepTime = Time.time + interval;
+            }
+        }
     }
 
     // =========================================================
@@ -178,12 +218,17 @@ public class GuardAI : MonoBehaviour
 
             if (currentTarget == player)
             {
-                // 게임오버 로직
+                // 게임오버 로직 추가하기
+                LoadAsyncSceneManager.instance.FadeToScene(deportScenename);
+                DataManager.instance.nextSpawnPointID = deportPortalname;
+
+                ChangeState(State.Return); // 또는 Patrol
+                return;
             }
             else
             {
                 // 쥐 잡음 -> 캐릭터 교체 -> 의심 모드
-                GameManager.instance.SwapCharacter();
+                GameManager.instance.SwapToHuman();
                 ChangeState(State.Suspicion);
             }
             return;
@@ -300,7 +345,7 @@ public class GuardAI : MonoBehaviour
     void UpdateAnimationAndFacing()
     {
         bool isMoving = agent.velocity.sqrMagnitude > 0.1f;
-        if (anim != null) anim.SetBool("isWalking", isMoving);
+        if (anim != null) anim.SetBool("isMoving", isMoving);
 
         // 이동 중이거나 추격 중일 때만 방향 전환 (제자리 떨림 방지)
         if (!isMoving && currentState != State.Alert) return;

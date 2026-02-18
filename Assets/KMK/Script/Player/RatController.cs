@@ -14,6 +14,11 @@ public class RatController : MonoBehaviour
         interaction = GetComponent<PlayerInteraction>();
     }
 
+    private void Start()
+    {
+        gameObject.SetActive(false);
+    }
+
     private void Update()
     {      
         // 인간 상태면 리턴
@@ -25,6 +30,10 @@ public class RatController : MonoBehaviour
             SetMoveDir();
             interaction.HandleInteraction();
         }
+    }
+    private void FixedUpdate()
+    {
+        movement.Move();
     }
 
     private void SetMoveDir()
@@ -48,8 +57,9 @@ public class RatController : MonoBehaviour
 
         Vector3 dir = (camForward * z) + (camRight * x);
 
-        movement.Move(dir);
+        movement.SetMoveDir(dir);
     }
+
 
     public void StopMove()
     {

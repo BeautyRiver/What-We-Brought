@@ -10,11 +10,12 @@ public class SceneAtmosphere : MonoBehaviour
 
     [Header("옵션")]
     public bool applyToCamera = true; // 카메라 배경색도 바꿀 건지
+    public bool applyFog = true;
 
     void Update() // 에디터에서 값 바꿀 때 실시간 반영을 위해 Update 사용
     {
         // 1. 안개 설정 적용
-        RenderSettings.fog = true;
+        RenderSettings.fog = applyFog;
         RenderSettings.fogMode = FogMode.Linear;
         RenderSettings.fogColor = atmosphereColor;
         RenderSettings.fogStartDistance = fogStart;
